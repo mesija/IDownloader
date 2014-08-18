@@ -10,7 +10,6 @@ define('DB_HOST',             'localhost');                       // хост д
 define('DB_NAME',             'test');                            // імя бази для підключення до апп
 define('DB_USER',             'root');                            // юзер для підключення до апп
 define('DB_PASS',             '');                                // пароль для підключення до апп
-define('UPDATE_SERVER',       'http://update.mesija.net/');        // сервер оновлень
+define('UPDATE_SERVER',       'http://update.mesija.net/');       // сервер оновлень
 
 //* -------------------------- Config -------------------------- *//
- 
