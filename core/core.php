@@ -144,7 +144,7 @@ if(isset($_GET['getInfo']) AND !empty($_GET['getInfo'])){
 
 if(file_exists('./core/update')){
   $update_time = (int)file_get_contents('./core/update');
-  $update_time = $update_time + (60*60*24);
+  $update_time = $update_time + (60*60*12);
   if($update_time < time()){
     $upVer = @file_get_contents(UPDATE_SERVER.'ver');
     if($upVer){
