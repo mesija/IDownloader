@@ -92,7 +92,15 @@
     function start(){
       all_size = size;
       failed_size_dw = failed_size;
-      download();
+      $.get("index.php?start="+dir, function( data ) {
+        if(data.trim() == 'OK'){
+          download();
+        }
+        else {
+          $(".h_top").text('Error start');
+        }
+      });
+
     }
 
     function clear_last(){
@@ -122,8 +130,8 @@
     function finish(){
       if(proces == 0){
         $(".h_top").text('Waiting ...');
-        $.get("index.php?finish", function( data ) {
-          if(data != 'NO'){
+        $.get("index.php?finish="+dir, function( data ) {
+          if(data == 'OK'){
             $(".h_top").text(dir);
             $(".h_proc").text('Finish');
             document.title = "Finish download " + migration['id'];

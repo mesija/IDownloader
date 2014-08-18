@@ -20,6 +20,25 @@ function dbConnect (){
   return $db;
 }
 
+// стартуємо завантаження
+
+if(isset($_GET['start']) AND !empty($_GET['start'])){
+  $dir = $_GET['start'];
+  chmod('../'.I_FOLDER.'/', 0777);
+  if(file_exists('./'.DOWNLOAD_FOLDER.'/'.$dir.'/'.$dir.'.csv'))
+    unlink('./'.DOWNLOAD_FOLDER.'/'.$dir.'/'.$dir.'.csv');
+  exit('OK');
+}
+
+// завершуємо завантаження
+
+if(isset($_GET['finish']) AND !empty($_GET['finish'])){
+  $dir = $_GET['finish'];
+  chmod('./'.DOWNLOAD_FOLDER.'/'.$dir.'/', 0777);
+  exec('chmod 777 -Rf ./'.DOWNLOAD_FOLDER.'/'.$dir.'/');
+  exit('OK');
+}
+
 // кліримо завантажені данні
 
 if(isset($_GET['clear']) AND isset($_GET['dir'])){
