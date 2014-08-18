@@ -133,8 +133,11 @@ if(isset($_GET['getInfo']) AND !empty($_GET['getInfo'])){
       LEFT JOIN migrations_stores AS s ON s.id = m.source_store_id
       WHERE t.id = " . $id
       ,$db);
-    $rez = mysql_fetch_array($rez,MYSQL_ASSOC);
-    exit(json_encode($rez));
+    if($rez){
+      $rez = mysql_fetch_array($rez,MYSQL_ASSOC);
+      exit(json_encode($rez));
+    }
+    exit('NO');
   }
   exit('NO');
 }
