@@ -1,6 +1,0 @@
-[
-    ["+","core\/body","php"],
-    ["+","core\/core","php"],
-    ["+","core\/head","php"],
-    ["+","core\/style","css"]
-]
