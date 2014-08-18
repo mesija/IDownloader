@@ -73,7 +73,7 @@ if(isset($_GET['s']) AND isset($_GET['t']) AND isset($_GET['dir'])){
       exit('OK');
     }
     else {
-      $file = fopen('./'.DOWNLOAD_FOLDER.'/' . $dir . '/failed.csv','a');
+      $file = fopen('./'.DOWNLOAD_FOLDER.'/' . $dir . '/' . $dir . '.csv','a');
       fputcsv($file,$_GET);
       fclose($file);
       exit('NO');
