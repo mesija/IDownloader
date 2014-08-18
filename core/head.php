@@ -25,7 +25,7 @@
     var defaultDir = '<?php echo date("Hi_dm"); ?>';
 
     function openFile(file){
-      $("#stat").html('<div id=\"load\"></div>');
+      $("#stat").html('<p id=\"load\"></p>');
       $(".h_top").text('Load file ...');
       $.get("index.php?loadFile="+file, function( data ) {
         if(data != 'NO'){
@@ -85,8 +85,6 @@
           }
         });
       }
-      else
-        location.reload();
     }
 
     function start(){
@@ -100,20 +98,26 @@
           $(".h_top").text('Error start');
         }
       });
-
     }
 
-    function clear(file){
-      $(".h_top").text('Clear...');
-      $.get("index.php?clear="+file, function( data ) {
-        if(data.trim() == 'OK'){
-          $(".h_top").text('Clear ok');
-        }
-        else {
-          $(".h_top").text('Error clear');
-        }
-      });
-      setTimeout(back,3000);
+    function clearLast(file){
+      if(confirm("Clear last download "+file+"?")){
+        $(".h_top").text('Clear...');
+        $.get("index.php?getInfo="+file, function( data ) {
+          if(data != 'NO'){
+            migration = $.parseJSON(data);
+            $.get("index.php?clear="+migration['id'], function( data ) {
+              if(data.trim() == 'OK'){
+                $(".h_top").text('Clear ok');
+              }
+              else {
+                $(".h_top").text('Error clear');
+              }
+            });
+          }
+        });
+        setTimeout(back,2000);
+      }
     }
 
     function back(){

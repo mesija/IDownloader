@@ -86,12 +86,11 @@ a:hover{text-decoration:none}
     font-size: 24px;
     display: inline-block;
     float: left;
-    margin: 2px;
-    font-family: arial, helvetica, verdana, sans-serif;
+    margin: 3px;
 }
 #stat div {
     display: inline-block;
-    padding: 5px 10px;
+    padding: 7px 10px;
     border: 1px solid #777777;
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
@@ -110,12 +109,12 @@ a:hover{text-decoration:none}
 
 #stat span b {
     display: inline-block;
-    padding: 5px 10px;
+    padding: 7px 10px;
     border: 1px solid #777777;
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
     background-color: rgba(128,128,128,0.2);
-    color: #cccccc;
+    color: #666666;
     cursor: pointer;
     margin-left: 44px;
 }
@@ -154,8 +153,6 @@ a:hover{text-decoration:none}
 
 #stat span i:hover {
     background-color: rgba(128,128,128,0.4);
-    text-shadow:0 0 3px rgba(0,0,0,0.7);
-    box-shadow:0 0 3px rgba(0,0,0,0.7);
     border-color: #999999;
 }
 
