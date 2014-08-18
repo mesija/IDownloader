@@ -41,8 +41,8 @@ if(isset($_GET['finish']) AND !empty($_GET['finish'])){
 
 // кліримо завантажені данні
 
-if(isset($_GET['clear']) AND isset($_GET['dir'])){
-  $dir = $_GET['dir'];
+if(isset($_GET['clear']) AND !empty($_GET['clear'])){
+  $dir = $_GET['clear'];
   chmod('../'.I_FOLDER.'/', 0777);
   if(file_exists('./'.DOWNLOAD_FOLDER.'/'.$dir.'/'))
     exec('rm -Rf ./'.DOWNLOAD_FOLDER.'/'.$dir.'/');

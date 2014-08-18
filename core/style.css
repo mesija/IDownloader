@@ -86,37 +86,85 @@ a:hover{text-decoration:none}
     font-size: 24px;
     display: inline-block;
     float: left;
-    padding: 5px 10px;
     margin: 2px;
-    border: 1px solid #777777;
-    border-radius: 5px;
     font-family: arial, helvetica, verdana, sans-serif;
+}
+#stat div {
+    display: inline-block;
+    padding: 5px 10px;
+    border: 1px solid #777777;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
     background-color: rgba(128,128,128,0.2);
     color: #cccccc;
     cursor: pointer;
+    margin: 0;
 }
-#stat span:hover {
+#stat div:hover {
     background-color: rgba(128,128,128,0.4);
     text-shadow:0 0 3px rgba(0,0,0,0.7);
     box-shadow:0 0 3px rgba(0,0,0,0.7);
     color: #62c462;
     border-color: #999999;
 }
+
+#stat span b {
+    display: inline-block;
+    padding: 5px 10px;
+    border: 1px solid #777777;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    background-color: rgba(128,128,128,0.2);
+    color: #cccccc;
+    cursor: pointer;
+    margin-left: 44px;
+}
+
+#stat span b:hover {
+    color: #cc0000!important;
+    background-color: rgba(128,128,128,0.4);
+    text-shadow:0 0 3px rgba(0,0,0,0.7);
+    box-shadow:0 0 3px rgba(0,0,0,0.7);
+    border-color: #999999;
+}
+
+#stat span i {
+    cursor: pointer;
+    display: inline-block;
+    padding: 3px 10px;
+    border-top: 1px solid #777777;
+    border-bottom: 1px solid #777777;
+    background-color: rgba(128,128,128,0.2);
+    color: #cccccc;
+    cursor: pointer;
+    position: absolute;
+}
+
+#stat span i img {
+    display: inline-block;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    cursor: pointer;
+    opacity: 0.3;
+}
+
+#stat span i:hover img {
+    opacity: 1;
+}
+
+#stat span i:hover {
+    background-color: rgba(128,128,128,0.4);
+    text-shadow:0 0 3px rgba(0,0,0,0.7);
+    box-shadow:0 0 3px rgba(0,0,0,0.7);
+    border-color: #999999;
+}
+
 #load {
     margin: 10% auto 0 auto;
     height: 19px;
     width: 220px;
     background: url("http://5.firepic.org/5/images/2014-07/29/t1aqpek5koyz.gif") center no-repeat;
 
-}
-#stat span b {
-    opacity: 0.2;
-    cursor: pointer;
-}
-
-#stat span b:hover {
-    opacity: 1;
-    color: #cc0000!important;
 }
 
 #error_db {

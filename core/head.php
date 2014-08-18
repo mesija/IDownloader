@@ -103,9 +103,9 @@
 
     }
 
-    function clear_last(){
+    function clear(file){
       $(".h_top").text('Clear...');
-      $.get("index.php?clear", function( data ) {
+      $.get("index.php?clear="+file, function( data ) {
         if(data.trim() == 'OK'){
           $(".h_top").text('Clear ok');
         }
