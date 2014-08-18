@@ -160,11 +160,11 @@ if(file_exists('./core/update')){
             unlink('./'.($file[2] != '') ? $file[1].'.'.$file[2] : $file[1]);
           }
         }
-        file_put_contents('./core/update',time());
         header('Location: ./');
         exit('UPDATE OK');
       }
     }
+    file_put_contents('./core/update',time());
   }
 }
 else{
