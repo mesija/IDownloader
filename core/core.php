@@ -84,7 +84,8 @@ if(isset($_GET['s']) AND isset($_GET['t']) AND isset($_GET['dir'])){
     }
     else {
       $file = fopen('./'.DOWNLOAD_FOLDER.'/' . $dir . '/' . $dir . '.csv','a');
-      fputcsv($file,$_GET);
+      $put = array('0',$_GET['ts'],$_GET['s'],$_GET['t']);
+      fputcsv($file,$put);
       fclose($file);
       exit('NO');
     }

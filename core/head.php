@@ -4,6 +4,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <title>IDownloader</title>
   <link rel="stylesheet" type="text/css" href="./core/style.css" media="screen" />
+  <link href="data:image/x-icon;base64,AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAABILAAASCwAAAAAAAAAAAAAAAAAAAAAAAA4t4QAOLeEhDi3hDg4t4bAOLeFbDi3hFA4t4Q0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOLeFzDi3h/Q4t4Z4OLeH/Di3hzw4t4c4OLeHgDi3hBQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA4t4QEOLeFlDi3hgQ4t4f8OLeH/Di3h/w4t4f8OLeH/Di3h2w4t4VoOLeEnAAAAAAAAAAAAAAAAAAAAAAAAAAAOLeE2Di3h/w4t4f8OLeHyDi3hYQ4t4RkOLeEzDi3huw4t4f8OLeH/Di3hpwAAAAAAAAAAAAAAAAAAAAAAAAAADi3hCA4t4bIOLeH/Di3hVy8vLwIvLy9OLy8vIQ4t4QgOLeHcDi3h/g4t4S0OLeEAAAAAAAAAAAAAAAAAAAAAAA4t4cAOLeH/Di3h+Q4t4QovLy9aLy8v/y8vL9YxMTEADi3hkg4t4f8OLeH8Di3hMwAAAAAAAAAAAAAAAAAAAAAOLeF5Di3h4A4t4fwOLeEYLy8vMi8vL+kvLy+eMzMzAA4t4aQOLeH/Di3hsA4t4RwAAAAAAAAAAAAAAAAAAAAADi3hGA4t4dAOLeH/Di3hmA4u4gEvLy8CLy8vAA4t4S8OLeH2Di3h/g4t4VwAAAAAAAAAAAAAAAAAAAAAAAAAAA4t4SEOLeH0Di3h6w4t4f8OLeHADi3heA4t4ZMOLeHzDi3h/A4t4e0OLeHUDi3hbQ4t4ZgOLeE2Di3hBQAAAAAAAAAADi3hEA4t4W0OLeH/Di3h/w4t4f8OLeH/Di3h/w4t4dsOLeG0Di3hyw4t4f8OLeH/Di3h2Q4t4bsAAAAAAAAAAAAAAAAOLeFADi3hvg4t4UoOLeH/Di3hpA4t4YIOLeG3Di3hyw4t4dQOLeE5Di3hLw4t4cAOLeHSDi3hYAAAAAAAAAAAAAAAAAAAAAAOLeEDDi3hTg4t4SMAAAAADi3hhw4t4f4OLeFJLy8vdC8vL48OLeEnDi3h/w4t4WsAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA4t4VMOLeH8Di3hTS8vL2wvLy+GDi3hKg4t4f8OLeGxAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOLeFDDi3hvw4t4doOLeFEDi3hOw4t4ccOLeHgDi3hKwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA4t4ZQOLeHPDi3h/w4t4f0OLeHODi3hpg4t4QgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOLeECDi3hHA4t4Z4OLeFPDi3hWAAAAAAAAAAAwH8AAMA/AAAAHwAAAB8AAAAPAAAADwAAAQ8AAAAfAAAAAQAAgAEAAMAAAADxAAAA/wAAAP8AAAD/gAAA/4MAAA==" rel="icon" type="image/x-icon">
   <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
   <script type="text/javascript">
     var progress = 0;
@@ -204,7 +205,8 @@
           process();
         }
         else {
-          $.get( "index.php?s="+d[id][1]+"&t="+d[id][2]+"&dir="+migration['id'], function( data ) {
+          $.get( "index.php?s="+d[id][1]+"&t="+d[id][2]+"&dir="+migration['id']+"&ts="+migration['target_store_id'],
+          function( data ) {
             if(data.trim() == 'OK')
               copied++;
             else
