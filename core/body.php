@@ -45,5 +45,6 @@
       echo $listDownload;
     ?>
   </div>
+  <div id="footer">&copy; Слава Рудавський &nbsp;&nbsp;&nbsp; IDownloader v<?php echo VER; ?></div>
 </div>
 </body>

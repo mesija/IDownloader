@@ -196,6 +196,9 @@ a:hover{text-decoration:none}
     margin: 10% auto 0 auto;
     height: 19px;
     width: 220px;
+    border-radius: 5px!important;
+    position: absolute;
+    top: 33%;
     background: url("http://5.firepic.org/5/images/2014-07/29/t1aqpek5koyz.gif") center no-repeat;
 
 }
@@ -222,4 +225,14 @@ a:hover{text-decoration:none}
     color:#999;
     text-align:center;
     vertical-align: middle;
+}
+
+#footer {
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    display: block;
+    color: #999999;
 }

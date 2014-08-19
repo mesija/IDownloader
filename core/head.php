@@ -26,7 +26,7 @@
     var defaultDir = '<?php echo date("Hi_dm"); ?>';
 
     function openFile(file){
-      $("#stat").html('<p id=\"load\"></p>');
+      $("#stat").html('<div id=\"load\"></div>');
       $(".h_top").text('Load file ...');
       $.get("index.php?loadFile="+file, function( data ) {
         if(data != 'NO'){
