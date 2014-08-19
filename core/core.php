@@ -59,6 +59,16 @@ if(isset($_GET['deleteFile']) AND !empty($_GET['deleteFile'])){
   exit('OK');
 }
 
+// видаляємо папку
+
+if(isset($_GET['deleteDir']) AND !empty($_GET['deleteDir'])){
+  $dir = $_GET['deleteDir'];
+  chmod('../'.DOWNLOAD_FOLDER.'/', 0777);
+  if(file_exists('./'.DOWNLOAD_FOLDER.'/'.$dir.'/'))
+    exec('rm -Rf ./'.DOWNLOAD_FOLDER.'/'.$dir.'/');
+  exit('OK');
+}
+
 // завантажуємо файл
 
 if(isset($_GET['s']) AND isset($_GET['t']) AND isset($_GET['dir'])){
@@ -194,6 +204,24 @@ else{
   }
   if(empty($listDir)){
     $listDir = '<div id="emptyDir">Dir csv empty</div>';
+  }
+}
+
+if(!file_exists('./'.DOWNLOAD_FOLDER.'/')){
+  mkdir('./'.DOWNLOAD_FOLDER.'/', 0777 , true);
+  $listDir = '<div id="emptyDir">Download dir empty</div>';
+}
+else{
+  chmod('./'.DOWNLOAD_FOLDER.'/', 0777);
+  $tmpDownload = array_splice(scandir('./'.DOWNLOAD_FOLDER.'/'),2);
+  $listDownload = array();
+  foreach($tmpDownload AS $tmp){
+    if(preg_match('/^[^\.\s]+$/', $tmp)){
+      $listDownload[] = $tmp;
+    }
+  }
+  if(empty($listDownload)){
+    $listDownload = '<div id="emptyDir">Download dir empty</div>';
   }
 }
 include('./core/body.php');

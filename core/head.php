@@ -87,6 +87,19 @@
       }
     }
 
+    function deleteDir(file){
+      if(confirm("Delete dir "+file+"?")){
+        $.get("index.php?deleteDir="+file, function( data ) {
+          if(data.trim() == 'OK'){
+            location.reload();
+          }
+          else {
+            $(".h_top").text('Error delete');
+          }
+        });
+      }
+    }
+
     function start(){
       all_size = size;
       failed_size_dw = failed_size;
@@ -108,7 +121,7 @@
             migration = $.parseJSON(data);
             $.get("index.php?clear="+migration['id'], function( data ) {
               if(data.trim() == 'OK'){
-                $(".h_top").text('Clear ok');
+                location.reload();
               }
               else {
                 $(".h_top").text('Error clear');

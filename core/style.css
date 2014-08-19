@@ -67,7 +67,7 @@ a:hover{text-decoration:none}
 .active {
     color: #62c462!important;
 }
-#top{width:1200px;height:300px;margin:10% auto 0}
+#top{width:1200px;height:300px;margin:10% auto 0; vertical-align: top;}
 #header{display:inline-block;height:300px;width:300px;border-radius:300px;background-color:#62c462;box-shadow:0 0 15px 0 rgba(0,0,0,1);overflow:hidden}
 .h_top{height:50px;padding-top:50px;font-size:25px;font-family:"Kelly Slab",sans-serif;text-align:center;opacity:.5}
 .h_center{height:100px;width:300px;text-align:center}
@@ -78,7 +78,7 @@ a:hover{text-decoration:none}
 .h_proc{font-size:45px;font-family:"Kelly Slab",sans-serif;text-align:center;margin-top:20px;opacity:.5}
 .h_proc span{cursor:pointer}
 .h_proc span:hover{color:#fff;opacity:1}
-#stat{display:inline-block;width:798px;height:260px;overflow:visible;font-family:'Ubuntu Mono',monospace;padding:35px;padding-bottom:0;color:#999;text-align:center}
+#stat{display:inline-block;width:798px;height:260px;overflow:visible;font-family:'Ubuntu Mono',monospace;padding:35px;padding-bottom:0;color:#999;text-align:center; margin-top: -150px;}
 .s_open{font-size:25px;height:50px;width:798px;margin-top:60px}
 .s_dow td{padding-top:20px;font-size:40px;width:33%;}
 #stat b{color:#eee;text-shadow:0 0 3px rgba(0,0,0,0.7)}
@@ -154,6 +154,42 @@ a:hover{text-decoration:none}
 #stat span i:hover {
     background-color: rgba(128,128,128,0.4);
     border-color: #999999;
+}
+
+#stat span.dir div {
+    display: inline-block;
+    padding: 7px 10px;
+    border: 1px solid #777777;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    background-color: rgba(128,128,128,0.2);
+    color: #cccccc;
+    cursor: default;
+    margin: 0;
+}
+
+#stat span.dir div:hover {
+    display: inline-block;
+    padding: 7px 10px;
+    border: 1px solid #777777;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    background-color: rgba(128,128,128,0.2);
+    color: #cccccc;
+    margin: 0;
+}
+
+#stat p {
+    display: block;
+    width: 100%;
+    text-align: left;
+    margin: 3px;
+    padding-bottom: 7px;
+    margin-bottom: 7px;
+    border-bottom: 1px solid #999999;
+    font-size: 24px;
+    float: left;
+    margin-top: -50px;
 }
 
 #load {
