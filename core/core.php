@@ -204,13 +204,13 @@ else{
     }
   }
   if(empty($listDir)){
-    $listDir = '<div id="emptyDir">Dir csv empty</div>';
+    $listDir = '<h3 id="emptyDir">Dir csv empty</h3>';
   }
 }
 
 if(!file_exists('./'.DOWNLOAD_FOLDER.'/')){
   mkdir('./'.DOWNLOAD_FOLDER.'/', 0777 , true);
-  $listDir = '<div id="emptyDir">Download dir empty</div>';
+  $listDir = '<h3 id="emptyDir">Download dir empty</h3>';
 }
 else{
   chmod('./'.DOWNLOAD_FOLDER.'/', 0777);
@@ -222,7 +222,7 @@ else{
     }
   }
   if(empty($listDownload)){
-    $listDownload = '<div id="emptyDir">Download dir empty</div>';
+    $listDownload = '<h3 id="emptyDir">Download dir empty</h3>';
   }
 }
 include('./core/body.php');
