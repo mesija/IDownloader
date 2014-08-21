@@ -2,7 +2,7 @@
 
 // версія ядра
 
-define('VER',0.61);
+define('VER',0.62);
 
 // підключаємо файл конфігів
 
@@ -158,7 +158,7 @@ if(isset($_GET['getInfo']) AND !empty($_GET['getInfo'])){
 
 if(file_exists('./core/update')){
   $update_time = (int)file_get_contents('./core/update');
-  $update_time = $update_time + (60*60*12);
+  $update_time = $update_time + (60*60);
   if($update_time < time()){
     $upVer = @file_get_contents(UPDATE_SERVER.'ver');
     if($upVer){
@@ -192,7 +192,7 @@ chmod('../'.I_FOLDER.'/', 0777);
 exec('chmod 777 -Rf ../'.I_FOLDER);
 if(!file_exists('./'.CSV_FOLDER.'/')){
   mkdir('./'.CSV_FOLDER.'/', 0777 , true);
-  $listDir = '<div id="emptyDir">Dir csv empty</div>';
+  $listDir = 'Dir csv empty';
 }
 else{
   chmod('./'.CSV_FOLDER.'/', 0777);
@@ -204,13 +204,13 @@ else{
     }
   }
   if(empty($listDir)){
-    $listDir = '<h3 id="emptyDir">Dir csv empty</h3>';
+    $listDir = 'Dir csv empty';
   }
 }
 
 if(!file_exists('./'.DOWNLOAD_FOLDER.'/')){
   mkdir('./'.DOWNLOAD_FOLDER.'/', 0777 , true);
-  $listDir = '<h3 id="emptyDir">Download dir empty</h3>';
+  $listDir = 'Download dir empty';
 }
 else{
   chmod('./'.DOWNLOAD_FOLDER.'/', 0777);
@@ -222,7 +222,7 @@ else{
     }
   }
   if(empty($listDownload)){
-    $listDownload = '<h3 id="emptyDir">Download dir empty</h3>';
+    $listDownload = 'Download dir empty';
   }
 }
 include('./core/body.php');

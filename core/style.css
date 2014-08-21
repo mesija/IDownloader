@@ -213,6 +213,31 @@ a:hover{text-decoration:none}
     margin-top: -50px;
 }
 
+#stat button {
+    display: inline-block;
+    margin-bottom: -15px;
+    margin-top: 30px;
+    border: 1px dotted #777777;
+    padding: 5px 50px;
+    background-color: rgba(128,128,128,0.1);
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+#stat button:hover {
+    border: 1px solid #62c462;
+    color: #62c462;
+    background-color: rgba(128,228,128,0.1);
+}
+
+#stat input {
+    font-family:'Ubuntu Mono',monospace;
+    margin-right: 50px;
+    display: inline-block;
+    border-radius: 5px;
+}
+
 #load {
     margin: 10% auto 0 auto;
     height: 19px;
