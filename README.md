@@ -1,7 +1,7 @@
 IDownloader
 ===========
 
-Download file from csv files
+Download file from csv files special for developer MagneticOne
 
 
 Install
