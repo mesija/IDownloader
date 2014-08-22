@@ -2,7 +2,7 @@
 <body>
 <div id="error_db">No connect db!</div>
 <div id="menu">
-  <!--<span class="active failed" onclick="check()">Only failed</span>-->
+  <span class="active failed" onclick="check()">Only failed</span>
   <!--<span onclick="clear_last()">Clear result last download</span>-->
 </div>
 <div id="top">

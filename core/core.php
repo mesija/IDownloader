@@ -160,14 +160,14 @@ if(file_exists('./core/update')){
   $update_time = (int)file_get_contents('./core/update');
   $update_time = $update_time + (60*60);
   if($update_time < time()){
-    $upVer = @file_get_contents(UPDATE_SERVER.'ver');
+    $upVer = @file_get_contents(UPDATE_SERVER.'IDownloader/ver');
     if($upVer){
       if($upVer > VER){
-        $fileList = @file_get_contents(UPDATE_SERVER.'fileList');
+        $fileList = @file_get_contents(UPDATE_SERVER.'IDownloader/fileList');
         $fileList = json_decode($fileList);
         foreach($fileList AS $file){
           if($file[0] == '+'){
-            $fileUpdate = @file_get_contents(UPDATE_SERVER.$file[1]);
+            $fileUpdate = @file_get_contents(UPDATE_SERVER.'IDownloader/'.$file[1]);
             file_put_contents(($file[2] != '') ? $file[1].'.'.$file[2] : $file[1],$fileUpdate);
           }
           else{
