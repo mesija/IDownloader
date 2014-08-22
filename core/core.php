@@ -210,7 +210,7 @@ else{
 
 if(!file_exists('./'.DOWNLOAD_FOLDER.'/')){
   mkdir('./'.DOWNLOAD_FOLDER.'/', 0777 , true);
-  $listDir = 'Download dir empty';
+  $listDir = '';
 }
 else{
   chmod('./'.DOWNLOAD_FOLDER.'/', 0777);
@@ -222,7 +222,7 @@ else{
     }
   }
   if(empty($listDownload)){
-    $listDownload = 'Download dir empty';
+    $listDownload = '';
   }
 }
 include('./core/body.php');

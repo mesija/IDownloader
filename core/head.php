@@ -4,7 +4,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <title>IDownloader</title>
   <link rel="stylesheet" type="text/css" href="./core/style.css" media="screen" />
-  <link href="data:image/x-icon;base64,AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAABILAAASCwAAAAAAAAAAAAAAAAAAAAAAAA4t4QAOLeEhDi3hDg4t4bAOLeFbDi3hFA4t4Q0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOLeFzDi3h/Q4t4Z4OLeH/Di3hzw4t4c4OLeHgDi3hBQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA4t4QEOLeFlDi3hgQ4t4f8OLeH/Di3h/w4t4f8OLeH/Di3h2w4t4VoOLeEnAAAAAAAAAAAAAAAAAAAAAAAAAAAOLeE2Di3h/w4t4f8OLeHyDi3hYQ4t4RkOLeEzDi3huw4t4f8OLeH/Di3hpwAAAAAAAAAAAAAAAAAAAAAAAAAADi3hCA4t4bIOLeH/Di3hVy8vLwIvLy9OLy8vIQ4t4QgOLeHcDi3h/g4t4S0OLeEAAAAAAAAAAAAAAAAAAAAAAA4t4cAOLeH/Di3h+Q4t4QovLy9aLy8v/y8vL9YxMTEADi3hkg4t4f8OLeH8Di3hMwAAAAAAAAAAAAAAAAAAAAAOLeF5Di3h4A4t4fwOLeEYLy8vMi8vL+kvLy+eMzMzAA4t4aQOLeH/Di3hsA4t4RwAAAAAAAAAAAAAAAAAAAAADi3hGA4t4dAOLeH/Di3hmA4u4gEvLy8CLy8vAA4t4S8OLeH2Di3h/g4t4VwAAAAAAAAAAAAAAAAAAAAAAAAAAA4t4SEOLeH0Di3h6w4t4f8OLeHADi3heA4t4ZMOLeHzDi3h/A4t4e0OLeHUDi3hbQ4t4ZgOLeE2Di3hBQAAAAAAAAAADi3hEA4t4W0OLeH/Di3h/w4t4f8OLeH/Di3h/w4t4dsOLeG0Di3hyw4t4f8OLeH/Di3h2Q4t4bsAAAAAAAAAAAAAAAAOLeFADi3hvg4t4UoOLeH/Di3hpA4t4YIOLeG3Di3hyw4t4dQOLeE5Di3hLw4t4cAOLeHSDi3hYAAAAAAAAAAAAAAAAAAAAAAOLeEDDi3hTg4t4SMAAAAADi3hhw4t4f4OLeFJLy8vdC8vL48OLeEnDi3h/w4t4WsAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA4t4VMOLeH8Di3hTS8vL2wvLy+GDi3hKg4t4f8OLeGxAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOLeFDDi3hvw4t4doOLeFEDi3hOw4t4ccOLeHgDi3hKwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA4t4ZQOLeHPDi3h/w4t4f0OLeHODi3hpg4t4QgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOLeECDi3hHA4t4Z4OLeFPDi3hWAAAAAAAAAAAwH8AAMA/AAAAHwAAAB8AAAAPAAAADwAAAQ8AAAAfAAAAAQAAgAEAAMAAAADxAAAA/wAAAP8AAAD/gAAA/4MAAA==" rel="icon" type="image/x-icon">
+  <link href="data:image/x-icon;base64,AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAABILAAASCwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP///xb///9X/f39ef39/Xn///9X////FgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////Fvn5+Z/i4+L5sb6x/5Sslv+UrJb/sb6x/+Lj4vn5+fmf////FgAAAAAAAAAAAAAAAAAAAAAAAAAA////Lu3t7eWWrZj/TJVf/0KjZf9DrG//Q6tu/0KkZv9MlF7/lq2Y/+3t7eX///8uAAAAAAAAAAAAAAAA////Fu3t7eV4nn7/QqRl/0O1fv9Duor/RL+V/0S9kv9Du4z/Q7R9/0KkZv94nn7/7e3t5f///xYAAAAAAAAAAPn5+Z+WrZj/QqRl/0O4hv9EwZj/SMqs/0bOtP9GzbP/SMmp/0XCnP9Dt4P/QqRm/5atmP/5+fmfAAAAAP///xbi4+L5TJVf/0O0ff9EwZj/SM61/0rWxf9P0sH/T9HA/0rWxf9HzbL/RMKc/0O0ff9MlF7/4uPi+f///xb///9Xsb6x/0KjZf9Duov/Rcqs/03Wxf9Dm3z/LUkf/y1JH/9Dm3v/TdbF/0XJqf9Du43/QqRm/7G+sf////9X/f39eZSslv9DrG//RL+U/0jOtP9M0cH/NlEp/zJFKv8yRSr/NlEp/0zRwf9IzbP/RL2R/0Orbv+UrJb//f39ef39/XmUrJb/Q6tu/0S9kf9Oz7X/aNnL/1dtS/9NXUb/TV1G/1duTP9o2cv/Ts+2/0S/lP9DrG//lKyW//39/Xn///9Xsb6x/0KkZv9EvI3/ZtK5/3He0f9pr5X/V21L/1duTP9pr5b/cd7R/2bTu/9Eu4z/QqNl/7G+sf////9X////FuLj4vlMlF7/TLeC/2rPsP9s18H/bt7R/3Lbzf9y283/bt7R/23YxP9qza3/TLiE/0yVX//i4+L5////FgAAAAD5+fmflq2Y/0imav9pxZz/as6w/23Uuv9s18L/bNfD/23Vvf9qza3/acaf/0imav+WrZj/+fn5nwAAAAAAAAAA////F+3t7eV4nn7/WK53/2nDl/9pyKP/acqn/2nLqv9pyKL/acSY/1itdv94nn7/7e3t5f///xYAAAAAAAAAAAAAAAD///8u7e3t5ZatmP9bm2r/YLF9/2e8iv9nvIv/YLF8/1uba/+WrZj/7e3t5f///y4AAAAAAAAAAAAAAAAAAAAAAAAAAP///xf5+fmg4uPi+bG+sf+UrJb/lKyX/7G+sf/i4+L5+fn5n////xYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP///xf///9X/f39ef39/Xn///9X////FgAAAAAAAAAAAAAAAAAAAAAAAAAA+B8AAOAHAADAAwAAgAEAAIABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAQAAgAEAAMADAADgBwAA+B8AAA==" rel="icon" type="image/x-icon">
   <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
   <script type="text/javascript">
     var progress = 0;
@@ -150,12 +150,12 @@
         $(".h_top").text('Waiting ...');
         $.get("index.php?finish="+dir, function( data ) {
           if(data == 'OK'){
-            $(".h_top").text(dir);
-            $(".h_proc").text('Finish');
+            $(".h_top").text('ID '+dir);
+            $(".h_proc").html('<span onclick=\'res()\'>RELOAD</span>');
             document.title = "Finish download " + migration['id'];
           }
           else{
-            $(".h_top").text(dir);
+            $(".h_top").text('ID '+dir);
             $(".h_proc").text('Error');
             document.title = "Error finish download " + migration['id'];
           }
@@ -195,6 +195,10 @@
       $(".completed_size").text(copied_size);
       $(".failed_size").text(failed_size);
       document.title = "Download "+pro+'%';
+    }
+
+    function res(){
+      location.reload();
     }
 
     function process(){
