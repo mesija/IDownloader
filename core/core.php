@@ -108,14 +108,12 @@ if(isset($_GET['loadFile']) AND !empty($_GET['loadFile']) AND isset($_GET['step'
     $i = 0;
     while($mass = fgetcsv($csv) AND $i < $max){
       if($i > $min-1){
-        if($mass[6] != '"failed"') {
+        if($mass[6] != 'failed') {
           $mass[6] = 1;
         }
         else {
           $mass[6] = 0;
         }
-        $mass[2] = str_replace('"', "", $mass[2]);
-        $mass[3] = str_replace('"', "", $mass[3]);
         $input[$i][0] = $mass[6];
         $input[$i][1] = $mass[2];
         $input[$i][2] = $mass[3];

@@ -168,7 +168,7 @@
         $(".h_top").text('Waiting ...');
         $.get("index.php?finish="+dir, function( data ) {
           if(data == 'OK'){
-            $(".h_top").text('ID '+dir);
+            $(".h_top").text('ID: '+dir);
             $(".h_proc").html('<span onclick=\'res()\'>RELOAD</span>');
             document.title = "Finish download " + migration['id'];
           }
@@ -227,7 +227,7 @@
           process();
         }
         else {
-          $.get( "index.php?s="+d[step][id][1]+"&t="+d[step][id][2]+"&dir="+migration['id']+"&ts="+migration['target_store_id'],
+          $.get( "index.php?s="+d[step][id][1]+"&t="+d[step][id][2]+"&dir="+dir+"&ts="+migration['target_store_id'],
           function( data ) {
             if(data.trim() == 'OK')
               copied++;
