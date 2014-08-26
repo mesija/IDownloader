@@ -2,7 +2,7 @@
 
 // версія ядра
 
-define('VER',0.63);
+define('VER',0.7);
 
 // підключаємо файл конфігів
 
@@ -95,17 +95,19 @@ if(isset($_GET['s']) AND isset($_GET['t']) AND isset($_GET['dir'])){
 
 // завантажуємо інформацію з csv файлу
 
-if(isset($_GET['loadFile']) AND !empty($_GET['loadFile'])){
+if(isset($_GET['loadFile']) AND !empty($_GET['loadFile']) AND isset($_GET['step'])){
   $file = $_GET['loadFile'];
+  $part = $_GET['step'];
+  $max = ($part+1)*50000;
+  $min = $part*50000;
   ini_set('max_execution_time', '0');
   ini_set('display_errors', '0');
   if(file_exists('./'.CSV_FOLDER.'/'.$file)){
-    $csv = file('./'.CSV_FOLDER.'/'.$file);
-    $size = sizeof($csv);
+    $csv = fopen('./'.CSV_FOLDER.'/'.$file,'r');
     $input = array();
-    if($size > 0){
-      for($i=0;$i<$size;$i++){
-        $mass = explode(',', $csv[$i]);
+    $i = 0;
+    while($mass = fgetcsv($csv) AND $i < $max){
+      if($i > $min-1){
         if($mass[6] != '"failed"') {
           $mass[6] = 1;
         }
@@ -118,9 +120,12 @@ if(isset($_GET['loadFile']) AND !empty($_GET['loadFile'])){
         $input[$i][1] = $mass[2];
         $input[$i][2] = $mass[3];
       }
-      exit(json_encode($input));
+      $i++;
     }
-    echo exit('NO');
+    if($i > 1)
+      exit(json_encode($input));
+    else
+      exit('NO');
   }
   exit('NO');
 }

@@ -18,29 +18,44 @@
     var copied_size = 0;
     var proces = <?php echo PROCESS; ?>;
     var d = [];
+    var n = 0;
     var size = 0;
     var pro = 0;
+    var step = 0;
+    var step_id = 0;
     var dir = '';
     var migration = [];
     var migration_status = false;
     var defaultDir = '<?php echo date("Hi_dm"); ?>';
 
-    function openFile(file){
+    function openFile(file,part){
       $("#stat").html('<div id=\"load\"></div>');
       $(".h_top").text('Load file ...');
-      $.get("index.php?loadFile="+file, function( data ) {
-        if(data != 'NO'){
-          d = $.parseJSON(data);
-          size = d.length;
-          var step = size;
-          while(step){
-            if(d[step-1][0] == 1)
-              copied_size++;
-            else
-              failed_size++;
-            step--;
+      $.get("index.php?loadFile="+file+"&step="+part, function( data ) {
+        if(data != '[]'){
+          d[part] = $.parseJSON(data);
+          $(".h_top").text('Load file step '+ (part++));
+          openFile(file,part);
+        }
+        else {
+          var mass = d.length;
+          var i = 0;
+          while(mass){
+            mass--;
+            var img = 0;
+            while(img != 50000){
+              if(window.d[i][size]){
+                if(d[i][size][0] == 1)
+                  copied_size++;
+                else
+                  failed_size++;
+                size++;
+              }
+              img++;
+            }
+            i++;
           }
-          $(".h_top").text('Load file ok');
+          if(failed_size == 0) $( ".failed" ).removeClass("active");
           $.get("index.php?getInfo="+file, function( data ) {
             $(".h_proc").html('<span onclick="start()">START</span>');
             $("#stat").html(
@@ -68,9 +83,6 @@
               $("#error_db").animate({opacity:1},1000);
             }
           });
-        }
-        else {
-          location.reload();
         }
       });
     }
@@ -139,6 +151,12 @@
     }
 
     function next(){
+      step_id++;
+      if(step_id == 50000) {
+        step_id = 0;
+        step++;
+        next_id++;
+      }
       var id = next_id;
       next_id++;
       if(next_id > size) id = -1;
@@ -155,7 +173,7 @@
             document.title = "Finish download " + migration['id'];
           }
           else{
-            $(".h_top").text('ID '+dir);
+            $(".h_top").text('ID: '+dir);
             $(".h_proc").text('Error');
             document.title = "Error finish download " + migration['id'];
           }
@@ -205,18 +223,18 @@
       stat();
       var id = next();
       if(id != -1)
-        if($(".failed").hasClass("active") && d[id][0] == 1){
+        if($(".failed").hasClass("active") && d[step][id][0] == 1){
           process();
         }
         else {
-          $.get( "index.php?s="+d[id][1]+"&t="+d[id][2]+"&dir="+migration['id']+"&ts="+migration['target_store_id'],
+          $.get( "index.php?s="+d[step][id][1]+"&t="+d[step][id][2]+"&dir="+migration['id']+"&ts="+migration['target_store_id'],
           function( data ) {
             if(data.trim() == 'OK')
               copied++;
             else
               failed++;
             all++;
-            if(d[id][0] == 0)
+            if(d[step][id][0] == 0)
               failed_size--;
             else
               copied_size--;
