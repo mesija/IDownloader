@@ -137,7 +137,7 @@ a:hover{text-decoration:none}
     background-color: rgba(128,128,128,0.2);
     color: #666666;
     cursor: pointer;
-    margin-left: 44px;
+    margin-left: 78px;
 }
 
 #stat span b:hover {
@@ -149,6 +149,7 @@ a:hover{text-decoration:none}
 }
 
 #stat span i {
+    margin-left: 34px;
     cursor: pointer;
     display: inline-block;
     padding: 3px 10px;
@@ -175,6 +176,27 @@ a:hover{text-decoration:none}
 #stat span i:hover {
     background-color: rgba(128,128,128,0.4);
     border-color: #999999;
+}
+
+#stat span t {
+    cursor: pointer;
+    display: inline-block;
+    padding: 7px 10px;
+    border-top: 1px solid #777777;
+    border-right: 1px solid #777777;
+    border-bottom: 1px solid #777777;
+    background-color: rgba(128,128,128,0.2);
+    color: #666666;
+    cursor: pointer;
+    position: absolute;
+    width: 13px;
+    text-shadow:0 0 3px rgba(0,0,0,0.7);
+}
+
+#stat span t:hover {
+    background-color: rgba(128,128,128,0.4);
+    border-color: #999999;
+    color: #cccccc;
 }
 
 #stat span.dir div {

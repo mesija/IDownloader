@@ -2,7 +2,7 @@
 
 // версія ядра
 
-define('VER',0.71);
+define('VER',0.8);
 
 // підключаємо файл конфігів
 
@@ -156,6 +156,30 @@ if(isset($_GET['getInfo']) AND !empty($_GET['getInfo'])){
   exit('NO');
 }
 
+// перейменовуємо файл
+
+if(isset($_GET['renameFile']) AND !empty($_GET['renameFile'])){
+  $file = $_GET['renameFile'];
+  if(file_exists('./'.CSV_FOLDER.'/'.$file)){
+    $csv = file('./'.CSV_FOLDER.'/'.$file);
+    $mass = explode(',', $csv[0]);
+    $id = str_replace('"', "", $mass[1]);
+    $db = dbConnect();
+    if(!$db) exit('NO');
+    $rez = mysql_query("
+      SELECT m.id
+      FROM migrations_stores AS t
+      LEFT JOIN migrations AS m ON m.target_store_id = t.id
+      WHERE t.id = " . $id
+      ,$db);
+    if($rez){
+      $rez = mysql_fetch_array($rez,MYSQL_ASSOC);
+      rename('./'.CSV_FOLDER.'/'.$file,'./'.CSV_FOLDER.'/'.$rez['id'].'.csv');
+      exit('OK');
+    }
+    exit('NO');
+  }
+}
 
 // перевіряємо оновлення
 

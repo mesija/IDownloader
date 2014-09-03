@@ -104,7 +104,7 @@
       if(confirm("Delete dir "+file+"?")){
         $.get("index.php?deleteDir="+file, function( data ) {
           if(data.trim() == 'OK'){
-            location.reload();
+            res();
           }
           else {
             $(".h_top").text('Error delete');
@@ -134,7 +134,7 @@
             migration = $.parseJSON(data);
             $.get("index.php?clear="+migration['id'], function( data ) {
               if(data.trim() == 'OK'){
-                location.reload();
+                res();
               }
               else {
                 $(".h_top").text('Error clear');
@@ -217,6 +217,18 @@
 
     function res(){
       location.reload();
+    }
+
+    function renameFile(file){
+      if(confirm("Set auto name for file "+file+"?")){
+        $.get( "index.php?renameFile="+file,
+          function( data ) {
+            if(data.trim() == 'OK')
+              res();
+            else
+              alert('Bad migration id or not connect db');
+          });
+      }
     }
 
     function process(){
