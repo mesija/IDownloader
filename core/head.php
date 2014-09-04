@@ -89,12 +89,12 @@
                 '<td class="right">'+migration['images_total_count']+'</td>'+
                 '</tr>'+
                 '<tr>'+
-                '<td class="left">Copied images</td>'+
-                '<td class="right">'+migration['images_copied_count']+'</td>'+
-                '</tr>'+
-                '<tr class="end">'+
                 '<td class="left">Failed images</td>'+
                 '<td class="right">'+migration['images_failed_count']+'</td>'+
+                '</tr>'+
+                '<tr class="end">'+
+                '<td class="left">Copied images</td>'+
+                '<td class="right">'+migration['images_copied_count']+'</td>'+
                 '</tr>'+
                 '<tr>'+
                 '<td class="left">Entities count</td>'+
@@ -137,6 +137,7 @@
             );
             $(".s_open").animate({opacity:1},1000);
             $("#info").animate({opacity:1},1000);
+            $(".failed").animate({marginTop:0},1000);
           });
         }
       });
@@ -222,7 +223,6 @@
     function finish(){
       if(proces == 0){
         $(".h_top").text('Waiting ...');
-        active = false;
         $.get("index.php?finish="+dir, function( data ) {
           if(data == 'OK'){
             $(".h_top").text('ID: '+dir);

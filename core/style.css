@@ -61,7 +61,8 @@ a:hover{text-decoration:none}
 
 #menu span {
     cursor: pointer;
-    margin: 0 25px;
+    margin-left: 25px;
+    margin-right: 25px;
     color:#999999;
     float: right;
 }
@@ -69,6 +70,8 @@ a:hover{text-decoration:none}
     color: #ffffff;
 }
 .failed {
+    margin-top: -70px;
+    position: relative;
     color: #999999!important;
     padding: 7px 20px;
     background-color: #272727;
