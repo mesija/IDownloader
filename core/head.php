@@ -27,6 +27,8 @@
     var migration = [];
     var migration_status = false;
     var defaultDir = '<?php echo date("Hi_dm"); ?>';
+    var active = false;
+    var info = '';
 
     function openFile(file,part){
       $("#stat").html('<div id=\"load\"></div>');
@@ -58,6 +60,67 @@
           if(failed_size == 0) $( ".failed" ).removeClass("active");
           $.get("index.php?getInfo="+file, function( data ) {
             $(".h_proc").html('<span onclick="start()">START</span>');
+            if(data != 'NO'){
+              migration = $.parseJSON(data);
+              $(".h_top").text('ID: ' + migration['id']);
+              dir = migration['id'];
+              migration_status = true;
+              var sUrl = migration['s_url'];
+              info = '<table id="info">'+
+                '<tbody>'+
+                '<tr>'+
+                '<td class="left">Source Name</td>'+
+                '<td class="right">'+migration['s_name']+'</td>'+
+                '</tr>'+
+                '<tr class="end">'+
+                '<td class="left">Source Url</td>'+
+                '<td class="right"><a href="'+migration['s_url']+'" target="_blank"> '+migration['s_url']+'</a></td>'+
+                '</tr>'+
+                '<tr>'+
+                '<td class="left">Target Name</td>'+
+                '<td class="right">'+migration['t_name']+'</td>'+
+                '</tr>'+
+                '<tr class="end">'+
+                '<td class="left">Target Url</td>'+
+                '<td class="right"><a href="'+migration['t_url']+'" target="_blank"> '+migration['t_url']+'</a></td>'+
+                '</tr>'+
+                '<tr>'+
+                '<td class="left">Total images</td>'+
+                '<td class="right">'+migration['images_total_count']+'</td>'+
+                '</tr>'+
+                '<tr>'+
+                '<td class="left">Copied images</td>'+
+                '<td class="right">'+migration['images_copied_count']+'</td>'+
+                '</tr>'+
+                '<tr class="end">'+
+                '<td class="left">Failed images</td>'+
+                '<td class="right">'+migration['images_failed_count']+'</td>'+
+                '</tr>'+
+                '<tr>'+
+                '<td class="left">Entities count</td>'+
+                '<td class="right">'+migration['entities_count']+'</td>'+
+                '</tr>'+
+                '<tr>'+
+                '<td class="left">Migrated entities</td>'+
+                '<td class="right">'+migration['migrated_entities_count']+'</td>'+
+                '</tr>'+
+                '<tr>'+
+                '<td class="left">Price</td>'+
+                '<td class="right">$'+migration['price_in_dollars']+'</td>'+
+                '</tr>'+
+                '<tr>'+
+                '<td class="left">Discount</td>'+
+                '<td class="right">$'+migration['discount']+'</td>'+
+                '</tr>'+
+                '</tbody>'+
+                '</table>';
+            }
+            else{
+              dir = defaultDir;
+              $(".h_top").text(dir);
+              $("#error_db").animate({opacity:1},1000);
+            }
+            $("#top").animate({marginTop:'3%'},1000);
             $("#stat").html(
               '<table class="s_open">'+
                 '<tr>'+
@@ -70,18 +133,10 @@
                 '<td><b id="failed" style="color: #ee5f5b;">---</b></td>'+
                 '<td><b id="copied" style="color: #62c462;">---</b></td>'+
                 '</tr>'+
-                '</table>');
-            if(data != 'NO'){
-              migration = $.parseJSON(data);
-              $(".h_top").text('ID: ' + migration['id']);
-              dir = migration['id'];
-              migration_status = true;
-            }
-            else{
-              dir = defaultDir;
-              $(".h_top").text(dir);
-              $("#error_db").animate({opacity:1},1000);
-            }
+              '</table>'+info
+            );
+            $(".s_open").animate({opacity:1},1000);
+            $("#info").animate({opacity:1},1000);
           });
         }
       });
@@ -118,6 +173,7 @@
       failed_size_dw = failed_size;
       $.get("index.php?start="+dir, function( data ) {
         if(data.trim() == 'OK'){
+          active = true;
           download();
         }
         else {
@@ -166,6 +222,7 @@
     function finish(){
       if(proces == 0){
         $(".h_top").text('Waiting ...');
+        active = false;
         $.get("index.php?finish="+dir, function( data ) {
           if(data == 'OK'){
             $(".h_top").text('ID: '+dir);
@@ -182,11 +239,13 @@
     }
 
     function check(){
-      if($(".failed").hasClass("active")){
-        $( ".failed" ).removeClass("active");
-      }
-      else{
-        $( ".failed" ).addClass("active");
+      if(!active){
+        if($(".failed").hasClass("active")){
+          $( ".failed" ).removeClass("active");
+        }
+        else{
+          $( ".failed" ).addClass("active");
+        }
       }
     }
 

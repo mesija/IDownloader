@@ -2,8 +2,9 @@
 <body>
 <div id="error_db">No connect db!</div>
 <div id="menu">
-  <span class="active failed" onclick="check()">Only failed</span>
-  <!--<span onclick="clear_last()">Clear result last download</span>-->
+  <div>
+    <span class="active failed" onclick="check()"><b>◉</b> Only failed</span>
+  </div>
 </div>
 <div id="top">
   <div id="header">
@@ -45,7 +46,7 @@
     else
       echo $listDownload;
     ?>
-  </div>
+</div>
   <div id="footer">&copy; Слава Рудавський &nbsp;&nbsp;&nbsp; IDownloader v<?php echo VER; ?> &nbsp;&nbsp;&nbsp;
     <a target="_blank" href="mailto:s.rudavskii@magneticone.com?Subject=Bug%20report%20IDownloader">Bug report</a></div>
 </div>

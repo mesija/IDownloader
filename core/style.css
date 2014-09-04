@@ -45,28 +45,54 @@ a:hover{text-decoration:none}
 #data{display:none}
 #menu {
     position: absolute;
-    top: 35px;
+    top: 0;
     width: 100%;
     text-align: center;
     font-size:30px;
     font-family:"Kelly Slab",sans-serif;
     color:#666666;
-    text-shadow:0 0 3px rgba(0,0,0,0.7)
 }
+
+#menu div {
+    margin: 0 auto;
+    width: 1120px;
+    padding: 0 40px;
+}
+
 #menu span {
     cursor: pointer;
     margin: 0 25px;
     color:#999999;
+    float: right;
 }
 #menu span:hover {
     color: #ffffff;
 }
 .failed {
     color: #999999!important;
+    padding: 7px 20px;
+    background-color: #272727;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    box-shadow:0 0 10px 0 rgba(0,0,0,1);
 }
+
+.failed b {
+    position: relative;
+    top: -3px;
+    left: -3px;
+    color: #a9302a;
+}
+
 .active {
-    color: #62c462!important;
+    background-color: #62c462;
+    color: #474747!important;
 }
+
+.active b {
+    color: #ffffff;
+}
+
 #top{width:1200px;height:300px;margin:7% auto 0; vertical-align: top;}
 #header{
     display:inline-block;
@@ -100,7 +126,7 @@ a:hover{text-decoration:none}
     position: absolute;
     margin-left: 300px;
 }
-.s_open{font-size:25px;height:50px;width:798px;margin-top:60px}
+.s_open{font-size:25px;height:50px;width:798px;margin-top:60px;opacity: 0;}
 .s_dow td{padding-top:20px;font-size:40px;width:33%;}
 #stat b{color:#eee;text-shadow:0 0 3px rgba(0,0,0,0.7)}
 #stat span {
@@ -258,6 +284,37 @@ a:hover{text-decoration:none}
     margin-right: 50px;
     display: inline-block;
     border-radius: 5px;
+}
+
+#info {
+    width:798px;
+    height:260px;
+    overflow:visible;
+    font-family: arial, helvetica, sans-serif;
+    padding:35px;
+    padding-bottom:0;
+    color:#999;
+    text-align:left;
+    font-size: 16px;
+    font-weight: 400;
+    margin-top: 50px;
+    opacity: 0;
+}
+
+#info .left {
+    text-align: right;
+    width: 160px;
+    padding: 5px 15px 5px 0;
+}
+
+#info .right {
+    overflow: visible;
+    font-size: 16px;
+    color: #eeeeee;
+}
+
+#info .end {
+    border-bottom: 1px dashed #999999;
 }
 
 #load {
