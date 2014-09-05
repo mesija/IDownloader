@@ -75,7 +75,8 @@ if(isset($_GET['s']) AND isset($_GET['t']) AND isset($_GET['dir'])){
   $dir = $_GET['dir'];
   $d = str_replace(basename($_GET['t']), '', $_GET['t']);
   if(!file_exists('./'.DOWNLOAD_FOLDER.'/' . $dir . '/' . $d)) mkdir('./'.DOWNLOAD_FOLDER.'/' . $dir . '/' . $d, 0777 , true);
-  if(!file_exists('./'.DOWNLOAD_FOLDER.'/' . $dir . '/' . $_GET['t'])) {
+  if(!file_exists('./'.DOWNLOAD_FOLDER.'/' . $dir . '/' . $_GET['t'])
+     AND filesize('./'.DOWNLOAD_FOLDER.'/' . $dir . '/' . $_GET['t']) > 0) {
     $img = false;
     $img = @file_get_contents(str_replace(' ', "%20", $_GET['s']));
     if($img) {
@@ -90,7 +91,8 @@ if(isset($_GET['s']) AND isset($_GET['t']) AND isset($_GET['dir'])){
       exit('NO');
     }
   }
-  else exit('OK');
+  else
+    exit('OK');
 }
 
 // завантажуємо інформацію з csv файлу
@@ -108,7 +110,7 @@ if(isset($_GET['loadFile']) AND !empty($_GET['loadFile']) AND isset($_GET['step'
     $i = 0;
     while($mass = fgetcsv($csv) AND $i < $max){
       if($i > $min-1){
-        if($mass[6] != 'failed') {
+        if($mass[6] == 'copied') {
           $mass[6] = 1;
         }
         else {

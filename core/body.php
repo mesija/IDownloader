@@ -47,7 +47,8 @@
       echo $listDownload;
     ?>
 </div>
-  <div id="footer">&copy; Слава Рудавський &nbsp;&nbsp;&nbsp; IDownloader v<?php echo VER; ?> &nbsp;&nbsp;&nbsp;
+  <div id="footer">&copy; IDownloader v<?php echo VER; ?> &nbsp;&nbsp;&nbsp;
+    s.rudavskii@magneticone.com &nbsp;&nbsp;&nbsp;
     <a target="_blank" href="mailto:s.rudavskii@magneticone.com?Subject=Bug%20report%20IDownloader">Bug report</a></div>
 </div>
 </body>
