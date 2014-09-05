@@ -67,13 +67,18 @@
               migration_status = true;
               info = '<table id="info">'+
                 '<tbody>'+
+                '<tr class="end">'+
+                '<td class="left">Migration page</td>'+
+                '<td class="right"><a href="https://app.shopping-cart-migration.com/madmin/migrations/admin2/index/mID/'+migration['id']+
+                  '" target="_blank">https://app.shopping-cart-migration.com...mID/'+migration['id']+'</a></td>'+
+                '</tr>'+
                 '<tr>'+
                 '<td class="left">Source Name</td>'+
                 '<td class="right">'+migration['s_name']+'</td>'+
                 '</tr>'+
                 '<tr class="end">'+
                 '<td class="left">Source Url</td>'+
-                '<td class="right"><a href="'+migration['s_url']+'" target="_blank"> '+migration['s_url']+'</a></td>'+
+                '<td class="right"><a href="'+migration['s_url']+'" target="_blank">'+migration['s_url']+'</a></td>'+
                 '</tr>'+
                 '<tr>'+
                 '<td class="left">Target Name</td>'+
@@ -81,7 +86,7 @@
                 '</tr>'+
                 '<tr class="end">'+
                 '<td class="left">Target Url</td>'+
-                '<td class="right"><a href="'+migration['t_url']+'" target="_blank"> '+migration['t_url']+'</a></td>'+
+                '<td class="right"><a href="'+migration['t_url']+'" target="_blank">'+migration['t_url']+'</a></td>'+
                 '</tr>'+
                 '<tr>'+
                 '<td class="left">Total images</td>'+
