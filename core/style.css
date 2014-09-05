@@ -356,6 +356,25 @@ a:hover{text-decoration:none;color:#62c462}
     margin-bottom: -250px;
 }
 
+.pro {
+    position: absolute;
+    top: 25px;
+    opacity: 0;
+}
+
+.pro b {
+    color: #cccccc;
+}
+
+.pro i {
+    color: #999999;
+    cursor: pointer;
+}
+
+.pro i:hover {
+    color: #62c462;
+}
+
 #footer {
     position: absolute;
     bottom: 20px;

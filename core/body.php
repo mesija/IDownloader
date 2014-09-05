@@ -4,6 +4,12 @@
 <div id="menu">
   <div>
     <span class="active failed" onclick="check()"><b>◉</b> Only failed</span>
+    <div class="pro">
+      Process: <b id="process">0</b> &nbsp;&nbsp;&nbsp;
+      <i onclick="download(10,false)">
+        +10 process
+      </i>
+    </div>
   </div>
 </div>
 <div id="top">

@@ -2,7 +2,7 @@
 
 // версія ядра
 
-define('VER',0.9);
+define('VER',1.0);
 
 // підключаємо файл конфігів
 
@@ -10,6 +10,8 @@ if(file_exists('./core/config.php'))
   include('./core/config.php');
 else
   exit('No such file ./core/config.php');
+
+if(PACK) define('PACK',25000);
 
 // конектимся до бази
 
@@ -100,15 +102,15 @@ if(isset($_GET['s']) AND isset($_GET['t']) AND isset($_GET['dir'])){
 if(isset($_GET['loadFile']) AND !empty($_GET['loadFile']) AND isset($_GET['step'])){
   $file = $_GET['loadFile'];
   $part = $_GET['step'];
-  $max = ($part+1)*50000;
-  $min = $part*50000;
+  $max = ($part+1)*PACK;
+  $min = $part*PACK;
   ini_set('max_execution_time', '0');
   ini_set('display_errors', '0');
   if(file_exists('./'.CSV_FOLDER.'/'.$file)){
     $csv = fopen('./'.CSV_FOLDER.'/'.$file,'r');
     $input = array();
     $i = 0;
-    while($mass = fgetcsv($csv) AND $i < $max){
+    while($mass = fgetcsv($csv,9999,';') AND $i < $max){
       if($i > $min-1){
         if($mass[6] == 'copied') {
           $mass[6] = 1;

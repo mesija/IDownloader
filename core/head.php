@@ -29,6 +29,7 @@
     var defaultDir = '<?php echo date("Hi_dm",time()+60*60*3); ?>';
     var active = false;
     var info = '';
+    var process_info = 0;
 
     setTimeout(openDownloader,200);
 
@@ -51,7 +52,7 @@
           while(mass){
             mass--;
             var img = 0;
-            while(img != 50000){
+            while(img != <?php echo PACK; ?>){
               if(window.d[i][size]){
                 if(d[i][size][0] == 1)
                   copied_size++;
@@ -186,7 +187,9 @@
       $.get("index.php?start="+dir, function( data ) {
         if(data.trim() == 'OK'){
           active = true;
-          download();
+          $(".h_proc").text('0%');
+          $(".pro").animate({opacity:1},1000);
+          download(proces,false);
         }
         else {
           $(".h_top").text('Error start');
@@ -219,19 +222,20 @@
     }
 
     function next(){
+      var st = step;
       step_id++;
-      if(step_id == 50000) {
+      if(step_id == <?php echo PACK; ?>) {
         step_id = 0;
         step++;
-        next_id++;
       }
       var id = next_id;
       next_id++;
       if(next_id > size) id = -1;
-      return id;
+      return [id,st];
     }
 
     function finish(){
+      stat();
       if(proces == 0){
         $(".h_top").text('Waiting ...');
         $.get("index.php?finish="+dir, function( data ) {
@@ -260,12 +264,21 @@
       }
     }
 
-    function download(){
-      $(".h_proc").text('0%');
-      var i = 0;
-      while(proces > i){
-        setTimeout(process,0);
-        i++;
+    function add(count,forse){
+      download(count,forse);
+      return process_info;
+    }
+
+    function download(count,forse){
+      if((process_info != 50) || forse){
+        if(process_info == 40)
+          $(".pro i").animate({opacity:0},500);
+        var i = 0;
+        while(count > i){
+          setTimeout(process,0);
+          process_info++;
+          i++;
+        }
       }
     }
 
@@ -280,6 +293,7 @@
       $("#failed").text(failed);
       $("#copied").text(copied);
       $(".size").text(all_size);
+      $("#process").text(process_info);
       $(".completed_size").text(copied_size);
       $(".failed_size").text(failed_size);
       document.title = "Download "+pro+'%';
@@ -302,30 +316,33 @@
     }
 
     function process(){
-      stat();
-      var id = next();
+      var mass = next();
+      var id = mass[0];
+      var stepp = mass[1];
       if(id != -1)
-        if($(".failed").hasClass("active") && d[step][id][0] == 1){
+        if($(".failed").hasClass("active") && (d[stepp][id][0] == 1)){
           process();
         }
         else {
-          $.get( "index.php?s="+d[step][id][1]+"&t="+d[step][id][2]+"&dir="+dir+"&ts="+migration['target_store_id'],
+          $.get( "index.php?s="+d[stepp][id][1]+"&t="+d[stepp][id][2]+"&dir="+dir+"&ts="+migration['target_store_id'],
           function( data ) {
             if(data.trim() == 'OK')
               copied++;
             else
               failed++;
             all++;
-            if(d[step][id][0] == 0)
+            if(d[stepp][id][0] == 0)
               failed_size--;
             else
               copied_size--;
             all_size--;
             process();
+            stat();
           });
         }
       else {
         proces--;
+        process_info--;
         finish();
       }
     }
