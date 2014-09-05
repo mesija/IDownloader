@@ -65,7 +65,6 @@
               $(".h_top").text('ID: ' + migration['id']);
               dir = migration['id'];
               migration_status = true;
-              var sUrl = migration['s_url'];
               info = '<table id="info">'+
                 '<tbody>'+
                 '<tr>'+
@@ -137,7 +136,8 @@
             );
             $(".s_open").animate({opacity:1},1000);
             $("#info").animate({opacity:1},1000);
-            $(".failed").animate({marginTop:0},1000);
+            if(copied_size > 0)
+              $(".failed").animate({marginTop:0},1000);
           });
         }
       });
