@@ -1,6 +1,6 @@
 </head>
 <body>
-<div id="error_db">No connect db!</div>
+<div id="error_db">Bad migration id or not connect db!</div>
 <div id="menu">
   <div>
     <span class="active failed" onclick="check()"><b>◉</b> Only failed</span>

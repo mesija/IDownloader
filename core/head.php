@@ -26,9 +26,15 @@
     var dir = '';
     var migration = [];
     var migration_status = false;
-    var defaultDir = '<?php echo date("Hi_dm"); ?>';
+    var defaultDir = '<?php echo date("Hi_dm",time()+60*60*3); ?>';
     var active = false;
     var info = '';
+
+    setTimeout(openDownloader,200);
+
+    function openDownloader(){
+      $("#top").animate({opacity:1,marginTop:7+'%'},1000);
+    }
 
     function openFile(file,part){
       $("#stat").html('<div id=\"load\"></div>');
