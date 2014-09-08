@@ -81,7 +81,6 @@ if(isset($_GET['s']) AND isset($_GET['t']) AND isset($_GET['dir'])){
      OR filesize('./'.DOWNLOAD_FOLDER.'/' . $dir . '/' . $_GET['t']) == 0) {
     $img = false;
     $img = @file_get_contents(str_replace(' ', "%20", $_GET['s']));
-    print_r($img);
     if($img) {
       file_put_contents('./'.DOWNLOAD_FOLDER.'/' . $dir . '/' . $_GET['t'], $img);
       exit('OK');
