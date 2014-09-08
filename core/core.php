@@ -2,7 +2,7 @@
 
 // версія ядра
 
-define('VER','1.0');
+define('VER','1.1');
 
 // підключаємо файл конфігів
 
@@ -78,9 +78,10 @@ if(isset($_GET['s']) AND isset($_GET['t']) AND isset($_GET['dir'])){
   $d = str_replace(basename($_GET['t']), '', $_GET['t']);
   if(!file_exists('./'.DOWNLOAD_FOLDER.'/' . $dir . '/' . $d)) mkdir('./'.DOWNLOAD_FOLDER.'/' . $dir . '/' . $d, 0777 , true);
   if(!file_exists('./'.DOWNLOAD_FOLDER.'/' . $dir . '/' . $_GET['t'])
-     AND filesize('./'.DOWNLOAD_FOLDER.'/' . $dir . '/' . $_GET['t']) > 0) {
+     OR filesize('./'.DOWNLOAD_FOLDER.'/' . $dir . '/' . $_GET['t']) == 0) {
     $img = false;
     $img = @file_get_contents(str_replace(' ', "%20", $_GET['s']));
+    print_r($img);
     if($img) {
       file_put_contents('./'.DOWNLOAD_FOLDER.'/' . $dir . '/' . $_GET['t'], $img);
       exit('OK');
@@ -110,7 +111,7 @@ if(isset($_GET['loadFile']) AND !empty($_GET['loadFile']) AND isset($_GET['step'
     $csv = fopen('./'.CSV_FOLDER.'/'.$file,'r');
     $input = array();
     $i = 0;
-    while($mass = fgetcsv($csv,9999,';') AND $i < $max){
+    while($mass = fgetcsv($csv,9999,',') AND $i < $max){
       if($i > $min-1){
         if($mass[6] == 'copied') {
           $mass[6] = 1;
