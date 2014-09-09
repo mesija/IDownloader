@@ -2,7 +2,7 @@
 
 // версія ядра
 
-define('VER','1.1');
+define('VER','1.2');
 
 // підключаємо файл конфігів
 
@@ -86,6 +86,32 @@ if(isset($_GET['s']) AND isset($_GET['t']) AND isset($_GET['dir'])){
       exit('OK');
     }
     else {
+      $s = $_GET['s'];
+      if(preg_match('/\.(jpeg|JPEG|jpg|JPG)$/',$s,$r)){
+        switch($r[0]){
+          case '.jpeg':
+            $mass = array('JPEG','jpg','JPG');
+            break;
+          case '.JPEG':
+            $mass = array('jpeg','jpg','JPG');
+            break;
+          case '.jpg':
+            $mass = array('jpeg','JPEG','JPG');
+            break;
+          case '.JPG':
+            $mass = array('jpeg','JPEG','jpg');
+            break;
+        }
+        $s = preg_replace('/'.$r[0].'$/','',$s);
+        foreach($mass AS $val){
+          $img = false;
+          $img = @file_get_contents(str_replace(' ', "%20", $s.'.'.$val));
+          if($img) {
+            file_put_contents('./'.DOWNLOAD_FOLDER.'/' . $dir . '/' . $_GET['t'], $img);
+            exit('OK');
+          }
+        }
+      }
       $file = fopen('./'.DOWNLOAD_FOLDER.'/' . $dir . '/' . $dir . '.csv','a');
       $put = array('0',$_GET['ts'],$_GET['s'],$_GET['t']);
       fputcsv($file,$put);
