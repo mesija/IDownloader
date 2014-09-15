@@ -267,8 +267,13 @@ if(file_exists('./core/update')){
         $fileList = json_decode($fileList);
         foreach($fileList AS $file){
           if($file[0] == '+'){
-            $fileUpdate = @file_get_contents(UPDATE_SERVER.'IDownloader/'.$file[1]);
-            file_put_contents(($file[2] != '') ? $file[1].'.'.$file[2] : $file[1],$fileUpdate);
+            if($file[2] == ""){
+              mkdir('./'.$file[1].'/', 0777 , true);
+            }
+            else{
+              $fileUpdate = @file_get_contents(UPDATE_SERVER.'IDownloader/'.$file[1]);
+              file_put_contents($file[1].'.'.$file[2],$fileUpdate);
+            }
           }
           else{
             unlink('./'.($file[2] != '') ? $file[1].'.'.$file[2] : $file[1]);
