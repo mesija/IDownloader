@@ -9,10 +9,6 @@
   >
 </div>
 
-  <script>
-
-  </script>
-
   <div id="footer">&copy; IDownloader <?php echo VER; ?> &nbsp;&nbsp;&nbsp;
     s.rudavskii@magneticone.com &nbsp;&nbsp;&nbsp;
     <a target="_blank" href="https://github.com/s-rudavskii/IDownloader">
