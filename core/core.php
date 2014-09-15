@@ -2,7 +2,7 @@
 
 // версія ядра
 
-define('VER','1.2');
+define('VER','2.0');
 
 // підключаємо файл конфігів
 
@@ -46,9 +46,12 @@ if(isset($_GET['finish']) AND !empty($_GET['finish'])){
 if(isset($_GET['clear']) AND !empty($_GET['clear'])){
   $dir = $_GET['clear'];
   chmod('../'.I_FOLDER.'/', 0777);
-  if(file_exists('./'.DOWNLOAD_FOLDER.'/'.$dir.'/'))
+  if(file_exists('./'.DOWNLOAD_FOLDER.'/'.$dir.'/')){
     exec('rm -Rf ./'.DOWNLOAD_FOLDER.'/'.$dir.'/');
-  exit('OK');
+    exit('OK');
+  }
+  else
+    exit('No such dir ./'.DOWNLOAD_FOLDER.'/'.$dir.'/');
 }
 
 // видаляємо csv файл
@@ -114,7 +117,7 @@ if(isset($_GET['s']) AND isset($_GET['t']) AND isset($_GET['dir'])){
       }
       $file = fopen('./'.DOWNLOAD_FOLDER.'/' . $dir . '/' . $dir . '.csv','a');
       $put = array('0',$_GET['ts'],$_GET['s'],$_GET['t']);
-      fputcsv($file,$put);
+      fputcsv($file,$put,',','"');
       fclose($file);
       exit('NO');
     }
@@ -125,15 +128,19 @@ if(isset($_GET['s']) AND isset($_GET['t']) AND isset($_GET['dir'])){
 
 // завантажуємо інформацію з csv файлу
 
-if(isset($_GET['loadFile']) AND !empty($_GET['loadFile']) AND isset($_GET['step'])){
+if(isset($_GET['loadFile']) AND !empty($_GET['loadFile']) AND isset($_GET['step']) AND isset($_GET['type'])){
   $file = $_GET['loadFile'];
   $part = $_GET['step'];
   $max = ($part+1)*PACK;
   $min = $part*PACK;
   ini_set('max_execution_time', '0');
   ini_set('display_errors', '0');
-  if(file_exists('./'.CSV_FOLDER.'/'.$file)){
-    $csv = fopen('./'.CSV_FOLDER.'/'.$file,'r');
+  if($_GET['type'] == 0)
+    $url = './'.CSV_FOLDER.'/'.$file;
+  else
+    $url = './'.DOWNLOAD_FOLDER.'/'.$file.'/'.$file.'.csv';
+  if(file_exists($url)){
+    $csv = fopen($url,'r');
     $input = array();
     $i = 0;
     while($mass = fgetcsv($csv,9999,',') AND $i < $max){
@@ -150,7 +157,7 @@ if(isset($_GET['loadFile']) AND !empty($_GET['loadFile']) AND isset($_GET['step'
       }
       $i++;
     }
-    if($i > 1)
+    if($i > 0 AND $input[0][1] != '""')
       exit(json_encode($input));
     else
       exit('NO');
@@ -160,12 +167,16 @@ if(isset($_GET['loadFile']) AND !empty($_GET['loadFile']) AND isset($_GET['step'
 
 // отримуємо інформацію про міграцію
 
-if(isset($_GET['getInfo']) AND !empty($_GET['getInfo'])){
+if(isset($_GET['getInfo']) AND !empty($_GET['getInfo']) AND isset($_GET['type'])){
   $file = $_GET['getInfo'];
   ini_set('max_execution_time', '0');
   ini_set('display_errors', '0');
-  if(file_exists('./'.CSV_FOLDER.'/'.$file)){
-    $csv = file('./'.CSV_FOLDER.'/'.$file);
+  if($_GET['type'] == 0)
+    $url = './'.CSV_FOLDER.'/'.$file;
+  else
+    $url = './'.DOWNLOAD_FOLDER.'/'.$file.'/'.$file.'.csv';
+  if(file_exists($url)){
+    $csv = file($url);
     $mass = explode(',', $csv[0]);
     $id = str_replace('"', "", $mass[1]);
     $db = dbConnect();
@@ -204,11 +215,43 @@ if(isset($_GET['renameFile']) AND !empty($_GET['renameFile'])){
       ,$db);
     if($rez){
       $rez = mysql_fetch_array($rez,MYSQL_ASSOC);
+      if(file_exists('./'.CSV_FOLDER.'/'.$rez['id'].'.csv')){
+        exit('Error! File '.$rez['id'].'.csv is exists');
+      }
       rename('./'.CSV_FOLDER.'/'.$file,'./'.CSV_FOLDER.'/'.$rez['id'].'.csv');
       exit('OK');
     }
     exit('NO');
   }
+  exit('NO');
+}
+
+// перейменовуємо папку
+
+if(isset($_GET['renameDir']) AND !empty($_GET['renameDir']) AND isset($_GET['name']) AND !empty($_GET['name'])){
+  $file = $_GET['renameDir'];
+  if(is_dir('./'.DOWNLOAD_FOLDER.'/'.$file.'/')){
+    if(!is_dir('./'.DOWNLOAD_FOLDER.'/'.$_GET['name'].'/')){
+      rename('./'.DOWNLOAD_FOLDER.'/'.$file.'/','./'.DOWNLOAD_FOLDER.'/'.$_GET['name']);
+      exit('OK');
+    }
+    else {
+      exit('Dir '.$_GET['name'].' is exists!');
+    }
+  }
+  exit('Dir '.$_GET['renameDir'].' not exists!');
+}
+
+// надаємо права
+
+if(isset($_GET['perDir']) AND !empty($_GET['perDir'])){
+  $file = $_GET['perDir'];
+  if(is_dir('./'.DOWNLOAD_FOLDER.'/'.$file.'/')){
+    chmod('./'.DOWNLOAD_FOLDER.'/'.$file.'/', 0777);
+    exec('chmod 777 -Rf ./'.DOWNLOAD_FOLDER.'/'.$file.'/');
+    exit('OK');
+  }
+  exit('Dir '.$_GET['perDir'].' not exists!');
 }
 
 // перевіряємо оновлення
@@ -244,9 +287,6 @@ else{
 
 // генеруємо код основної сторінки
 
-include('./core/head.php');
-chmod('../'.I_FOLDER.'/', 0777);
-exec('chmod 777 -Rf ../'.I_FOLDER);
 if(!file_exists('./'.CSV_FOLDER.'/')){
   mkdir('./'.CSV_FOLDER.'/', 0777 , true);
   $listDir = 'Dir csv empty';
@@ -257,7 +297,12 @@ else{
   $listDir = array();
   foreach($tmpDir AS $tmp){
     if(preg_match('/\.csv$/', $tmp)){
-      $listDir[] = $tmp;
+      $f_file = './'.CSV_FOLDER.'/'.$tmp;
+      if(substr((filesize($f_file)/1000000), 0, 4) > 1.00)
+      {if(substr((filesize($f_file)/1000000), 0, 4) > 100.00) $n = 5; else $n = 4;
+        $f_size = substr((filesize($f_file)/1000000), 0, $n)." Mb";}
+      else {$f_size = substr((filesize($f_file)/1000), 0, 5)." Kb";}
+      $listDir[$tmp] = $f_size;
     }
   }
   if(empty($listDir)){
@@ -275,11 +320,184 @@ else{
   $listDownload = array();
   foreach($tmpDownload AS $tmp){
     if(preg_match('/^[^\.\s]+$/', $tmp)){
-      $listDownload[] = $tmp;
+      $listDownload[$tmp] = $tmp;
     }
   }
   if(empty($listDownload)){
     $listDownload = '';
   }
 }
+
+// генеруємо код контенту
+
+function printContent($listDir,$listDownload){
+  echo '<div class="block logo">
+  <b class="icon-download"></b> IDownloader <v>'.VER.'</v>
+  <button onclick="res()"><b class="icon-loop2"></b> Reload</button>
+  </div>
+  <div class="block download panel">
+    <div id="left">
+        <div class="all">
+            <div class="left"></div>
+            <div class="right"></div>
+        </div>
+        <div class="failed">
+            <div class="left"></div>
+            <div class="right"></div>
+        </div>
+        <div class="copied">
+            <div class="left"></div>
+            <div class="right"></div>
+        </div>
+    </div>
+    <div id="right">
+        <div class="process">
+            <div class="left"><b>0</b> <span class="icon-meter"></span></div>
+            <div class="right"><button onclick="add(10)" class="dis">+10 process</button></div>
+        </div>
+        <div class="only">
+            <div class="center"><button onclick="check()"><span class="icon-aid"></span> Only failed</button></div>
+        </div>
+    </div>
+  </div>
+  <div class="block download cir"><div id="topLoader"></div></div>
+  <div class="block fileList">
+    <div id="csv">
+      <h1><span class="icon-file3"></span> CSV file</h1>';
+      if(!is_array($listDir))
+        echo $listDir;
+      else{
+        echo '<table class="csvFolder"><tbody><tr>';
+        $step = 1;
+        foreach($listDir AS $name => $size){
+          if($step == 0){
+            $step++;
+            $class = '';
+          } else {
+            $step--;
+            $class = ' class="step"';
+          }
+          echo '
+                <tr'.$class.'>
+                  <td onclick="openFile(\''.$name.'\',0,0)" class="csvFolderName" title="Open file">'.preg_replace('/\.csv$/','',$name).'</td>
+                  <td class="fileSize" title="Size csv file '.$size.'">'.$size.'</td>
+                  <td class="icon" onclick="renameFile(\''.$name.'\')" title="Set migration id for name"><span class="icon-pencil2"></span></td>
+                  <td class="icon" onclick="clearLast(\''.$name.'\')" title="Clear last download files"><span class="icon-magnet"></span></td>
+                  <td class="icon delete" onclick="deleteFile(\''.$name.'\')" title="Delete csv file"><span class="icon-remove"></span></td>
+                </tr>';
+        }
+        echo '</tbody></table>';
+      }
+      echo '
+    </div
+      ><div id="folder">
+      <h1><span class="icon-folder"></span> Download folder</h1>'.'';
+      if(!is_array($listDownload))
+        echo $listDownload;
+      else{
+        if(is_array($listDir)){
+          echo '<table class="csvFolder"><tbody><tr>';
+          $step = 1;
+          foreach($listDir AS $name => $tmp){
+            if($step == 0){
+              $step++;
+              $class = '';
+            } else {
+              $step--;
+              $class = 'step';
+            }
+            $name = preg_replace('/\.csv$/','',$name);
+            if(isset($listDownload[$name])){
+              $pre = substr(sprintf('%o', fileperms('./'.DOWNLOAD_FOLDER.'/'.$name)), -3);
+              if($pre != 777) $lock = 'icon-close'; else $lock = 'icon-checkmark';
+              echo '
+                <tr class="'.$class.'">
+                  <td class="csvFolderName">'.$name.'</td>';
+              if(file_exists('./'.DOWNLOAD_FOLDER.'/'.$name.'/'.$name.'.csv'))
+                echo '<td class="icon" onclick="openFile(\''.$name.'\',0,1)"><span class="icon-history"></span></td>';
+              else
+                echo '<td class="dis"></td>'.'';
+              echo '
+                  <td class="icon" onclick="renameDir(\''.$name.'\')"><span class="icon-pencil2"></span></td>
+                  <td class="icon" onclick="perDir(\''.$name.'\')"><span class="'.$lock.'" title="Permissions '.$pre.'"></span></td>
+                  <td class="icon delete" onclick="deleteDir(\''.$name.'\')"><span class="icon-remove"></span></td>
+                </tr>';
+              unset($listDownload[$name]);
+            }
+            else{
+              echo '
+                <tr class="'.$class.' empty">
+                  <td class="csvFolderName"></td>
+                  <td class="icon"></td>
+                  <td class="icon"></td>
+                  <td class="icon"></td>
+                  <td class="icon delete"></td>
+                </tr>';
+            }
+          }
+          foreach($listDownload AS $name){
+            if($step == 0){
+              $step++;
+              $class = '';
+            } else {
+              $step--;
+              $class = 'step';
+            }
+            $pre = substr(sprintf('%o', fileperms('./'.DOWNLOAD_FOLDER.'/'.$name)), -3);
+            if($pre != 777) $lock = 'icon-close'; else $lock = 'icon-checkmark';
+            echo '
+                <tr class="'.$class.' red">
+                  <td class="csvFolderName">'.$name.'</td>';
+              if(file_exists('./'.DOWNLOAD_FOLDER.'/'.$name.'/'.$name.'.csv'))
+                echo '<td class="icon" onclick="openFile(\''.$name.'\',0,1)"><span class="icon-history"></span></td>';
+              else
+                echo '<td class="dis"></td>'.'';
+              echo '
+                  <td class="icon" onclick="renameDir(\''.$name.'\')"><span class="icon-pencil2"></span></td>
+                  <td class="icon" onclick="perDir(\''.$name.'\')"><span class="'.$lock.'" title="Permissions '.$pre.'"></span></td>
+                  <td class="icon delete" onclick="deleteDir(\''.$name.'\')"><span class="icon-remove"></span></td>
+                </tr>';
+          }
+          echo '</tbody></table>'.'';
+        }
+        else {
+          echo '<table class="csvFolder"><tbody><tr>'.'';
+          $step = 1;
+          foreach($listDownload AS $name){
+            if($step == 0){
+              $step++;
+              $class = '';
+            } else {
+              $step--;
+              $class = ' class="step"';
+            }
+            $pre = substr(sprintf('%o', fileperms('./'.DOWNLOAD_FOLDER.'/'.$name)), -3);
+            if($pre != 777) $lock = 'icon-close'; else $lock = 'icon-checkmark';
+            echo '
+                <tr'.$class.'>
+                  <td class="csvFolderName">'.preg_replace('/\.csv$/','',$name).'</td>
+                  <td class="icon" onclick="renameDir(\''.$name.'\')"><span class="icon-pencil2"></span></td>
+                  <td class="icon" onclick="perDir(\''.$name.'\')"><span class="'.$lock.'" title="Permissions '.$pre.'"></span></td>
+                  <td class="icon delete" onclick="deleteDir(\''.$name.'\')"><span class="icon-remove"></span></td>
+                </tr>';
+          }
+          echo '</tbody></table>'.'';
+        }
+      }
+  echo '
+    </div>
+  </div>
+  <div class="block download download_migration"><p style="text-align: center">No data</p></div>'.'';
+}
+
+// вертаємо код сторінки
+
+if(isset($_GET['getContent']) AND !empty($_GET['getContent'])){
+  printContent($listDir,$listDownload);
+  exit();
+}
+
+// інклудимо сторінки
+
+include('./core/head.php');
 include('./core/body.php');
