@@ -63,7 +63,11 @@ function unBug(test){
  */
 function add(count,forse){
   if(active){
-    download(count,forse);
+    var addProcess = download(count,forse);
+    if (addProcess)
+      alert('Add '+count+' process','ok');
+    else
+      alert('Error add process','warning');
     return process_info;
   }
   return false;
@@ -530,7 +534,7 @@ function renameDir(dir){
   if(name.trim() != ''){
     $.get( "index.php?renameDir="+dir+"&name="+name, function( data ) {
       if(data.trim() == 'OK'){
-        alert('Rename dir '+dir,'ok');
+        alert('Rename dir '+dir+' to '+name,'ok');
         res(false);
         return true;
       }
@@ -538,7 +542,7 @@ function renameDir(dir){
         if(data.trim() != 'NO')
           alert(data.trim(),'warning');
         else
-          alert('Error rename dir '+dir+'!','warning');
+          alert('Error rename dir '+dir+' to '+name+'!','warning');
         return false;
       }
     });
@@ -555,7 +559,7 @@ function renameFile(file){
   if(confirm("Set auto name for file "+file+"?")){
     $.get( "index.php?renameFile="+file, function( data ) {
       if(data.trim() == 'OK'){
-        alert('Rename file '+file,'ok');
+        alert('Set auto name file '+file,'ok');
         res(false);
         return false;
       }
@@ -583,13 +587,18 @@ function res(send){
   }
   else{
     $.get("index.php?getContent=1", function( content ) {
-      if(send)
-        alert('Reload page ok','ok');
-      $("#content").html(content);
-      document.title = "IDownloader";
-      return true;
+      if(content){
+        if(send)
+          alert('Reload page','ok');
+        $("#content").html(content);
+        document.title = "IDownloader";
+        return true;
+      }
+      else{
+        alert('Error reload page','warning');
+        return false;
+      }
     });
-    return false;
   }
 }
 

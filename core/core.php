@@ -2,7 +2,7 @@
 
 // версія ядра
 
-define('VER','2.2');
+define('VER','2.3');
 
 // підключаємо файл конфігів
 
@@ -221,6 +221,8 @@ if(isset($_GET['renameFile']) AND !empty($_GET['renameFile'])){
       ,$db);
     if($rez){
       $rez = mysql_fetch_array($rez,MYSQL_ASSOC);
+      if($rez['id'].'.csv' == $_GET['renameFile'])
+        exit('OK');
       if(file_exists('./'.CSV_FOLDER.'/'.$rez['id'].'.csv')){
         exit('Error! File '.$rez['id'].'.csv is exists');
       }
@@ -235,6 +237,8 @@ if(isset($_GET['renameFile']) AND !empty($_GET['renameFile'])){
 // перейменовуємо папку
 
 if(isset($_GET['renameDir']) AND !empty($_GET['renameDir']) AND isset($_GET['name']) AND !empty($_GET['name'])){
+  if($_GET['renameDir'] == $_GET['name'])
+    exit('OK');
   $file = $_GET['renameDir'];
   if(is_dir('./'.DOWNLOAD_FOLDER.'/'.$file.'/')){
     if(!is_dir('./'.DOWNLOAD_FOLDER.'/'.$_GET['name'].'/')){
