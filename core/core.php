@@ -2,7 +2,7 @@
 
 // версія ядра
 
-define('VER','2.0');
+define('VER','2.1');
 
 // підключаємо файл конфігів
 
@@ -15,6 +15,9 @@ if(PACK) define('PACK',25000);
 
 // конектимся до бази
 
+/**
+ * @return resource
+ */
 function dbConnect (){
   $db = mysql_connect(DB_HOST,DB_USER,DB_PASS);
   if($db)
@@ -143,7 +146,9 @@ if(isset($_GET['loadFile']) AND !empty($_GET['loadFile']) AND isset($_GET['step'
     $csv = fopen($url,'r');
     $input = array();
     $i = 0;
-    while($mass = fgetcsv($csv,9999,',') AND $i < $max){
+    while($line = fgets($csv,9999) AND $i < $max){
+      $line = str_replace('"','',$line);
+      $mass = explode(',',$line);
       if($i > $min-1){
         if($mass[6] == 'copied') {
           $mass[6] = 1;
@@ -157,6 +162,7 @@ if(isset($_GET['loadFile']) AND !empty($_GET['loadFile']) AND isset($_GET['step'
       }
       $i++;
     }
+    fclose($csv);
     if($i > 0 AND $input[0][1] != '""')
       exit(json_encode($input));
     else
@@ -335,6 +341,10 @@ else{
 
 // генеруємо код контенту
 
+/**
+ * @param $listDir
+ * @param $listDownload
+ */
 function printContent($listDir,$listDownload){
   echo '<div class="block logo">
   <b class="icon-download"></b> IDownloader <v>'.VER.'</v>
@@ -365,7 +375,7 @@ function printContent($listDir,$listDownload){
         </div>
     </div>
   </div>
-  <div class="block download cir"><div id="topLoader"></div></div>
+  <div class="block download cir"><div id="topLoader" class="topLoader"></div></div>
   <div class="block fileList">
     <div id="csv">
       <h1><span class="icon-file3"></span> CSV file</h1>';
