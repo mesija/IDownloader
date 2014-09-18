@@ -20,6 +20,7 @@ var migration_status = false;   // статус міграції
 var active = false;             // статус завантаження
 var process_info = 0;           // кількість процесів яку потрібно запустити
 var loader = '';                // дані лоадера
+var alertSize = 0;              // кількість активних алертів
 
 // оголошуємо константи
 
@@ -34,6 +35,7 @@ function unBug(test){
     add();                  // додає вказану кількість процесів
     alert();                // виводить повідомлення
     alertHide();            // приховує повідомлення
+    alertDrop();            // видаляє блок повідомлення
     check();                // активує/дективує кнопку Only failed
     clearLast();            // видаляє результати завантаження
     closeEditorWarning();   // підтвердження закриття вклідки
@@ -70,29 +72,53 @@ function add(count,forse){
 /**
  * @param text
  * @param type
- * @returns {boolean}
+ * @returns {number}
  */
 function alert(text,type){
+  var id = Math.floor((Math.random() * 1000) + 1);
   if (type === 'ok') {
-    $("#alert").addClass('ok').removeClass('warning').removeClass('info').animate({opacity: 1, marginTop: 275 + 'px'}, 1000);
-    $("#alertIcon").removeClass('icon-info2').removeClass('icon-spam').addClass('icon-checkmark-circle');
+    $("#alertBox").append('<div class="alertBox">'+
+      '<div id="alert" class="'+type+' alertID-'+id+'">'+
+      '<div class="icon "><span id="alertIcon" class="icon-checkmark-circle"></span></div>'+
+      '<div class="text" id="alertText"></div>'+
+      '</div></div>');
   } else if (type === 'warning') {
-    $("#alert").removeClass('ok').addClass('warning').removeClass('info').animate({opacity: 1, marginTop: 275 + 'px'}, 1000);
-    $("#alertIcon").removeClass('icon-info2').addClass('icon-spam').removeClass('icon-checkmark-circle');
+    $("#alertBox").append('<div class="alertBox">' +
+    '<div id="alert" class="'+type+' alertID-'+id+'">'+
+    '<div class="icon "><span id="alertIcon" class="icon-spam"></span></div>'+
+    '<div class="text" id="alertText"></div>'+
+    '</div></div>');
   } else {
-    $("#alert").removeClass('ok').removeClass('warning').addClass('info').animate({opacity: 1, marginTop: 275 + 'px'}, 1000);
-    $("#alertIcon").addClass('icon-info2').removeClass('icon-spam').removeClass('icon-checkmark-circle');
+    $("#alertBox").append('<div class="alertBox">' +
+    '<div id="alert" class="info alertID-'+id+'">'+
+    '<div class="icon "><span id="alertIcon" class="icon-info2"></span></div>'+
+    '<div class="text" id="alertText"></div>'+
+    '</div></div>');
   }
-  $("#alertText").html(text);
-  setTimeout(alertHide,2500);
+  $(".alertID-"+id+" #alertText").html(text);
+  $(".alertID-"+id).animate({opacity: 1, marginTop: (275+(alertSize*60)) + 'px'}, 1000);
+  alertSize++;
+  setTimeout(function(){alertHide(id);},2500);
+  return id;
+}
+
+/**
+ * @param id
+ * @returns {boolean}
+ */
+function alertHide(id){
+  $(".alertID-"+id).animate({opacity: 0, marginTop: 0}, 1000);
+  setTimeout(function(){alertDrop(id);},1000);
+  alertSize--;
   return true;
 }
 
 /**
+ * @param id
  * @returns {boolean}
  */
-function alertHide(){
-  $("#alert").animate({opacity: 0, marginTop: 0}, 1000);
+function alertDrop(id){
+  $(".alert"+id).remove();
   return true;
 }
 
@@ -123,7 +149,7 @@ function clearLast(file){
         migration = $.parseJSON(data);
         $.get("index.php?clear="+migration['id'], function( data ) {
           if(data.trim() == 'OK'){
-            alert('Dir '+migration['id']+' is delete','ok');
+            alert('Delete dir '+migration['id'],'ok');
             res(false);
             return true;
           }
@@ -158,7 +184,7 @@ function deleteDir(dir){
   if(confirm("Delete dir "+dir+"?")){
     $.get("index.php?deleteDir="+dir, function( data ) {
       if(data.trim() == 'OK'){
-        alert('Dir '+dir+' is delete','ok');
+        alert('Delete dir '+dir,'ok');
         res(false);
         return true;
       }
@@ -181,6 +207,7 @@ function deleteFile(file){
     $.get("index.php?deleteFile="+file, function( data ) {
       if(data.trim() == 'OK'){
         location.reload();
+        alert('Delete file '+file,'ok');
         return true;
       }
       else {
@@ -256,7 +283,7 @@ function next(){
   var id = next_id;
   next_id++;
   if(next_id > size)
-    id = [-1,false];
+    id = -1;
   return [id,st];
 }
 
@@ -278,6 +305,7 @@ function openFile(file,part,type){
       else {
         d[part] = $.parseJSON(data);
         part++;
+        alert('Open file step '+part,'info');
         openFile(file,part,type);
         return true;
       }
@@ -301,6 +329,7 @@ function openFile(file,part,type){
         i++;
       }
       createLoader();
+      alert('Get migration info','info');
       $.get("index.php?getInfo="+file+"&type="+type, function( data ) {
         if(data != 'NO'){
           migration = $.parseJSON(data);
@@ -374,7 +403,7 @@ function openFile(file,part,type){
         else{
           dir = defaultDir;
           $(".h_top").text(dir);
-          alert('Bad migration id or not connect db','warning')
+          alert('Bad migration id or not connect db','warning');
         }
         $(".all .left").text(size);
         $(".copied .left").text(copied_size);
@@ -387,6 +416,7 @@ function openFile(file,part,type){
         if(failed_size > 0){
           $(".only button").addClass("ok");
         }
+        alert('Open file '+file,'ok');
       });
     }
   });
@@ -400,7 +430,7 @@ function openFile(file,part,type){
 function perDir(dir){
   $.get( "index.php?perDir="+dir, function( data ) {
     if(data.trim() == 'OK'){
-      alert('Set permissions dir '+dir+' is ok','ok');
+      alert('Set permissions dir '+dir,'ok');
       res(false);
       return true;
     }
@@ -500,7 +530,7 @@ function renameDir(dir){
   if(name.trim() != ''){
     $.get( "index.php?renameDir="+dir+"&name="+name, function( data ) {
       if(data.trim() == 'OK'){
-        alert('Rename dir '+dir+' is ok','ok');
+        alert('Rename dir '+dir,'ok');
         res(false);
         return true;
       }
@@ -525,7 +555,7 @@ function renameFile(file){
   if(confirm("Set auto name for file "+file+"?")){
     $.get( "index.php?renameFile="+file, function( data ) {
       if(data.trim() == 'OK'){
-        alert('Rename file '+file+' is ok','ok');
+        alert('Rename file '+file,'ok');
         res(false);
         return false;
       }
@@ -577,6 +607,7 @@ function start(){
       active = true;
       $(".only").addClass('dis');
       $(".process button").removeClass('dis');
+      alert('Start download','ok');
       download(proces,false);
       return true;
     }

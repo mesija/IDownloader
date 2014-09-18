@@ -16,11 +16,6 @@
     <a target="_blank" href="mailto:s.rudavskii@magneticone.com?Subject=Bug%20report%20IDownloader"><span class="icon-code"></span> Bug report</a></div>
 </div>
 
-<div id="alertBox">
-  <div id="alert">
-    <div class="icon"><span id="alertIcon"></span></div>
-    <div class="text" id="alertText"></div>
-  </div>
-</div>
+<div id="alertBox"></div>
 
 </body>

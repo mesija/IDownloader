@@ -2,7 +2,7 @@
 
 // версія ядра
 
-define('VER','2.1');
+define('VER','2.2');
 
 // підключаємо файл конфігів
 
@@ -348,7 +348,7 @@ else{
 function printContent($listDir,$listDownload){
   echo '<div class="block logo">
   <b class="icon-download"></b> IDownloader <v>'.VER.'</v>
-  <button onclick="res()"><b class="icon-loop2"></b> Reload</button>
+  <button onclick="res(true)"><b class="icon-loop2"></b> Reload</button>
   </div>
   <div class="block download panel">
     <div id="left">

@@ -414,6 +414,9 @@ a:hover{text-decoration:none;color:#f05466}
 
 
 #alertBox {
+}
+
+.alertBox {
     position: absolute;
     top: -250px;
     left: 25px;
