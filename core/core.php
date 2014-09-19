@@ -2,7 +2,7 @@
 
 // версія ядра
 
-define('VER','2.3');
+define('VER','2.4');
 
 // підключаємо файл конфігів
 
@@ -148,7 +148,12 @@ if(isset($_GET['loadFile']) AND !empty($_GET['loadFile']) AND isset($_GET['step'
     $i = 0;
     while($line = fgets($csv,9999) AND $i < $max){
       $line = str_replace('"','',$line);
-      $mass = explode(',',$line);
+      if(strpos($line,',') AND strpos($line,',') < 20)
+        $mass = explode(',',$line);
+      elseif(strpos($line,';') AND strpos($line,';') < 20)
+        $mass = explode(';',$line);
+      else
+        exit('NO');
       if($i > $min-1){
         if($mass[6] == 'copied') {
           $mass[6] = 1;
@@ -182,8 +187,15 @@ if(isset($_GET['getInfo']) AND !empty($_GET['getInfo']) AND isset($_GET['type'])
   else
     $url = './'.DOWNLOAD_FOLDER.'/'.$file.'/'.$file.'.csv';
   if(file_exists($url)){
-    $csv = file($url);
-    $mass = explode(',', $csv[0]);
+    $csv = fopen($url,'r');
+    $line = fgets($csv,9999);
+    $line = str_replace('"','',$line);
+    if(strpos($line,',') AND strpos($line,',') < 20)
+      $mass = explode(',',$line);
+    elseif(strpos($line,';') AND strpos($line,';') < 20)
+      $mass = explode(';',$line);
+    else
+      exit('NO');
     $id = str_replace('"', "", $mass[1]);
     $db = dbConnect();
     if(!$db) exit('NO');
@@ -208,8 +220,15 @@ if(isset($_GET['getInfo']) AND !empty($_GET['getInfo']) AND isset($_GET['type'])
 if(isset($_GET['renameFile']) AND !empty($_GET['renameFile'])){
   $file = $_GET['renameFile'];
   if(file_exists('./'.CSV_FOLDER.'/'.$file)){
-    $csv = file('./'.CSV_FOLDER.'/'.$file);
-    $mass = explode(',', $csv[0]);
+    $csv = fopen('./'.CSV_FOLDER.'/'.$file,'r');
+    $line = fgets($csv,9999);
+    $line = str_replace('"','',$line);
+    if(strpos($line,',') AND strpos($line,',') < 20)
+      $mass = explode(',',$line);
+    elseif(strpos($line,';') AND strpos($line,';') < 20)
+      $mass = explode(';',$line);
+    else
+      exit('Bad delimiter in csv file, must be , or ;');
     $id = str_replace('"', "", $mass[1]);
     $db = dbConnect();
     if(!$db) exit('NO');
@@ -227,11 +246,11 @@ if(isset($_GET['renameFile']) AND !empty($_GET['renameFile'])){
         exit('Error! File '.$rez['id'].'.csv is exists');
       }
       rename('./'.CSV_FOLDER.'/'.$file,'./'.CSV_FOLDER.'/'.$rez['id'].'.csv');
-      exit('OK');
+      exit($rez['id']);
     }
-    exit('NO');
+    exit('No connect db');
   }
-  exit('NO');
+  exit('No such file '.$file);
 }
 
 // перейменовуємо папку
@@ -352,7 +371,7 @@ else{
 function printContent($listDir,$listDownload){
   echo '<div class="block logo">
   <b class="icon-download"></b> IDownloader <v>'.VER.'</v>
-  <button onclick="res(true)"><b class="icon-loop2"></b> Reload</button>
+  <button onclick="res(1,1,0)"><b class="icon-loop2"></b> Reload</button>
   </div>
   <div class="block download panel">
     <div id="left">
@@ -372,7 +391,7 @@ function printContent($listDir,$listDownload){
     <div id="right">
         <div class="process">
             <div class="left"><b>0</b> <span class="icon-meter"></span></div>
-            <div class="right"><button onclick="add(10)" class="dis">+10 process</button></div>
+            <div class="right"><button onclick="add(10,0)" class="dis">+10 process</button></div>
         </div>
         <div class="only">
             <div class="center"><button onclick="check()"><span class="icon-aid"></span> Only failed</button></div>
@@ -394,10 +413,10 @@ function printContent($listDir,$listDownload){
             $class = '';
           } else {
             $step--;
-            $class = ' class="step"';
+            $class = ' step';
           }
           echo '
-                <tr'.$class.'>
+                <tr class="file-'.preg_replace('/\.csv$/','',$name).$class.'">
                   <td onclick="openFile(\''.$name.'\',0,0)" class="csvFolderName" title="Open file">'.preg_replace('/\.csv$/','',$name).'</td>
                   <td class="fileSize" title="Size csv file '.$size.'">'.$size.'</td>
                   <td class="icon" onclick="renameFile(\''.$name.'\')" title="Set migration id for name"><span class="icon-pencil2"></span></td>

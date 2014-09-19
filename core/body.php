@@ -1,6 +1,6 @@
 </head>
 <body>
-
+<div id="ribbon"></div>
 <div id="box">
   <div id="contentBox"
     ><div id="content"

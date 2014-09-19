@@ -32,6 +32,7 @@ var proces =          dif_proces;         // дефолтна кількість
 setTimeout(unBug(false),0);
 function unBug(test){
   if(test){
+    actionShow();           // виділяє кольором текст в блоці
     add();                  // додає вказану кількість процесів
     alert();                // виводить повідомлення
     alertHide();            // приховує повідомлення
@@ -54,6 +55,28 @@ function unBug(test){
     start();                // підготовує сторінку до завантаження файлів
     stat();                 // оновляє статистику на сторінці
   }
+}
+
+/**
+ * @param block
+ * @param time
+ * @param step
+ * @returns {boolean}
+ */
+function actionShow(block,time,step){
+  if(time){
+    if(step){
+      $(block).animate({opacity:0},500);
+      step = 0;
+    }
+    else{
+      $(block).animate({opacity:1},500);
+      step = 1;
+    }
+    setTimeout(function(){actionShow(block,--time,step);},500);
+  }
+  else
+    return true;
 }
 
 /**
@@ -154,7 +177,7 @@ function clearLast(file){
         $.get("index.php?clear="+migration['id'], function( data ) {
           if(data.trim() == 'OK'){
             alert('Delete dir '+migration['id'],'ok');
-            res(false);
+            res(0,0,0);
             return true;
           }
           else {
@@ -189,7 +212,7 @@ function deleteDir(dir){
     $.get("index.php?deleteDir="+dir, function( data ) {
       if(data.trim() == 'OK'){
         alert('Delete dir '+dir,'ok');
-        res(false);
+        res(0,0,0);
         return true;
       }
       else {
@@ -303,7 +326,7 @@ function openFile(file,part,type){
     if(data != '[]'){
       if(data == 'NO'){
         alert('CSV file is empty or broken!','warning');
-        res(false);
+        res(0,0,0);
         return false;
       }
       else {
@@ -435,7 +458,7 @@ function perDir(dir){
   $.get( "index.php?perDir="+dir, function( data ) {
     if(data.trim() == 'OK'){
       alert('Set permissions dir '+dir,'ok');
-      res(false);
+      res(0,0,0);
       return true;
     }
     else{
@@ -535,7 +558,7 @@ function renameDir(dir){
     $.get( "index.php?renameDir="+dir+"&name="+name, function( data ) {
       if(data.trim() == 'OK'){
         alert('Rename dir '+dir+' to '+name,'ok');
-        res(false);
+        res(0,0,0);
         return true;
       }
       else{
@@ -559,15 +582,21 @@ function renameFile(file){
   if(confirm("Set auto name for file "+file+"?")){
     $.get( "index.php?renameFile="+file, function( data ) {
       if(data.trim() == 'OK'){
-        alert('Set auto name file '+file,'ok');
-        res(false);
-        return false;
+        alert('Name file '+file+' is the actual','ok');
+        res(0,0,0);
+        return true;
       }
       else{
-        if(data.trim() != 'NO')
-          alert(data.trim(),'warning');
+        if(data.trim() != 'NO'){
+          if(data.match(/^[0-9]+$/g)) {
+            alert('Rename file '+file+' to '+data+'.csv','ok');
+            res(0,0,'.file-'+data);
+          }
+          else
+            alert(data.trim(),'warning');
+        }
         else
-          alert('Bad migration id or not connect db!','warning');
+          alert('Oops, something going wrong!','warning');
         return false;
       }
     });
@@ -578,10 +607,12 @@ function renameFile(file){
 
 /**
  * @param send
+ * @param forse
+ * @param action
  * @returns {boolean}
  */
-function res(send){
-  if(active){
+function res(send,forse,action){
+  if(active || forse){
     location.reload();
     return false;
   }
@@ -591,6 +622,10 @@ function res(send){
         if(send)
           alert('Reload page','ok');
         $("#content").html(content);
+        if(action){
+          $(action).addClass('action');
+          actionShow('.action',10,1);
+        }
         document.title = "IDownloader";
         return true;
       }
