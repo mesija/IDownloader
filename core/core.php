@@ -2,7 +2,7 @@
 
 // версія ядра
 
-define('VER','2.4');
+define('VER','2.5');
 
 // підключаємо файл конфігів
 
@@ -87,7 +87,7 @@ if(isset($_GET['s']) AND isset($_GET['t']) AND isset($_GET['dir'])){
      OR filesize('./'.DOWNLOAD_FOLDER.'/' . $dir . '/' . $_GET['t']) == 0) {
     $img = false;
     $img = @file_get_contents(str_replace(' ', "%20", $_GET['s']));
-    if($img) {
+    if($img AND !preg_match('/(<html)/',$img)) {
       file_put_contents('./'.DOWNLOAD_FOLDER.'/' . $dir . '/' . $_GET['t'], $img);
       exit('OK');
     }
@@ -112,7 +112,7 @@ if(isset($_GET['s']) AND isset($_GET['t']) AND isset($_GET['dir'])){
         foreach($mass AS $val){
           $img = false;
           $img = @file_get_contents(str_replace(' ', "%20", $s.'.'.$val));
-          if($img) {
+          if($img AND !preg_match('/(<html)/',$img)) {
             file_put_contents('./'.DOWNLOAD_FOLDER.'/' . $dir . '/' . $_GET['t'], $img);
             exit('OK');
           }
@@ -220,35 +220,49 @@ if(isset($_GET['getInfo']) AND !empty($_GET['getInfo']) AND isset($_GET['type'])
 if(isset($_GET['renameFile']) AND !empty($_GET['renameFile'])){
   $file = $_GET['renameFile'];
   if(file_exists('./'.CSV_FOLDER.'/'.$file)){
-    $csv = fopen('./'.CSV_FOLDER.'/'.$file,'r');
-    $line = fgets($csv,9999);
-    $line = str_replace('"','',$line);
-    if(strpos($line,',') AND strpos($line,',') < 20)
-      $mass = explode(',',$line);
-    elseif(strpos($line,';') AND strpos($line,';') < 20)
-      $mass = explode(';',$line);
-    else
-      exit('Bad delimiter in csv file, must be , or ;');
-    $id = str_replace('"', "", $mass[1]);
-    $db = dbConnect();
-    if(!$db) exit('NO');
-    $rez = mysql_query("
+    if($_GET['name'] != ''){
+      if(!preg_match('/(\.csv)$/',$_GET['name']))
+        $_GET['name'] .= '.csv';
+      if($_GET['name'] == $_GET['renameFile'])
+        exit('OK');
+      if(file_exists('./'.CSV_FOLDER.'/'.$_GET['name'])){
+        exit('Error! File '.$rez['id'].'.csv is exists');
+      }
+      rename('./'.CSV_FOLDER.'/'.$file,'./'.CSV_FOLDER.'/'.$_GET['name']);
+      exit(preg_replace('/\.csv$/','',$_GET['name']));
+    }
+    else{
+      $csv = fopen('./'.CSV_FOLDER.'/'.$file,'r');
+      $line = fgets($csv,9999);
+      $line = str_replace('"','',$line);
+      if(strpos($line,',') AND strpos($line,',') < 20)
+        $mass = explode(',',$line);
+      elseif(strpos($line,';') AND strpos($line,';') < 20)
+        $mass = explode(';',$line);
+      else
+        exit('Bad delimiter in csv file, must be , or ;');
+      $id = str_replace('"', "", $mass[1]);
+      $db = dbConnect();
+      if(!$db) exit('NO');
+      $rez = mysql_query("
       SELECT m.id
       FROM migrations_stores AS t
       LEFT JOIN migrations AS m ON m.target_store_id = t.id
       WHERE t.id = " . $id
-      ,$db);
-    if($rez){
-      $rez = mysql_fetch_array($rez,MYSQL_ASSOC);
-      if($rez['id'].'.csv' == $_GET['renameFile'])
-        exit('OK');
-      if(file_exists('./'.CSV_FOLDER.'/'.$rez['id'].'.csv')){
-        exit('Error! File '.$rez['id'].'.csv is exists');
+        ,$db);
+      if($rez){
+        $rez = mysql_fetch_array($rez,MYSQL_ASSOC);
+        if($rez['id'].'.csv' == $_GET['renameFile'])
+          exit('OK');
+        if(file_exists('./'.CSV_FOLDER.'/'.$rez['id'].'.csv')){
+          exit('Error! File '.$rez['id'].'.csv is exists');
+        }
+        rename('./'.CSV_FOLDER.'/'.$file,'./'.CSV_FOLDER.'/'.$rez['id'].'.csv');
+        exit($rez['id']);
       }
-      rename('./'.CSV_FOLDER.'/'.$file,'./'.CSV_FOLDER.'/'.$rez['id'].'.csv');
-      exit($rez['id']);
+      else
+        exit('No connect db');
     }
-    exit('No connect db');
   }
   exit('No such file '.$file);
 }

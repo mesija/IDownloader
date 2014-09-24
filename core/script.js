@@ -553,8 +553,8 @@ function createLoader (){
  * @returns {boolean}
  */
 function renameDir(dir){
-  var name = prompt('Enter new name for folder '+dir);
-  if(name.trim() != ''){
+  var name = prompt('Enter new name for folder '+dir).trim().replace(/[^a-zA-Z0-9а-яА-ЯіІїЇєЄ_]/,'_');
+  if(name != ''){
     $.get( "index.php?renameDir="+dir+"&name="+name, function( data ) {
       if(data.trim() == 'OK'){
         alert('Rename dir '+dir+' to '+name,'ok');
@@ -579,8 +579,9 @@ function renameDir(dir){
  * @returns {boolean}
  */
 function renameFile(file){
-  if(confirm("Set auto name for file "+file+"?")){
-    $.get( "index.php?renameFile="+file, function( data ) {
+  var name = prompt("Enter new name for file "+file+"\n * dont need put .csv\n\nSet empty for auto rename file",file.replace(/(\.csv)$/, ''));
+  if(name !== null){
+    $.get( "index.php?renameFile="+file+"&name="+name.replace(/[^a-zA-Z0-9а-яА-ЯіІїЇєЄ_\.]/,'_'), function( data ) {
       if(data.trim() == 'OK'){
         alert('Name file '+file+' is the actual','ok');
         res(0,0,0);
@@ -588,7 +589,7 @@ function renameFile(file){
       }
       else{
         if(data.trim() != 'NO'){
-          if(data.match(/^[0-9]+$/g)) {
+          if(data.match(/^[^ ]+$/g)) {
             alert('Rename file '+file+' to '+data+'.csv','ok');
             res(0,0,'.file-'+data);
           }
