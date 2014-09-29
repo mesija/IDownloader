@@ -169,6 +169,11 @@ a:hover{text-decoration:none;color:#f05466}
 
 #content .fileSize {
     width: 90px;
+    text-align: right;
+}
+
+#content .fileDate {
+    width: 90px;
 }
 
 #content .csvFolderName {

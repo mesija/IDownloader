@@ -2,7 +2,7 @@
 
 // версія ядра
 
-define('VER','2.5');
+define('VER','2.6');
 
 // підключаємо файл конфігів
 
@@ -433,7 +433,8 @@ function printContent($listDir,$listDownload){
                 <tr class="file-'.preg_replace('/\.csv$/','',$name).$class.'">
                   <td onclick="openFile(\''.$name.'\',0,0)" class="csvFolderName" title="Open file">'.preg_replace('/\.csv$/','',$name).'</td>
                   <td class="fileSize" title="Size csv file '.$size.'">'.$size.'</td>
-                  <td class="icon" onclick="renameFile(\''.$name.'\')" title="Set migration id for name"><span class="icon-pencil2"></span></td>
+                  <td class="fileDate" title="Last edit date">'.date("d-m-y",filemtime(CSV_FOLDER.'/'.$name)).'</td>
+                  <td class="icon" onclick="renameFile(\''.$name.'\')" title="Rename file"><span class="icon-pencil2"></span></td>
                   <td class="icon" onclick="clearLast(\''.$name.'\')" title="Clear last download files"><span class="icon-magnet"></span></td>
                   <td class="icon delete" onclick="deleteFile(\''.$name.'\')" title="Delete csv file"><span class="icon-remove"></span></td>
                 </tr>';

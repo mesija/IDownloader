@@ -285,8 +285,6 @@ function finish(){
         return true;
       }
       else{
-        $(".h_top").text('ID: '+dir);
-        $(".h_proc").text('Error');
         document.title = "Error finish download " + migration['id'];
         alert("Error finish download " + migration['id'],'warning');
         return false;
@@ -579,7 +577,7 @@ function renameDir(dir){
  * @returns {boolean}
  */
 function renameFile(file){
-  var name = prompt("Enter new name for file "+file+"\n * dont need put .csv\n\nSet empty for auto rename file",file.replace(/(\.csv)$/, ''));
+  var name = prompt("Enter new name for file "+file+"\n\nSet empty for auto rename file");
   if(name !== null){
     $.get( "index.php?renameFile="+file+"&name="+name.replace(/[^a-zA-Z0-9а-яА-ЯіІїЇєЄ_\.]/,'_'), function( data ) {
       if(data.trim() == 'OK'){
