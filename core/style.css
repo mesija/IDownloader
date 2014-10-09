@@ -176,6 +176,11 @@ a:hover{text-decoration:none;color:#f05466}
     width: 90px;
 }
 
+#content .csvFolder .fileDate:hover {
+    background-color: #999999!important;
+    cursor: default!important;
+}
+
 #content .csvFolderName {
     padding-left: 7px!important;
     text-align: left!important;
