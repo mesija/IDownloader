@@ -471,7 +471,7 @@ a:hover{text-decoration:none;color:#f05466}
     display: inline-block;
 }
 
-.warning {
+.error {
     background-color: #a11833;
 }
 

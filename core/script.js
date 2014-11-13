@@ -17,7 +17,7 @@ var step_id = 0;                // іп стрічки в кроці
 var dir = '';                   // папка в яку будемо завантажувати файли
 var migration = [];             // штформація про міграцію
 var migration_status = false;   // статус міграції
-var active = false;             // статус завантаження
+var active = true;              // статус завантаження
 var process_info = 0;           // кількість процесів яку потрібно запустити
 var loader = '';                // дані лоадера
 var alertSize = 0;              // кількість активних алертів
@@ -47,6 +47,7 @@ function unBug(test){
     finish();               // виконує необхідні функції при завершенні завантаженя
     next();                 // вертає id наступного файлу для завантаження
     openFile();             // завантажує данні з файлу
+    parse();                // парсимо відповідь від серверу
     perDir();               // надає права 777 для папки рекурсивно
     process();              // процес завантаження файлу
     renameDir();            // перейменовує папку
@@ -54,6 +55,7 @@ function unBug(test){
     res();                  // перезавантажує сторінку
     start();                // підготовує сторінку до завантаження файлів
     stat();                 // оновляє статистику на сторінці
+    view();                 // виводить відповідь від серверу
   }
 }
 
@@ -90,7 +92,7 @@ function add(count,forse){
     if (addProcess)
       alert('Add '+count+' process','ok');
     else
-      alert('Error add process','warning');
+      alert('Error add process','error');
     return process_info;
   }
   return false;
@@ -109,7 +111,7 @@ function alert(text,type){
       '<div class="icon "><span id="alertIcon" class="icon-checkmark-circle"></span></div>'+
       '<div class="text" id="alertText"></div>'+
       '</div></div>');
-  } else if (type === 'warning') {
+  } else if (type === 'error') {
     $("#alertBox").append('<div class="alertBox">' +
     '<div id="alert" class="'+type+' alertID-'+id+'">'+
     '<div class="icon "><span id="alertIcon" class="icon-spam"></span></div>'+
@@ -156,9 +158,11 @@ function check(){
   if(!active){
     if($(".only button").hasClass("ok")){
       $(".only div button").removeClass("ok");
+      $("#only_failed").text("Download all");
     }
     else{
       $(".only div button").addClass("ok");
+      $("#only_failed").text("Only failed");
     }
     return true;
   }
@@ -172,22 +176,19 @@ function check(){
 function clearLast(file){
   if(confirm("Clear last download "+file+"?")){
     $.get("index.php?getInfo="+file+"&type=0", function( data ) {
-      if(data != 'NO'){
-        migration = $.parseJSON(data);
+      data = parse(data);
+      if(data['code'] == 200){
+        migration = data['data'];
         $.get("index.php?clear="+migration['id'], function( data ) {
-          if(data.trim() == 'OK'){
-            alert('Delete dir '+migration['id'],'ok');
+          data = parse(data);
+          if(data['code'] == 200)
             res(0,0,0);
-            return true;
-          }
-          else {
-            alert(data,'info');
-            return false;
-          }
+          view(data);
+          return data['code'] == 200;
         });
       }
       else{
-        alert('Error clear','warning');
+        view(data);
         return false;
       }
     });
@@ -210,15 +211,11 @@ function closeEditorWarning(){
 function deleteDir(dir){
   if(confirm("Delete dir "+dir+"?")){
     $.get("index.php?deleteDir="+dir, function( data ) {
-      if(data.trim() == 'OK'){
-        alert('Delete dir '+dir,'ok');
+      data = parse(data);
+      if(data['code'] == 200)
         res(0,0,0);
-        return true;
-      }
-      else {
-        alert('Error delete dir '+dir,'warning');
-        return false;
-      }
+      view(data);
+      return data['code'] == 200;
     });
   }
   else
@@ -232,15 +229,11 @@ function deleteDir(dir){
 function deleteFile(file){
   if(confirm("Delete file "+file+"?")){
     $.get("index.php?deleteFile="+file, function( data ) {
-      if(data.trim() == 'OK'){
-        location.reload();
-        alert('Delete file '+file,'ok');
-        return true;
-      }
-      else {
-        alert('Error delete file '+file,'warning');
-        return false;
-      }
+      data = parse(data);
+      if(data['code'] == 200)
+        res(0,0,0);
+      view(data);
+      return data['code'] == 200;
     });
   }
   else
@@ -274,21 +267,22 @@ function download(count,forse){
  * @returns {boolean}
  */
 function finish(){
+  if(!size)
+    return false;
   stat();
   window.onbeforeunload = '';
   active = false;
   if(proces == 0){
     $.get("index.php?finish="+dir, function( data ) {
-      if(data == 'OK'){
+      data = parse(data);
+      if(data['code'] == 200){
         document.title = "Finish download " + migration['id'];
-        alert("Finish download " + migration['id'],'ok');
-        return true;
       }
       else{
         document.title = "Error finish download " + migration['id'];
-        alert("Error finish download " + migration['id'],'warning');
-        return false;
       }
+      view(data);
+      return data['code'] == 200;
     });
   }
   else
@@ -321,14 +315,15 @@ function next(){
 function openFile(file,part,type){
   $(".fileList").html('<div id=\"load\"></div>');
   $.get("index.php?loadFile="+file+"&step="+part+"&type="+type, function( data ) {
-    if(data != '[]'){
-      if(data == 'NO'){
-        alert('CSV file is empty or broken!','warning');
+    data = parse(data);
+    if(data['data'] != '[]'){
+      if(data['code'] == 400 || data['code'] == 404){
+        view(data);
         res(0,0,0);
         return false;
       }
       else {
-        d[part] = $.parseJSON(data);
+        d[part] = parse(data['data']);
         part++;
         alert('Open file step '+part,'info');
         openFile(file,part,type);
@@ -355,9 +350,11 @@ function openFile(file,part,type){
       }
       createLoader();
       alert('Get migration info','info');
+      active = false;
       $.get("index.php?getInfo="+file+"&type="+type, function( data ) {
-        if(data != 'NO'){
-          migration = $.parseJSON(data);
+        data = parse(data);
+        if(data['code'] == 200){
+          migration = data['data'];
           $(".h_top").text('ID: ' + migration['id']);
           dir = migration['id'];
           migration_status = true;
@@ -428,7 +425,7 @@ function openFile(file,part,type){
         else{
           dir = defaultDir;
           $(".h_top").text(dir);
-          alert('Bad migration id or not connect db','warning');
+          view(data);
         }
         $(".all .left").text(size);
         $(".copied .left").text(copied_size);
@@ -449,21 +446,27 @@ function openFile(file,part,type){
 }
 
 /**
+ * @param data
+ * @returns {*}
+ */
+function parse (data){
+  return $.parseJSON(data);
+}
+
+/**
  * @param dir
  * @returns {boolean}
  */
 function perDir(dir){
   $.get( "index.php?perDir="+dir, function( data ) {
-    if(data.trim() == 'OK'){
-      alert('Set permissions dir '+dir,'ok');
+    data = parse(data);
+    if(data['code'] == 200){
+      view(data);
       res(0,0,0);
       return true;
     }
     else{
-      if(data.trim() != 'NO')
-        alert(data.trim(),'warning');
-      else
-        alert('Error set permissions dir '+dir+'!','warning');
+      view(data);
       return false;
     }
   });
@@ -484,7 +487,8 @@ function process(){
     }
     else {
       $.get( "index.php?s="+d[stepp][id][1]+"&t="+d[stepp][id][2]+"&dir="+dir+"&ts="+migration['target_store_id'], function( data ) {
-        if(data.trim() == 'OK')
+        data = parse(data);
+        if(data['code'] == 200)
           copied++;
         else
           failed++;
@@ -496,7 +500,7 @@ function process(){
         all_size--;
         process();
         stat();
-        return data.trim() == 'OK';
+        return data['code'] == 200;
       });
     }
   }
@@ -554,18 +558,11 @@ function renameDir(dir){
   var name = prompt('Enter new name for folder '+dir).trim().replace(/[^a-zA-Z0-9а-яА-ЯіІїЇєЄ_]/,'_');
   if(name != ''){
     $.get( "index.php?renameDir="+dir+"&name="+name, function( data ) {
-      if(data.trim() == 'OK'){
-        alert('Rename dir '+dir+' to '+name,'ok');
+      data = parse(data);
+      if(data['code'] == 200)
         res(0,0,0);
-        return true;
-      }
-      else{
-        if(data.trim() != 'NO')
-          alert(data.trim(),'warning');
-        else
-          alert('Error rename dir '+dir+' to '+name+'!','warning');
-        return false;
-      }
+      view(data);
+      return data['code'] == 200;
     });
   }
   else
@@ -580,22 +577,18 @@ function renameFile(file){
   var name = prompt("Enter new name for file "+file+"\n\nSet empty for auto rename file");
   if(name !== null){
     $.get( "index.php?renameFile="+file+"&name="+name.replace(/[^a-zA-Z0-9а-яА-ЯіІїЇєЄ_\.]/,'_'), function( data ) {
-      if(data.trim() == 'OK'){
-        alert('Name file '+file+' is the actual','ok');
-        res(0,0,0);
+      data = parse(data);
+      if(data['code'] == 200){
+        view(data);
+        res(0,0,'.file-'+data['data']['name']);
         return true;
       }
-      else{
-        if(data.trim() != 'NO'){
-          if(data.match(/^[^ ]+$/g)) {
-            alert('Rename file '+file+' to '+data+'.csv','ok');
-            res(0,0,'.file-'+data);
-          }
-          else
-            alert(data.trim(),'warning');
-        }
-        else
-          alert('Oops, something going wrong!','warning');
+      else if(data['code'] == 201){
+        view(data);
+        return true;
+      }
+      else {
+        view(data);
         return false;
       }
     });
@@ -611,7 +604,7 @@ function renameFile(file){
  * @returns {boolean}
  */
 function res(send,forse,action){
-  if(active || forse){
+  if(size || forse){
     location.reload();
     return false;
   }
@@ -629,7 +622,7 @@ function res(send,forse,action){
         return true;
       }
       else{
-        alert('Error reload page','warning');
+        alert('Error reload page','error');
         return false;
       }
     });
@@ -646,17 +639,14 @@ function start(){
   all_size = size;
   failed_size_dw = failed_size;
   $.get("index.php?start="+dir, function( data ) {
-    if(data.trim() == 'OK'){
+    data = parse(data);
+    if(data['code'] == 200){
       active = true;
       $(".only").addClass('dis');
       $(".process button").removeClass('dis');
-      alert('Start download','ok');
+      view(data);
       download(proces,false);
-      return true;
-    }
-    else {
-      alert('Error start download','warning');
-      return false;
+      return data['code'] == 200;
     }
   });
   return false;
@@ -682,5 +672,17 @@ function stat(){
   document.title = "Download "+pro+'%';
   loader.setValue(all);
   loader.setProgress(pro/100);
+  return true;
+}
+
+/**
+ * @param data
+ * @returns {boolean}
+ */
+function view (data){
+  if(data['data'] instanceof Object)
+    alert(data['data']['message'],data['type']);
+  else
+    alert(data['data'],data['type']);
   return true;
 }

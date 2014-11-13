@@ -2,7 +2,7 @@
 
 // версія ядра
 
-define('VER','2.6');
+define('VER','2.7');
 
 // підключаємо файл конфігів
 
@@ -25,6 +25,17 @@ function dbConnect (){
   return $db;
 }
 
+// виводимо результат виконання
+
+function alert ($type = 'error', $code = 0, $data = 'Undefined error'){
+  $message = array(
+    'type' => $type,
+    'code' => $code,
+    'data' => $data
+  );
+  exit(json_encode($message));
+}
+
 // стартуємо завантаження
 
 if(isset($_GET['start']) AND !empty($_GET['start'])){
@@ -32,7 +43,7 @@ if(isset($_GET['start']) AND !empty($_GET['start'])){
   chmod('../'.I_FOLDER.'/', 0777);
   if(file_exists('./'.DOWNLOAD_FOLDER.'/'.$dir.'/'.$dir.'.csv'))
     unlink('./'.DOWNLOAD_FOLDER.'/'.$dir.'/'.$dir.'.csv');
-  exit('OK');
+  alert('ok', 200, 'Start download');
 }
 
 // завершуємо завантаження
@@ -41,7 +52,7 @@ if(isset($_GET['finish']) AND !empty($_GET['finish'])){
   $dir = $_GET['finish'];
   chmod('./'.DOWNLOAD_FOLDER.'/'.$dir.'/', 0777);
   exec('chmod 777 -Rf ./'.DOWNLOAD_FOLDER.'/'.$dir.'/');
-  exit('OK');
+  alert('ok', 200, 'Finish download');
 }
 
 // кліримо завантажені данні
@@ -51,10 +62,10 @@ if(isset($_GET['clear']) AND !empty($_GET['clear'])){
   chmod('../'.I_FOLDER.'/', 0777);
   if(file_exists('./'.DOWNLOAD_FOLDER.'/'.$dir.'/')){
     exec('rm -Rf ./'.DOWNLOAD_FOLDER.'/'.$dir.'/');
-    exit('OK');
+    alert('ok', 200, 'Folder '.$dir.' is delete');
   }
   else
-    exit('No such dir ./'.DOWNLOAD_FOLDER.'/'.$dir.'/');
+    alert('error', 404, 'No such dir ./'.DOWNLOAD_FOLDER.'/'.$dir.'/');
 }
 
 // видаляємо csv файл
@@ -64,7 +75,7 @@ if(isset($_GET['deleteFile']) AND !empty($_GET['deleteFile'])){
   chmod('../'.I_FOLDER.'/', 0777);
   if(file_exists('./'.CSV_FOLDER.'/'.$file))
     unlink('./'.CSV_FOLDER.'/'.$file);
-  exit('OK');
+  alert('ok', 200, 'File '.$file.' is delete');
 }
 
 // видаляємо папку
@@ -74,7 +85,7 @@ if(isset($_GET['deleteDir']) AND !empty($_GET['deleteDir'])){
   chmod('../'.DOWNLOAD_FOLDER.'/', 0777);
   if(file_exists('./'.DOWNLOAD_FOLDER.'/'.$dir.'/'))
     exec('rm -Rf ./'.DOWNLOAD_FOLDER.'/'.$dir.'/');
-  exit('OK');
+  alert('ok', 200, 'Dir '.$dir.' is delete');
 }
 
 // завантажуємо файл
@@ -89,7 +100,7 @@ if(isset($_GET['s']) AND isset($_GET['t']) AND isset($_GET['dir'])){
     $img = @file_get_contents(str_replace(' ', "%20", $_GET['s']));
     if($img AND !preg_match('/(<html)/',$img)) {
       file_put_contents('./'.DOWNLOAD_FOLDER.'/' . $dir . '/' . $_GET['t'], $img);
-      exit('OK');
+      alert('ok', 200, 'Download file '.$_GET['s'].' to '.$_GET['t'].' is ok');
     }
     else {
       $s = $_GET['s'];
@@ -114,7 +125,7 @@ if(isset($_GET['s']) AND isset($_GET['t']) AND isset($_GET['dir'])){
           $img = @file_get_contents(str_replace(' ', "%20", $s.'.'.$val));
           if($img AND !preg_match('/(<html)/',$img)) {
             file_put_contents('./'.DOWNLOAD_FOLDER.'/' . $dir . '/' . $_GET['t'], $img);
-            exit('OK');
+            alert('ok', 200, 'Download file '.$_GET['s'].' to '.$_GET['t'].' is ok');
           }
         }
       }
@@ -122,11 +133,11 @@ if(isset($_GET['s']) AND isset($_GET['t']) AND isset($_GET['dir'])){
       $put = array('0',$_GET['ts'],$_GET['s'],$_GET['t']);
       fputcsv($file,$put,',','"');
       fclose($file);
-      exit('NO');
+      alert('error', 404, 'Error download file '.$_GET['s'].' to '.$_GET['t']);
     }
   }
   else
-    exit('OK');
+    alert('ok', 200, 'File '.$_GET['t'].' is exists');
 }
 
 // завантажуємо інформацію з csv файлу
@@ -146,14 +157,22 @@ if(isset($_GET['loadFile']) AND !empty($_GET['loadFile']) AND isset($_GET['step'
     $csv = fopen($url,'r');
     $input = array();
     $i = 0;
+    $delimiter = '';
     while($line = fgets($csv,9999) AND $i < $max){
       $line = str_replace('"','',$line);
-      if(strpos($line,',') AND strpos($line,',') < 20)
-        $mass = explode(',',$line);
-      elseif(strpos($line,';') AND strpos($line,';') < 20)
-        $mass = explode(';',$line);
-      else
-        exit('NO');
+      $mass = array();
+      if($delimiter == ''){
+        preg_match_all('/[^a-z0-9A-Z:\/\.?&=_ %\\!#$^+@()<>-]/',$line,$del);
+        foreach($del[0] AS $delTmp){
+          $mass = explode($delTmp,$line);
+          if(count($mass) > 3){
+            $delimiter = $delTmp;
+            break;
+          }
+        }
+        if($delimiter == '') alert('error', 404, 'No such delimiter in file '.$file);
+      }
+      $mass = explode($delimiter,$line);
       if($i > $min-1){
         if($mass[6] == 'copied') {
           $mass[6] = 1;
@@ -169,11 +188,11 @@ if(isset($_GET['loadFile']) AND !empty($_GET['loadFile']) AND isset($_GET['step'
     }
     fclose($csv);
     if($i > 0 AND $input[0][1] != '""')
-      exit(json_encode($input));
+      alert('ok', 200, json_encode($input));
     else
-      exit('NO');
+      alert('error', 400, 'File '.$file.' is empty');
   }
-  exit('NO');
+  alert('error', 404, 'No such file '.$file);
 }
 
 // отримуємо інформацію про міграцію
@@ -190,29 +209,33 @@ if(isset($_GET['getInfo']) AND !empty($_GET['getInfo']) AND isset($_GET['type'])
     $csv = fopen($url,'r');
     $line = fgets($csv,9999);
     $line = str_replace('"','',$line);
-    if(strpos($line,',') AND strpos($line,',') < 20)
-      $mass = explode(',',$line);
-    elseif(strpos($line,';') AND strpos($line,';') < 20)
-      $mass = explode(';',$line);
-    else
-      exit('NO');
-    $id = str_replace('"', "", $mass[1]);
+    preg_match_all('/[^a-z0-9A-Z:\/\.?&=_ %\\!#$^+@()<>-]/',$line,$del);
+    $mass = array();
+    foreach($del[0] AS $delTmp){
+      $mass = explode($delTmp,$line);
+      if(count($mass) > 3){
+        break;
+      }
+    }
+    if(count($mass) < 3) {
+      alert('error', 404, 'No such delimiter in file '.$file);
+    }
     $db = dbConnect();
-    if(!$db) exit('NO');
+    if(!$db) alert('error', 406, 'No connect database');
     $rez = mysql_query("
       SELECT m.*,t.url AS t_url, t.cart_id AS t_name,s.url AS s_url, s.cart_id AS s_name
       FROM migrations_stores AS t
       LEFT JOIN migrations AS m ON m.target_store_id = t.id
       LEFT JOIN migrations_stores AS s ON s.id = m.source_store_id
-      WHERE t.id = " . $id
+      WHERE t.id = " . $mass[1]
       ,$db);
     if($rez){
       $rez = mysql_fetch_array($rez,MYSQL_ASSOC);
-      exit(json_encode($rez));
+      alert('ok', 200, $rez);
     }
-    exit('NO');
+    alert('error', 404, 'No such store id '.$mass[1]);
   }
-  exit('NO');
+  alert('error', 404, 'No such file '.$file);
 }
 
 // перейменовуємо файл
@@ -223,48 +246,58 @@ if(isset($_GET['renameFile']) AND !empty($_GET['renameFile'])){
     if($_GET['name'] != ''){
       if(!preg_match('/(\.csv)$/',$_GET['name']))
         $_GET['name'] .= '.csv';
-      if($_GET['name'] == $_GET['renameFile'])
-        exit('OK');
+      if($_GET['name'] == $file)
+        alert('ok', 201, 'Name file '.$_GET['name'].' is actual');
       if(file_exists('./'.CSV_FOLDER.'/'.$_GET['name'])){
-        exit('Error! File '.$rez['id'].'.csv is exists');
+        alert('error', 401, 'Error! File '.$_GET['name'].' is exists');
       }
       rename('./'.CSV_FOLDER.'/'.$file,'./'.CSV_FOLDER.'/'.$_GET['name']);
-      exit(preg_replace('/\.csv$/','',$_GET['name']));
+      alert('ok', 200, array(
+        'name'    => preg_replace('/\.csv$/','',$_GET['name']),
+        'message' => 'Rename file '.$file.' to '.$_GET['name']
+      ));
     }
     else{
       $csv = fopen('./'.CSV_FOLDER.'/'.$file,'r');
       $line = fgets($csv,9999);
       $line = str_replace('"','',$line);
-      if(strpos($line,',') AND strpos($line,',') < 20)
-        $mass = explode(',',$line);
-      elseif(strpos($line,';') AND strpos($line,';') < 20)
-        $mass = explode(';',$line);
-      else
-        exit('Bad delimiter in csv file, must be , or ;');
-      $id = str_replace('"', "", $mass[1]);
+      preg_match_all('/[^a-z0-9A-Z:\/\.?&=_ %\\!#$^+@()<>-]/',$line,$del);
+      $mass = array();
+      foreach($del[0] AS $delTmp){
+        $mass = explode($delTmp,$line);
+        if(count($mass) > 3){
+          break;
+        }
+      }
+      if(count($mass) < 3) {
+        alert('error', 404, 'No such delimiter in file '.$file);
+      }
       $db = dbConnect();
-      if(!$db) exit('NO');
+      if(!$db) alert('error', 406, 'No connect database');
       $rez = mysql_query("
       SELECT m.id
       FROM migrations_stores AS t
       LEFT JOIN migrations AS m ON m.target_store_id = t.id
-      WHERE t.id = " . $id
+      WHERE t.id = " . $mass[1]
         ,$db);
       if($rez){
         $rez = mysql_fetch_array($rez,MYSQL_ASSOC);
-        if($rez['id'].'.csv' == $_GET['renameFile'])
-          exit('OK');
+        if($rez['id'].'.csv' == $file)
+          alert('ok', 201, 'Name file '.$rez['id'].'.csv is actual');
         if(file_exists('./'.CSV_FOLDER.'/'.$rez['id'].'.csv')){
-          exit('Error! File '.$rez['id'].'.csv is exists');
+          alert('error', 401, 'Error! File '.$rez['id'].'.csv is exists');
         }
         rename('./'.CSV_FOLDER.'/'.$file,'./'.CSV_FOLDER.'/'.$rez['id'].'.csv');
-        exit($rez['id']);
+        alert('ok', 200, array(
+          'name'    => $rez['id'],
+          'message' => 'Rename file '.$$file.' to '.$rez['id'].'.csv'
+        ));
       }
       else
-        exit('No connect db');
+        alert('error', 403, 'Bad store id');
     }
   }
-  exit('No such file '.$file);
+  alert('error', 404, 'No such file '.$file);
 }
 
 // перейменовуємо папку
@@ -288,13 +321,13 @@ if(isset($_GET['renameDir']) AND !empty($_GET['renameDir']) AND isset($_GET['nam
 // надаємо права
 
 if(isset($_GET['perDir']) AND !empty($_GET['perDir'])){
-  $file = $_GET['perDir'];
-  if(is_dir('./'.DOWNLOAD_FOLDER.'/'.$file.'/')){
-    chmod('./'.DOWNLOAD_FOLDER.'/'.$file.'/', 0777);
-    exec('chmod 777 -Rf ./'.DOWNLOAD_FOLDER.'/'.$file.'/');
-    exit('OK');
+  $folder = $_GET['perDir'];
+  if(is_dir('./'.DOWNLOAD_FOLDER.'/'.$folder.'/')){
+    chmod('./'.DOWNLOAD_FOLDER.'/'.$folder.'/', 0777);
+    exec('chmod 777 -Rf ./'.DOWNLOAD_FOLDER.'/'.$folder.'/');
+    alert('ok', 200, 'Set permissions dir '.$folder);
   }
-  exit('Dir '.$_GET['perDir'].' not exists!');
+  alert('error', 404, 'Dir '.$folder.' not exists!');
 }
 
 // перевіряємо оновлення
@@ -323,7 +356,7 @@ if(file_exists('./core/update')){
           }
         }
         header('Location: ./');
-        exit('UPDATE OK');
+        alert('ok', 200, 'Update ok');
       }
     }
     file_put_contents('./core/update',time());
@@ -408,7 +441,7 @@ function printContent($listDir,$listDownload){
             <div class="right"><button onclick="add(10,0)" class="dis">+10 process</button></div>
         </div>
         <div class="only">
-            <div class="center"><button onclick="check()"><span class="icon-aid"></span> Only failed</button></div>
+            <div class="center"><button onclick="check()"><span class="icon-aid"></span> <span id="only_failed">Only failed</span></button></div>
         </div>
     </div>
   </div>
