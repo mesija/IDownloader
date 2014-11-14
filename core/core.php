@@ -303,19 +303,19 @@ if(isset($_GET['renameFile']) AND !empty($_GET['renameFile'])){
 // перейменовуємо папку
 
 if(isset($_GET['renameDir']) AND !empty($_GET['renameDir']) AND isset($_GET['name']) AND !empty($_GET['name'])){
-  if($_GET['renameDir'] == $_GET['name'])
-    exit('OK');
   $file = $_GET['renameDir'];
+  if($file == $_GET['name'])
+    alert('info', 300, 'Dir name '.$file.' is actual');
   if(is_dir('./'.DOWNLOAD_FOLDER.'/'.$file.'/')){
     if(!is_dir('./'.DOWNLOAD_FOLDER.'/'.$_GET['name'].'/')){
       rename('./'.DOWNLOAD_FOLDER.'/'.$file.'/','./'.DOWNLOAD_FOLDER.'/'.$_GET['name']);
-      exit('OK');
+      alert('ok', 200, 'Rename dir '.$file.' to '.$_GET['name']);
     }
     else {
-      exit('Dir '.$_GET['name'].' is exists!');
+      alert('error', 400, 'Dir '.$_GET['name'].' is exists!');
     }
   }
-  exit('Dir '.$_GET['renameDir'].' not exists!');
+  alert('error', 404, 'Dir '.$file.' not exists!');
 }
 
 // надаємо права
@@ -391,22 +391,18 @@ else{
   }
 }
 
-if(!file_exists('./'.DOWNLOAD_FOLDER.'/')){
+if(!file_exists('./'.DOWNLOAD_FOLDER.'/'))
   mkdir('./'.DOWNLOAD_FOLDER.'/', 0777 , true);
-  $listDir = '';
+
+$tmpDownload = array_splice(scandir('./'.DOWNLOAD_FOLDER.'/'),2);
+$listDownload = array();
+foreach($tmpDownload AS $tmp){
+  if(preg_match('/^[^\.\s]+$/', $tmp)){
+    $listDownload[$tmp] = $tmp;
+  }
 }
-else{
-  chmod('./'.DOWNLOAD_FOLDER.'/', 0777);
-  $tmpDownload = array_splice(scandir('./'.DOWNLOAD_FOLDER.'/'),2);
-  $listDownload = array();
-  foreach($tmpDownload AS $tmp){
-    if(preg_match('/^[^\.\s]+$/', $tmp)){
-      $listDownload[$tmp] = $tmp;
-    }
-  }
-  if(empty($listDownload)){
-    $listDownload = '';
-  }
+if(empty($listDownload)){
+  $listDownload = '';
 }
 
 // генеруємо код контенту
