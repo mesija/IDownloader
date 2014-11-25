@@ -9,9 +9,9 @@
   <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
   <script src="./core/percentageloader.js" type="text/javascript"></script>
   <script type="text/javascript">
-    var dif_proces = <?php echo PROCESS; ?>;
+    var dif_proces = <?php echo PROCESS > 50 ? 10 : PROCESS; ?>;
     var dif_defaultDir = '<?php echo date("d-m_H:i",time()+60*60*3); ?>';
-    var dif_pack = <?php echo PACK; ?>;
+    var dif_pack = <?php echo PACK > 100000 ? 25000 : PACK; ?>;
     var dif_downloadFolder = '<?php echo DOWNLOAD_FOLDER; ?>';
   </script>
   <script src="./core/script.js" type="text/javascript"></script>
