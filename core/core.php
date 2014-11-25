@@ -2,7 +2,7 @@
 
 // версія ядра
 
-define('VER','2.71');
+define('VER','2.72');
 
 // підключаємо файл конфігів
 
@@ -496,13 +496,13 @@ function printContent($listDir,$listDownload){
                 <tr class="'.$class.'">
                   <td class="csvFolderName">'.$name.'</td>';
               if(file_exists('./'.DOWNLOAD_FOLDER.'/'.$name.'/'.$name.'.csv'))
-                echo '<td class="icon" onclick="openFile(\''.$name.'\',0,1)"><span class="icon-history"></span></td>';
+                echo '<td class="icon" onclick="openFile(\''.$name.'\',0,1)"><span class="icon-history" title="Open only failed files in last download"></span></td>';
               else
                 echo '<td class="dis"></td>'.'';
               echo '
-                  <td class="icon" onclick="renameDir(\''.$name.'\')"><span class="icon-pencil2"></span></td>
+                  <td class="icon" onclick="renameDir(\''.$name.'\')"><span class="icon-pencil2" title="Rename dir '.$name.'"></span></td>
                   <td class="icon" onclick="perDir(\''.$name.'\')"><span class="'.$lock.'" title="Permissions '.$pre.'"></span></td>
-                  <td class="icon delete" onclick="deleteDir(\''.$name.'\')"><span class="icon-remove"></span></td>
+                  <td class="icon delete" onclick="deleteDir(\''.$name.'\')"><span class="icon-remove" title="Delete dir '.$name.'"></span></td>
                 </tr>';
               unset($listDownload[$name]);
             }
@@ -531,13 +531,13 @@ function printContent($listDir,$listDownload){
                 <tr class="'.$class.' red">
                   <td class="csvFolderName">'.$name.'</td>';
               if(file_exists('./'.DOWNLOAD_FOLDER.'/'.$name.'/'.$name.'.csv'))
-                echo '<td class="icon" onclick="openFile(\''.$name.'\',0,1)"><span class="icon-history"></span></td>';
+                echo '<td class="icon" onclick="openFile(\''.$name.'\',0,1)"><span class="icon-history" title="Open only failed files in last download"></span></td>';
               else
                 echo '<td class="dis"></td>'.'';
               echo '
-                  <td class="icon" onclick="renameDir(\''.$name.'\')"><span class="icon-pencil2"></span></td>
+                  <td class="icon" onclick="renameDir(\''.$name.'\')"><span class="icon-pencil2" title="Rename dir '.$name.'"></span></td>
                   <td class="icon" onclick="perDir(\''.$name.'\')"><span class="'.$lock.'" title="Permissions '.$pre.'"></span></td>
-                  <td class="icon delete" onclick="deleteDir(\''.$name.'\')"><span class="icon-remove"></span></td>
+                  <td class="icon delete" onclick="deleteDir(\''.$name.'\')"><span class="icon-remove" title="Delete dir '.$name.'"></span></td>
                 </tr>';
           }
           echo '</tbody></table>'.'';
@@ -558,9 +558,9 @@ function printContent($listDir,$listDownload){
             echo '
                 <tr'.$class.'>
                   <td class="csvFolderName">'.preg_replace('/\.csv$/','',$name).'</td>
-                  <td class="icon" onclick="renameDir(\''.$name.'\')"><span class="icon-pencil2"></span></td>
+                  <td class="icon" onclick="renameDir(\''.$name.'\')"><span class="icon-pencil2" title="Rename dir '.$name.'"></span></td>
                   <td class="icon" onclick="perDir(\''.$name.'\')"><span class="'.$lock.'" title="Permissions '.$pre.'"></span></td>
-                  <td class="icon delete" onclick="deleteDir(\''.$name.'\')"><span class="icon-remove"></span></td>
+                  <td class="icon delete" onclick="deleteDir(\''.$name.'\')"><span class="icon-remove" title="Delete dir '.$name.'"></span></td>
                 </tr>';
           }
           echo '</tbody></table>'.'';

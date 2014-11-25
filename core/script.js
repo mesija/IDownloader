@@ -365,7 +365,6 @@ function openFile(file,part,type){
             '<td class="right"><a href="https://app.shopping-cart-migration.com/madmin/migrations/admin2/index/mID/'+migration['id']+
               '" target="_blank"><span class="icon-newtab"></span> https://app.shopping-cart-migration.com ... '+migration['id']+'</a></td>'+
             '</tr>'+
-            '</tr>'+
             '<tr class="failedList">'+
             '<td class="left">Failed image list</td>'+
             '<td class="right"><a target="_blank" href="'+downloadFolder+'/'+dir+'/'+dir+'.csv"><span class="icon-disk"></span> '+downloadFolder+'/'+dir+'/'+dir+'.csv</a></td>'+
@@ -425,6 +424,19 @@ function openFile(file,part,type){
         else{
           dir = defaultDir;
           $(".h_top").text(dir);
+          $(".download_migration").html('<table id="info">'+
+            '<tbody>'+
+            '<tr class="failedList">'+
+            '<td class="left">Failed image list</td>'+
+            '<td class="right"><a target="_blank" href="'+downloadFolder+'/'+dir+'/'+dir+'.csv"><span class="icon-disk"></span> '+downloadFolder+'/'+dir+'/'+dir+'.csv</a></td>'+
+            '</tr>'+
+            '<tr>'+
+            '<td class="left">Download folder</td>'+
+            '<td class="right"><span class="icon-folder"></span> '+downloadFolder+'/'+dir+'/</td>'+
+            '</tr>'+
+            '</tbody>'+
+            '</table><br/>'
+          );
           view(data);
         }
         $(".all .left").text(size);
