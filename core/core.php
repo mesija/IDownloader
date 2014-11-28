@@ -2,7 +2,7 @@
 
 // версія ядра
 
-define('VER','2.73');
+define('VER','2.75');
 
 // підключаємо файл конфігів
 
@@ -200,10 +200,14 @@ if (isset($_GET['loadFile']) AND !empty($_GET['loadFile']) AND isset($_GET['step
       $i++;
     }
     fclose($csv);
-    if ($i > 0 AND $input[0][1] != '""') {
+    if (count($input) > 0) {
       alert('ok', 200, json_encode($input));
     } else {
-      alert('error', 400, 'File '.$file.' is empty');
+      if ($part == 0){
+        alert('error', 400, 'File '.$file.' is empty');
+      } else {
+        alert('ok', 200, json_encode($input));
+      }
     }
   } else {
     alert('error', 404, 'No such file '.$file);
