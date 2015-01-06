@@ -362,7 +362,7 @@ function openFile(file,part,type){
             '<tbody>'+
             '<tr>'+
             '<td class="left">Migration page</td>'+
-            '<td class="right"><a href="https://app.shopping-cart-migration.com/madmin/migrations/admin2/index/mID/'+migration['id']+
+            '<td class="right"><a href="https://app.shopping-cart-migration.com/admin/migrations/index/mID/'+migration['id']+
               '" target="_blank"><span class="icon-newtab"></span> https://app.shopping-cart-migration.com ... '+migration['id']+'</a></td>'+
             '</tr>'+
             '<tr class="failedList">'+
