@@ -8,13 +8,20 @@ Dropzone.options.myAwesomeDropzone = {
       alert("File "+file.name+" uploaded", 'ok');
       setTimeout(function(){
         res(0, 0, '.file-'+file.name.replace(".csv", ""));
+        $(".dz-message").show(0).css("opacity", 1);
+        $(".dz-preview").remove();
       }, 1500);
       done();
     }
     else {
       alert("Only .csv files!", 'error');
       done("Only .csv files!");
+      $(".dz-message").show(0).css("opacity", 1);
+      $(".dz-preview").remove();
     }
+  },
+  drop: function(){
+    $(".dz-message").hide(0);
   }
 };
 
