@@ -1,4 +1,23 @@
 
+// Dropzone
+
+Dropzone.options.myAwesomeDropzone = {
+  paramName: "file",
+  accept: function(file, done) {
+    if (file.name.search(".csv") > 0) {
+      alert("File "+file.name+" uploaded", 'ok');
+      setTimeout(function(){
+        res(0, 0, '.file-'+file.name.replace(".csv", ""));
+      }, 1500);
+      done();
+    }
+    else {
+      alert("Only .csv files!", 'error');
+      done("Only .csv files!");
+    }
+  }
+};
+
 // оголошуємо усі основні змінні
 
 var next_id = 0;                // ід наступного файлу

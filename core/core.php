@@ -2,7 +2,7 @@
 
 // версія ядра
 
-define('VER','2.76');
+define('VER','2.80');
 
 // підключаємо файл конфігів
 
@@ -13,6 +13,7 @@ else
 {
   if (!isset($_GET['config'])) {
     rename('./core/config_sample.php','./core/config.php');
+    include('./core/config.php');
   } else {
     alert('error', 404, 'Not create file ./core/config.php T_T');
   }
@@ -39,6 +40,14 @@ function alert ($type = 'error', $code = 0, $data = 'Undefined error') {
     'data' => $data
   );
   exit(json_encode($message));
+}
+
+// уплоадимо csv файл в теку
+
+if (isset($_GET['fileUpload'])) {
+  print_r($_FILES);
+  copy($_FILES['file']['tmp_name'], './csv/'.$_FILES['file']['name']);
+  exit();
 }
 
 // стартуємо завантаження

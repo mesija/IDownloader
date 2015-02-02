@@ -7,6 +7,13 @@
       ><?php printContent($listDir,$listDownload); ?>
     </div
   >
+    <form action="./index.php?fileUpload"
+          class="dropzone"
+          id="my-awesome-dropzone">
+      <div class="fallback">
+        <input name="file" type="file" multiple />
+      </div>
+    </form>
 </div>
 
   <div id="footer">&copy; IDownloader <?php echo VER; ?> &nbsp;&nbsp;&nbsp;

@@ -4,6 +4,7 @@
 error_reporting(0);                                               // відключаємо помилки
 define('I_FOLDER',            basename(__DIR__));                 // папка в якій розміщений скріпт
 define('CSV_FOLDER',          'csv');                             // папка де лежать файли csv
+define('PACK',                25000);                             // кількість файлів на один запит
 define('DOWNLOAD_FOLDER',     'download');                        // папка з завантаженими зображеннями
 define('PROCESS',             10);                                // кількість потоків      * не зловживати ^_^
 define('DB_HOST',             'localhost');                       // хост для підключення до апп
