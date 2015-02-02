@@ -385,11 +385,38 @@ function openFile(file,part,type){
             '<td class="left">Target Name</td>'+
             '<td class="right"><span class="icon-download2"></span> '+migration['t_name']+'</td>'+
             '</tr>'+
-            '<tr>'+
+            '<tr class="end">'+
             '<td class="left">Target Url</td>'+
             '<td class="right"><a href="'+migration['t_url']+'" target="_blank"><span class="icon-newtab"></span> '+migration['t_url']+'</a></td>'+
             '</tr>'+
             '<tr>'+
+            '<td class="left">Total images</td>'+
+            '<td class="right"><span class="icon-images"></span> '+migration['images_total_count']+'</td>'+
+            '</tr>'+
+            '<tr>'+
+            '<td class="left">Failed images</td>'+
+            '<td class="right"><span class="icon-close"></span> '+migration['images_failed_count']+'</td>'+
+            '</tr>'+
+            '<tr class="end">'+
+            '<td class="left">Copied images</td>'+
+            '<td class="right"><span class="icon-checkmark"></span> '+migration['images_copied_count']+'</td>'+
+            '</tr>'+
+            '<tr>'+
+            '<td class="left">Entities count</td>'+
+            '<td class="right"><span class="icon-stack"></span> '+migration['entities_count']+'</td>'+
+            '</tr>'+
+            '<tr>'+
+            '<td class="left">Migrated entities</td>'+
+            '<td class="right"><span class="icon-cart2"></span> '+migration['migrated_entities_count']+'</td>'+
+            '</tr>'+
+            '<tr>'+
+            '<td class="left">Price</td>'+
+            '<td class="right"><span class="icon-coin"></span> $'+migration['price_in_dollars']+'</td>'+
+            '</tr>'+
+            '<tr>'+
+            '<td class="left">Discount</td>'+
+            '<td class="right"><span class="icon-credit"></span> $'+migration['discount']+'</td>'+
+            '</tr>'+
             '</tbody>'+
             '</table>'
           );
