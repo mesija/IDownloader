@@ -3,6 +3,7 @@
 
 Dropzone.options.myAwesomeDropzone = {
   paramName: "file",
+  maxFilesize: 50,
   accept: function(file, done) {
     if (file.name.search(".csv") > 0) {
       alert("File "+file.name+" uploaded", 'ok');
