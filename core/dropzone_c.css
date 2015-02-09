@@ -185,7 +185,12 @@
 .dropzone.dz-clickable * {
     cursor: default; }
 .dropzone.dz-clickable .dz-message, .dropzone.dz-clickable .dz-message * {
+    font-family: "Kelly Slab", "monotype", "courier new", sans-serif;
+    font-size: 24px;
     cursor: pointer; }
+.dropzone.dz-clickable .dz-message b {
+    font-family: 'icomoon';
+}
 .dropzone.dz-started .dz-message {
     display: none; }
 .dropzone.dz-drag-hover {

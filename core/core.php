@@ -2,7 +2,7 @@
 
 // версія ядра
 
-define('VER','2.80');
+define('VER','2.82');
 
 // підключаємо файл конфігів
 
@@ -46,8 +46,12 @@ function alert ($type = 'error', $code = 0, $data = 'Undefined error') {
 
 if (isset($_GET['fileUpload'])) {
   print_r($_FILES);
-  copy($_FILES['file']['tmp_name'], './csv/'.$_FILES['file']['name']);
-  exit();
+  $rez = copy($_FILES['file']['tmp_name'], './csv/'.$_FILES['file']['name']);
+  if ($rez) {
+    alert('ok', 200, 'File uploaded');
+  } else {
+    alert('error', 400, 'File not uploaded');
+  }
 }
 
 // стартуємо завантаження
@@ -198,8 +202,7 @@ if (isset($_GET['loadFile']) AND !empty($_GET['loadFile']) AND isset($_GET['step
       if ($i > $min-1) {
         if ($mass[6] == 'copied') {
           $mass[6] = 1;
-        }
-        else {
+        } else {
           $mass[6] = 0;
         }
         $input[$i][0] = $mass[6];
@@ -446,8 +449,9 @@ if (empty($listDownload)) {
  * @param $listDownload
  */
 function printContent($listDir,$listDownload) {
+  $ver = explode('.', VER);
   echo '<div class="block logo">
-  <b class="icon-download"></b> IDownloader <v>'.VER.'</v>
+  <b class="icon-download"></b> IDownloader <v>'.$ver[0].'<v2>.'.$ver[1].'<v2></v>
   <button onclick="res(1,1,0)"><b class="icon-loop2"></b> Reload</button>
   </div>
   <div class="block download panel">
