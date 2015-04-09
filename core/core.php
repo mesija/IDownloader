@@ -2,7 +2,7 @@
 
 // версія ядра
 
-define('VER','2.82');
+define('VER','2.83');
 
 // підключаємо файл конфігів
 
@@ -112,19 +112,21 @@ if (isset($_GET['deleteDir']) AND !empty($_GET['deleteDir'])) {
 
 // завантажуємо файл
 
-if (isset($_GET['s']) AND isset($_GET['t']) AND isset($_GET['dir'])) {
-  $dir = $_GET['dir'];
-  $d = str_replace(basename($_GET['t']), '', $_GET['t']);
+if (isset($_POST['s']) AND isset($_POST['t']) AND isset($_POST['dir'])) {
+  $_POST['s'] = base64_decode($_POST['s']);
+  $_POST['t'] = base64_decode($_POST['t']);
+  $dir = $_POST['dir'];
+  $d = str_replace(basename($_POST['t']), '', $_POST['t']);
   if (!file_exists('./'.DOWNLOAD_FOLDER.'/' . $dir . '/' . $d)) {
     mkdir('./'.DOWNLOAD_FOLDER.'/' . $dir . '/' . $d, 0777 , true);
   }
-  if (!file_exists('./'.DOWNLOAD_FOLDER.'/' . $dir . '/' . $_GET['t'])
-     OR filesize('./'.DOWNLOAD_FOLDER.'/' . $dir . '/' . $_GET['t']) == 0) {
+  if (!file_exists('./'.DOWNLOAD_FOLDER.'/' . $dir . '/' . $_POST['t'])
+     OR filesize('./'.DOWNLOAD_FOLDER.'/' . $dir . '/' . $_POST['t']) == 0) {
     $img = false;
-    $img = @file_get_contents(str_replace(' ', "%20", $_GET['s']));
+    $img = @file_get_contents(str_replace(' ', "%20", $_POST['s']));
     if ($img AND !preg_match('/(<html)/',$img)) {
-      file_put_contents('./'.DOWNLOAD_FOLDER.'/' . $dir . '/' . $_GET['t'], $img);
-      alert('ok', 200, 'Download file '.$_GET['s'].' to '.$_GET['t'].' is ok');
+      file_put_contents('./'.DOWNLOAD_FOLDER.'/' . $dir . '/' . $_POST['t'], $img);
+      alert('ok', 200, 'Download file '.$_POST['s'].' to '.$_POST['t'].' is ok');
     } else {
       $s = $_GET['s'];
       if (preg_match('/\.(jpeg|JPEG|jpg|JPG)$/',$s,$r)) {
@@ -147,16 +149,16 @@ if (isset($_GET['s']) AND isset($_GET['t']) AND isset($_GET['dir'])) {
           $img = false;
           $img = @file_get_contents(str_replace(' ', "%20", $s.'.'.$val));
           if ($img AND !preg_match('/(<html)/',$img)) {
-            file_put_contents('./'.DOWNLOAD_FOLDER.'/' . $dir . '/' . $_GET['t'], $img);
-            alert('ok', 200, 'Download file '.$_GET['s'].' to '.$_GET['t'].' is ok');
+            file_put_contents('./'.DOWNLOAD_FOLDER.'/' . $dir . '/' . $_POST['t'], $img);
+            alert('ok', 200, 'Download file '.$_POST['s'].' to '.$_POST['t'].' is ok');
           }
         }
       }
       $file = fopen('./'.DOWNLOAD_FOLDER.'/' . $dir . '/' . $dir . '.csv','a');
-      $put = array('0',$_GET['ts'],$_GET['s'],$_GET['t']);
+      $put = array('0',$_POST['ts'],$_POST['s'],$_POST['t']);
       fputcsv($file,$put,',','"');
       fclose($file);
-      alert('error', 404, 'Error download file '.$_GET['s'].' to '.$_GET['t']);
+      alert('error', 404, 'Error download file '.$_POST['s'].' to '.$_POST['t']);
     }
   } else {
     alert('ok', 200, 'File '.$_GET['t'].' is exists');
@@ -206,8 +208,8 @@ if (isset($_GET['loadFile']) AND !empty($_GET['loadFile']) AND isset($_GET['step
           $mass[6] = 0;
         }
         $input[$i][0] = $mass[6];
-        $input[$i][1] = $mass[2];
-        $input[$i][2] = $mass[3];
+        $input[$i][1] = base64_encode($mass[2]);
+        $input[$i][2] = base64_encode($mass[3]);
       }
       $i++;
     }

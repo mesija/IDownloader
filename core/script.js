@@ -497,7 +497,15 @@ function process(){
       return true;
     }
     else {
-      $.get( "index.php?s="+d[stepp][id][1]+"&t="+d[stepp][id][2]+"&dir="+dir+"&ts="+migration['target_store_id'], function( data ) {
+      $.post(
+        "index.php",
+        {
+          s: d[stepp][id][1],
+          t: d[stepp][id][2],
+        dir: dir,
+         ts: migration['target_store_id']
+        },
+      function( data ) {
         data = parse(data);
         if(data['code'] == 200)
           copied++;
