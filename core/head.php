@@ -15,5 +15,6 @@
     var dif_defaultDir = '<?php echo date("d-m_H:i",time()+60*60*3); ?>';
     var dif_pack = <?php echo PACK > 100000 ? 25000 : PACK; ?>;
     var dif_downloadFolder = '<?php echo DOWNLOAD_FOLDER; ?>';
+    var dif_lock = '<?php echo LOCK; ?>';
   </script>
   <script src="./core/script.js" type="text/javascript"></script>

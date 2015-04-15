@@ -54,6 +54,7 @@ var defaultDir =      dif_defaultDir;     // дефолтна папка в як
 var downloadFolder =  dif_downloadFolder; // папка в яку виконуються усі завантаження
 var pack =            dif_pack;           // кількість рядків в кроці при відкритті файлу
 var proces =          dif_proces;         // дефолтна кількість процесів
+var lockOn =          dif_lock;           // блокування випадкового перезавантаження сторінки
 
 setTimeout(unBug(false),0);
 function unBug(test){
@@ -70,6 +71,7 @@ function unBug(test){
     deleteDir();            // видаляє папку
     deleteFile();           // видаляє файл
     download();             // запускає процеси завантаження
+    lock();                 // блокує випадкове перезавантаження сторінки
     finish();               // виконує необхідні функції при завершенні завантаженя
     next();                 // вертає id наступного файлу для завантаження
     openFile();             // завантажує данні з файлу
@@ -139,16 +141,16 @@ function alert(text,type){
       '</div></div>');
   } else if (type === 'error') {
     $("#alertBox").append('<div class="alertBox">' +
-    '<div id="alert" class="'+type+' alertID-'+id+'">'+
-    '<div class="icon "><span id="alertIcon" class="icon-spam"></span></div>'+
-    '<div class="text" id="alertText"></div>'+
-    '</div></div>');
+      '<div id="alert" class="'+type+' alertID-'+id+'">'+
+      '<div class="icon "><span id="alertIcon" class="icon-spam"></span></div>'+
+      '<div class="text" id="alertText"></div>'+
+      '</div></div>');
   } else {
     $("#alertBox").append('<div class="alertBox">' +
-    '<div id="alert" class="info alertID-'+id+'">'+
-    '<div class="icon "><span id="alertIcon" class="icon-info2"></span></div>'+
-    '<div class="text" id="alertText"></div>'+
-    '</div></div>');
+      '<div id="alert" class="info alertID-'+id+'">'+
+      '<div class="icon "><span id="alertIcon" class="icon-info2"></span></div>'+
+      '<div class="text" id="alertText"></div>'+
+      '</div></div>');
   }
   $(".alertID-"+id+" #alertText").html(text);
   $(".alertID-"+id).animate({opacity: 1, marginTop: (275+(alertSize*60)) + 'px'}, 1000);
@@ -287,6 +289,21 @@ function download(count,forse){
   }
   else
     return false;
+}
+
+function lock(){
+  if (lockOn == 1){
+    $("#lock").addClass("lock-off");
+    lockOn = 0;
+  } else {
+    $("#lock").removeClass("lock-off");
+    lockOn = 1;
+  }
+  $.get("index.php?lock="+lockOn, function( data ) {
+    data = parse(data);
+    view(data);
+    return data['code'] == 200;
+  });
 }
 
 /**
@@ -652,9 +669,12 @@ function res(send,forse,action){
  * @returns {boolean}
  */
 function start(){
-  if(active)
+  if (active) {
     return false;
-  window.onbeforeunload = closeEditorWarning;
+  }
+  if (lockOn == 1) {
+    window.onbeforeunload = closeEditorWarning;
+  }
   all_size = size;
   failed_size_dw = failed_size;
   $.get("index.php?start="+dir, function( data ) {

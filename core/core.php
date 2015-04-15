@@ -2,7 +2,7 @@
 
 // версія ядра
 
-define('VER','2.83');
+define('VER','2.84');
 
 // підключаємо файл конфігів
 
@@ -42,10 +42,31 @@ function alert ($type = 'error', $code = 0, $data = 'Undefined error') {
   exit(json_encode($message));
 }
 
+// перевіряємо параметр захисту від випадкових перезавантажень
+
+$lock = 1;
+if (isset($_COOKIE['lock'])) {
+  $lock = $_COOKIE['lock'];
+} else {
+  setcookie('lock', 1);
+}
+
+define('LOCK', $lock);
+
+// змінюємо параметр захисту від випадквого перезавантаження
+
+if (isset($_GET['lock'])) {
+  setcookie('lock', $_GET['lock']);
+  if ($_GET['lock'] == 1) {
+    alert('ok',    200, 'Lock reload page ON');
+  } else {
+    alert('error', 200, 'Lock reload page OFF');
+  }
+}
+
 // уплоадимо csv файл в теку
 
 if (isset($_GET['fileUpload'])) {
-  print_r($_FILES);
   $rez = copy($_FILES['file']['tmp_name'], './csv/'.$_FILES['file']['name']);
   if ($rez) {
     alert('ok', 200, 'File uploaded');
@@ -128,7 +149,7 @@ if (isset($_POST['s']) AND isset($_POST['t']) AND isset($_POST['dir'])) {
       file_put_contents('./'.DOWNLOAD_FOLDER.'/' . $dir . '/' . $_POST['t'], $img);
       alert('ok', 200, 'Download file '.$_POST['s'].' to '.$_POST['t'].' is ok');
     } else {
-      $s = $_GET['s'];
+      $s = $_POST['s'];
       if (preg_match('/\.(jpeg|JPEG|jpg|JPG)$/',$s,$r)) {
         switch($r[0]) {
           case '.jpeg':
@@ -161,7 +182,7 @@ if (isset($_POST['s']) AND isset($_POST['t']) AND isset($_POST['dir'])) {
       alert('error', 404, 'Error download file '.$_POST['s'].' to '.$_POST['t']);
     }
   } else {
-    alert('ok', 200, 'File '.$_GET['t'].' is exists');
+    alert('ok', 200, 'File '.$_POST['t'].' is exists');
   }
 }
 
@@ -455,6 +476,7 @@ function printContent($listDir,$listDownload) {
   echo '<div class="block logo">
   <b class="icon-download"></b> IDownloader <v>'.$ver[0].'<v2>.'.$ver[1].'<v2></v>
   <button onclick="res(1,1,0)"><b class="icon-loop2"></b> Reload</button>
+  <button class="lock' . (LOCK ? '' : ' lock-off') . '" id="lock" onclick="lock()"><b class="icon-lock"></b></button>
   </div>
   <div class="block download panel">
     <div id="left">

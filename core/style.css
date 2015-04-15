@@ -129,6 +129,15 @@ a:hover{text-decoration:none;color:#f05466}
     cursor: pointer;
 }
 
+#content button.lock {
+    margin-right: 55px;
+    color: #41879e !important;
+}
+
+#content button.lock-off {
+    color: #f05466 !important;
+}
+
 #content .block h1 {
     font-size: 25px;
     font-family: "Kelly Slab", "monotype", "courier new", sans-serif;
