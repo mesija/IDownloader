@@ -400,6 +400,11 @@ function openFile(file,part,type){
         if(data['code'] == 200){
           migration = data['data'];
           $(".h_top").text('ID: ' + migration['id']);
+          if (!migration){
+            migration = [];
+            migration['id'] = defaultDir;
+            migration['target_store_id'] = 0;
+          }
           dir = migration['id'];
           migration_status = true;
           $(".download_migration").html('<table id="info">'+
