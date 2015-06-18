@@ -402,7 +402,7 @@ function openFile(file,part,type){
           $(".h_top").text('ID: ' + migration['id']);
           if (!migration){
             migration = [];
-            migration['id'] = defaultDir;
+            migration['id'] = prompt('Error connect db.\nPlease enter download dir name hear:', defaultDir);
             migration['target_store_id'] = 0;
           }
           dir = migration['id'];
@@ -443,7 +443,7 @@ function openFile(file,part,type){
           );
         }
         else{
-          dir = defaultDir;
+          dir = prompt('Error connect db.\nPlease enter download dir name hear:', defaultDir);
           $(".h_top").text(dir);
           $(".download_migration").html('<table id="info">'+
             '<tbody>'+

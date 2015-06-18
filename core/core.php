@@ -2,7 +2,7 @@
 
 // версія ядра
 
-define('VER','2.85');
+define('VER','2.86');
 
 // підключаємо файл конфігів
 
@@ -284,8 +284,7 @@ if (isset($_GET['getInfo']) AND !empty($_GET['getInfo']) AND isset($_GET['type']
       LEFT JOIN migrations_stores AS s ON s.id = m.source_store_id
       WHERE t.id = " . $mass[1]
       ,$db);
-    if ($rez) {
-      $rez = mysql_fetch_array($rez,MYSQL_ASSOC);
+    if ($rez = mysql_fetch_array($rez,MYSQL_ASSOC)) {
       alert('ok', 200, $rez);
     }
     alert('error', 404, 'No such store id '.$mass[1]);
