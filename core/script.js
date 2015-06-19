@@ -47,6 +47,7 @@ var active = true;              // статус завантаження
 var process_info = 0;           // кількість процесів яку потрібно запустити
 var loader = '';                // дані лоадера
 var alertSize = 0;              // кількість активних алертів
+var newDir = '';                // тимчасова змінна для імені папки
 
 // оголошуємо константи
 
@@ -402,7 +403,8 @@ function openFile(file,part,type){
           $(".h_top").text('ID: ' + migration['id']);
           if (!migration){
             migration = [];
-            migration['id'] = prompt('Error connect db.\nPlease enter download dir name hear:', defaultDir);
+            newDir = prompt('Error connect db.\nPlease enter download dir name hear:', defaultDir);
+            migration['id'] = newDir ? newDir : defaultDir;
             migration['target_store_id'] = 0;
           }
           dir = migration['id'];
@@ -443,7 +445,8 @@ function openFile(file,part,type){
           );
         }
         else{
-          dir = prompt('Error connect db.\nPlease enter download dir name hear:', defaultDir);
+          newDir = prompt('Error connect db.\nPlease enter download dir name hear:', defaultDir);
+          dir = newDir ? newDir : defaultDir;
           $(".h_top").text(dir);
           $(".download_migration").html('<table id="info">'+
             '<tbody>'+
