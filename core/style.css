@@ -84,7 +84,7 @@ a:hover{text-decoration:none;color:#f05466}
     margin: 0 0 25px 0;
     background-color: #f2f2e9;
     padding: 15px 15px 15px 15px;
-    border: 2px solid #FFFFFF;
+    border: 2px solid #F2F2E9;
     border-radius: 5px;
     vertical-align: top;
 }
@@ -122,7 +122,7 @@ a:hover{text-decoration:none;color:#f05466}
     outline: 0;
 }
 #content .logo button:hover {
-    color: #FFFFFF;
+    color: #F2F2E9;
 }
 
 #content .logo button b {
@@ -136,6 +136,11 @@ a:hover{text-decoration:none;color:#f05466}
 
 #content button.lock-off {
     color: #f05466 !important;
+}
+
+#content button.add {
+    margin-right: 55px;
+    color: #F2F2E9 !important;
 }
 
 #content .block h1 {
@@ -211,7 +216,7 @@ a:hover{text-decoration:none;color:#f05466}
 
 #content .csvFolder tr:hover td {
     background-color: #999999;
-    color: #FFFFFF;
+    color: #F2F2E9;
 }
 
 #content .csvFolder td:hover {
@@ -467,7 +472,7 @@ a:hover{text-decoration:none;color:#f05466}
     border-radius: 7px;
     font-family: Arial, Helvetica, Sans Serif;
     font-weight: bold;
-    color: #FFFFFF;
+    color: #F2F2E9;
 }
 
 #alert * {
