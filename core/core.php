@@ -2,7 +2,7 @@
 
 // версія ядра
 
-define('VER','2.88');
+define('VER','2.89');
 
 // підключаємо файл конфігів
 
@@ -206,7 +206,7 @@ if (isset($_GET['loadFile']) AND !empty($_GET['loadFile']) AND isset($_GET['step
     $i = 0;
     $delimiter = '';
     while($line = fgets($csv,9999) AND $i < $max) {
-      $line = str_replace('"','',$line);
+      $line = preg_replace('/[\n\r"]+/', '', $line);
       $mass = array();
       if ($delimiter == '') {
         preg_match_all('/[^a-z0-9A-Z:\/\.?&=_ %\\!#$^+@()<>-]/',$line,$del);
@@ -475,7 +475,8 @@ function printContent($listDir,$listDownload) {
   echo '<div class="block logo">
   <b class="icon-download"></b> IDownloader <v>'.$ver[0].'<v2>.'.$ver[1].'<v2></v>
   <button onclick="res(1,1,0)"><b class="icon-loop2"></b> Reload</button>
-  <button class="lock' . (LOCK ? '' : ' lock-off') . '" id="lock" onclick="lock()"><b class="icon-lock"></b></button>
+  <button class="lock' . (LOCK ? '' : ' lock-off') . '" id="lock" onclick="lock()" title="Lock reload page"><b class="icon-lock"></b></button>
+  <button class="add" id="add" onclick="addFile()" title="Upload new file"><b class="icon-box-add"></b></button>
   </div>
   <div class="block download panel">
     <div id="left">
