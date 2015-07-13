@@ -2,7 +2,7 @@
 
 // версія ядра
 
-define('VER', '3.00');
+define('VER', '3.01');
 
 // підключаємо файл конфігів
 
@@ -401,11 +401,11 @@ if (file_exists('./core/update')) {
         $fileList = json_decode($fileList);
         foreach ($fileList AS $file) {
           if ($file[0] == '+') {
-            if ($file[2] == "dir") {
+            if ($file[2] == "") {
               mkdir('./' . $file[1] . '/', 0777, true);
             } else {
               $fileUpdate = @file_get_contents(UPDATE_SERVER . 'IDownloader/' . $file[1]);
-              file_put_contents($file[2] == '' ? $file[1] : $file[1] . '.' . $file[2], $fileUpdate);
+              file_put_contents($file[1] . '.' . $file[2], $fileUpdate);
             }
           } else {
             unlink('./' . ($file[2] != '') ? $file[1] . '.' . $file[2] : $file[1]);
@@ -475,7 +475,7 @@ function printContent($listDir, $listDownload)
 {
   $ver = explode('.', VER);
   echo '<div class="block logo">
-  <b class="icon-download"></b> <img src="./core/id.png"> <v>' . $ver[0] . '<v2>.' . $ver[1] . '<v2></v> Lite
+  <b class="icon-download"></b> <div id="logo-img"></div> <v>' . $ver[0] . '<v2>.' . $ver[1] . '<v2></v> Lite
   <button class="reload" onclick="res(1,1,0)"><b class="icon-loop2"></b> Reload</button>
   <button class="lock' . (LOCK ? '' : ' lock-off') . '" id="lock" onclick="lock()" title="Lock reload page"><b class="icon-lock"></b></button>
   <button class="add" id="add" onclick="addFile()" title="Upload new file"><b class="icon-box-add"></b></button>
