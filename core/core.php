@@ -2,7 +2,20 @@
 
 // версія ядра
 
-define('VER', '3.02');
+define('VER', '3.10');
+
+// масив доступних тем
+
+$THEME_ARRAY = array(
+  'white'   => array(
+    'name'  => 'Lite',
+    'src'   => 'theme-white.css',
+  ),
+  'dark'   => array(
+    'name'  => 'Dark',
+    'src'   => 'theme-dark.css',
+  ),
+);
 
 // підключаємо файл конфігів
 
@@ -48,7 +61,7 @@ $lock = 1;
 if (isset($_COOKIE['lock'])) {
   $lock = $_COOKIE['lock'];
 } else {
-  setcookie('lock', 1);
+  setcookie('lock', $lock);
 }
 
 define('LOCK', $lock);
@@ -61,6 +74,32 @@ if (isset($_GET['lock'])) {
     alert('ok', 200, 'Lock reload page ON');
   } else {
     alert('error', 200, 'Lock reload page OFF');
+  }
+}
+
+// перевіряємо активну тему
+
+$theme = 'white';
+if (isset($_COOKIE['theme'])) {
+  $theme = $_COOKIE['theme'];
+} else {
+  setcookie('theme', $theme);
+}
+
+define('THEME', $theme);
+
+$THEME_DATA = array(
+  'logo-title' => $THEME_ARRAY[$theme]['name'],
+);
+
+// змінюємо активну тему
+
+if (isset($_GET['theme'])) {
+  if(array_key_exists($_GET['theme'], $THEME_ARRAY)){
+    setcookie('theme', $_GET['theme']);
+    alert('ok', 200, 'Change theme ok');
+  } else {
+    alert('error', 400, 'Theme ' . $_GET['theme'] . ' do not exist!');
   }
 }
 
@@ -471,13 +510,14 @@ if (empty($listDownload)) {
  * @param $listDir
  * @param $listDownload
  */
-function printContent($listDir, $listDownload)
+function printContent($listDir, $listDownload, $themeData)
 {
   $ver = explode('.', VER);
   echo '<div class="block logo">
-  <b class="icon-download"></b> <div id="logo-img"></div> <v>' . $ver[0] . '<v2>.' . $ver[1] . '<v2></v> Lite
+  <b class="icon-download"></b> <div id="logo-img"></div> <v>' . $ver[0] . '<v2>.' . $ver[1] . '<v2></v> ' . $themeData['logo-title'] . '
   <button class="reload" onclick="res(1,1,0)"><b class="icon-loop2"></b> Reload</button>
   <button class="lock' . (LOCK ? '' : ' lock-off') . '" id="lock" onclick="lock()" title="Lock reload page"><b class="icon-lock"></b></button>
+  <button class="change-theme" id="change-theme" onclick="changeTheme()" title="Change color theme"><b class="icon-paint-format"></b></button>
   <button class="add" id="add" onclick="addFile()" title="Upload new file"><b class="icon-box-add"></b></button>
   </div>
   <div class="block download panel">
@@ -639,7 +679,7 @@ function printContent($listDir, $listDownload)
 // вертаємо код сторінки
 
 if (isset($_GET['getContent']) AND !empty($_GET['getContent'])) {
-  printContent($listDir, $listDownload);
+  printContent($listDir, $listDownload, $THEME_DATA);
   exit();
 }
 

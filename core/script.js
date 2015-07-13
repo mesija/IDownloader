@@ -1,30 +1,3 @@
-
-// Dropzone
-
-Dropzone.options.myAwesomeDropzone = {
-  paramName: "file",
-  accept: function(file, done) {
-    if (file.name.search(".csv") > 0) {
-      alert("File "+file.name+" uploaded", 'ok');
-      setTimeout(function(){
-        res(0, 0, '.file-'+file.name.replace(".csv", ""));
-        $(".dz-message").show(0).css("opacity", 1);
-        $(".dz-preview").remove();
-      }, 1500);
-      done();
-    }
-    else {
-      alert("Only .csv files!", 'error');
-      done("Only .csv files!");
-      $(".dz-message").show(0).css("opacity", 1);
-      $(".dz-preview").remove();
-    }
-  },
-  drop: function(){
-    $(".dz-message").hide(0);
-  }
-};
-
 // оголошуємо усі основні змінні
 
 var next_id = 0;                // ід наступного файлу
@@ -51,11 +24,13 @@ var newDir = '';                // тимчасова змінна для іме
 
 // оголошуємо константи
 
-var defaultDir =      dif_defaultDir;     // дефолтна папка в яку будем завантажувати файли
-var downloadFolder =  dif_downloadFolder; // папка в яку виконуються усі завантаження
-var pack =            dif_pack;           // кількість рядків в кроці при відкритті файлу
-var proces =          dif_proces;         // дефолтна кількість процесів
-var lockOn =          dif_lock;           // блокування випадкового перезавантаження сторінки
+var defaultDir =      dif_defaultDir;         // дефолтна папка в яку будем завантажувати файли
+var downloadFolder =  dif_downloadFolder;     // папка в яку виконуються усі завантаження
+var pack =            dif_pack;               // кількість рядків в кроці при відкритті файлу
+var proces =          dif_proces;             // дефолтна кількість процесів
+var lockOn =          dif_lock;               // блокування випадкового перезавантаження сторінки
+var theme_array =     parse(dif_theme_array); // масив доступних тем
+var theme =           dif_theme;              // активна тема
 
 setTimeout(unBug(false),0);
 function unBug(test){
@@ -66,6 +41,7 @@ function unBug(test){
     alertHide();            // приховує повідомлення
     alertDrop();            // видаляє блок повідомлення
     check();                // активує/дективує кнопку Only failed
+    changeTheme();          // змінює тему
     clearLast();            // видаляє результати завантаження
     closeEditorWarning();   // підтвердження закриття вклідки
     createLoader();         // створює індикатор завантаження
@@ -135,20 +111,20 @@ function add(count,forse){
 function alert(text,type){
   var id = Math.floor((Math.random() * 1000) + 1);
   if (type === 'ok') {
-    $("#alertBox").append('<div class="alertBox">'+
-      '<div id="alert" class="'+type+' alertID-'+id+'">'+
+    $("#alertBox").append('<div class="alertBox alertID-'+id+'">'+
+      '<div id="alert" class="'+type+'">'+
       '<div class="icon "><span id="alertIcon" class="icon-checkmark-circle"></span></div>'+
       '<div class="text" id="alertText"></div>'+
       '</div></div>');
   } else if (type === 'error') {
-    $("#alertBox").append('<div class="alertBox">' +
-      '<div id="alert" class="'+type+' alertID-'+id+'">'+
+    $("#alertBox").append('<div class="alertBox alertID-'+id+'">' +
+      '<div id="alert" class="'+type+'">'+
       '<div class="icon "><span id="alertIcon" class="icon-spam"></span></div>'+
       '<div class="text" id="alertText"></div>'+
       '</div></div>');
   } else {
-    $("#alertBox").append('<div class="alertBox">' +
-      '<div id="alert" class="info alertID-'+id+'">'+
+    $("#alertBox").append('<div class="alertBox alertID-'+id+'">' +
+      '<div id="alert" class="info">'+
       '<div class="icon "><span id="alertIcon" class="icon-info2"></span></div>'+
       '<div class="text" id="alertText"></div>'+
       '</div></div>');
@@ -176,7 +152,7 @@ function alertHide(id){
  * @returns {boolean}
  */
 function alertDrop(id){
-  $(".alert"+id).remove();
+  $(".alertID-"+id).remove();
   return true;
 }
 
@@ -196,6 +172,19 @@ function check(){
     return true;
   }
   return false;
+}
+
+function changeTheme(){
+  theme_array.remByVal(theme);
+  var theme_id = Math.floor((Math.random() * theme_array.length));
+  $.get("index.php?theme="+theme_array[theme_id], function( data ) {
+    data = parse(data);
+    if(data['code'] == 200){
+      res(0,1,0);
+    }
+    view(data);
+    return data['code'] == 200;
+  });
 }
 
 /**
@@ -292,6 +281,9 @@ function download(count,forse){
     return false;
 }
 
+/**
+ * @returns {boolean}
+ */
 function lock(){
   if (lockOn == 1){
     $("#lock").addClass("lock-off");
@@ -471,6 +463,8 @@ function openFile(file,part,type){
         $(".copied .right").text(copied);
         $(".download").show(300);
         $(".fileList").hide(300);
+        $("#change-theme").hide(300);
+        $("#add").hide(300);
         if(failed_size > 0){
           $(".only button").addClass("ok");
         }
@@ -732,4 +726,41 @@ function view (data){
   else
     alert(data['data'],data['type']);
   return true;
+}
+
+// Dropzone
+
+Dropzone.options.myAwesomeDropzone = {
+  paramName: "file",
+  accept: function(file, done) {
+    if (file.name.search(".csv") > 0) {
+      alert("File "+file.name+" uploaded", 'ok');
+      setTimeout(function(){
+        res(0, 0, '.file-'+file.name.replace(".csv", ""));
+        $(".dz-message").show(0).css("opacity", 1);
+        $(".dz-preview").remove();
+      }, 1500);
+      done();
+    }
+    else {
+      alert("Only .csv files!", 'error');
+      done("Only .csv files!");
+      $(".dz-message").show(0).css("opacity", 1);
+      $(".dz-preview").remove();
+    }
+  },
+  drop: function(){
+    $(".dz-message").hide(0);
+  }
+};
+
+
+Array.prototype.remByVal = function(val) {
+  for (var i = 0; i < this.length; i++) {
+    if (this[i] === val) {
+      this.splice(i, 1);
+      i--;
+    }
+  }
+  return this;
 }

@@ -4,7 +4,7 @@
 <div id="box">
   <div id="contentBox"
     ><div id="content"
-      ><?php printContent($listDir,$listDownload); ?>
+      ><?php printContent($listDir,$listDownload, $THEME_DATA); ?>
     </div>
     <form action="./index.php?fileUpload"
           class="dropzone"
@@ -17,7 +17,7 @@
 
 </div>
 
-<div id="footer">&copy; IDownloader <?php echo VER; ?> &nbsp;&nbsp;&nbsp;
+<div id="footer">&copy; IDownloader <?php echo VER . ' ' . $THEME_DATA['logo-title']; ?> &nbsp;&nbsp;&nbsp;
   s.rudavskii@magneticone.com &nbsp;&nbsp;&nbsp;
   <a target="_blank" href="https://github.com/s-rudavskii/IDownloader">
     <span class="icon-github3"></span> Project in GitHub</a> &nbsp;&nbsp;&nbsp;
