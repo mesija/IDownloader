@@ -188,9 +188,8 @@ if (isset($_POST['s']) AND isset($_POST['t']) AND isset($_POST['dir'])) {
     OR filesize(DOWNLOAD_FOLDER . '/' . $dir . '/' . $_POST['t']) == 0
   ) {
     $img = false;
-    $img = @file_get_contents(str_replace(' ', "%20", $_POST['s']));
-    if ($img AND !preg_match('/(<html)/', $img)) {
-      file_put_contents(DOWNLOAD_FOLDER . '/' . $dir . '/' . $_POST['t'], $img);
+    $img = downloadImage($_POST['s'], $_POST['t'], $dir);
+    if ($img) {
       alert('ok', 200, 'Download file ' . $_POST['s'] . ' to ' . $_POST['t'] . ' is ok');
     } else {
       $s = $_POST['s'];
@@ -212,9 +211,8 @@ if (isset($_POST['s']) AND isset($_POST['t']) AND isset($_POST['dir'])) {
         $s = preg_replace('/' . $r[0] . '$/', '', $s);
         foreach ($mass AS $val) {
           $img = false;
-          $img = @file_get_contents(str_replace(' ', "%20", $s . '.' . $val));
-          if ($img AND !preg_match('/(<html)/', $img)) {
-            file_put_contents(DOWNLOAD_FOLDER . '/' . $dir . '/' . $_POST['t'], $img);
+          $img = downloadImage(str_replace(' ', "%20", $s . '.' . $val), $_POST['t'], $dir);
+          if ($img) {
             alert('ok', 200, 'Download file ' . $_POST['s'] . ' to ' . $_POST['t'] . ' is ok');
           }
         }
@@ -228,6 +226,28 @@ if (isset($_POST['s']) AND isset($_POST['t']) AND isset($_POST['dir'])) {
   } else {
     alert('ok', 200, 'File ' . $_POST['t'] . ' is exists');
   }
+}
+
+// спроба завантажити картинку
+
+function downloadImage($source, $target, $dir){
+  $img = @file_get_contents($source);
+  if ($img AND !preg_match('/(<html)/', $img)) {
+    file_put_contents(DOWNLOAD_FOLDER . '/' . $dir . '/' . $target, $img);
+    return true;
+  } else {
+    $proxyArray = explode(', ', PROXY_SERVER);
+    $proxy = $proxyArray[rand(0, count($proxyArray) - 1)];
+    chmod(DOWNLOAD_FOLDER . '/' . $dir . '/', 0777);
+    exec('curl -x ' . $proxy . ' --proxy-user ' . PROXY_AUTH . ' -L ' . $source . ' > ' . DOWNLOAD_FOLDER . '/' . $dir . '/' . $target);
+    $img = @file_get_contents(DOWNLOAD_FOLDER . '/' . $dir . '/' . $target);
+    if ($img AND !preg_match('/(<html)/', $img) AND filesize(DOWNLOAD_FOLDER . '/' . $dir . '/' . $target) > 0) {
+      return true;
+    } else {
+      unlink(DOWNLOAD_FOLDER . '/' . $dir . '/' . $target);
+    }
+  }
+  return false;
 }
 
 // завантажуємо інформацію з csv файлу
@@ -273,7 +293,7 @@ if (isset($_GET['loadFile']) AND !empty($_GET['loadFile']) AND isset($_GET['step
           $mass[6] = 0;
         }
         $input[$i][0] = $mass[6];
-        $input[$i][1] = base64_encode($mass[2]);
+        $input[$i][1] = base64_encode(str_replace(' ', "%20", $mass[2]));
         $input[$i][2] = base64_encode($mass[3]);
       }
       $i++;
