@@ -2,7 +2,7 @@
 
 // версія ядра
 
-define('VER', '3.10');
+define('VER', '3.11');
 
 // масив доступних тем
 
@@ -12,8 +12,12 @@ $THEME_ARRAY = array(
     'src'   => 'theme-white.css',
   ),
   'dark'   => array(
-    'name'  => 'Dark',
+    'name'  => 'Dark-Yellow',
     'src'   => 'theme-dark.css',
+  ),
+  'black-white'   => array(
+    'name'  => 'Black-White',
+    'src'   => 'theme-black-white.css',
   ),
 );
 
