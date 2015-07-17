@@ -24,7 +24,6 @@ var newDir = '';                // тимчасова змінна для іме
 
 // оголошуємо константи
 
-var defaultDir =      dif_defaultDir;         // дефолтна папка в яку будем завантажувати файли
 var downloadFolder =  dif_downloadFolder;     // папка в яку виконуються усі завантаження
 var pack =            dif_pack;               // кількість рядків в кроці при відкритті файлу
 var proces =          dif_proces;             // дефолтна кількість процесів
@@ -387,6 +386,7 @@ function openFile(file,part,type){
       }
       createLoader();
       alert('Get migration info','info');
+      defaultDir = file.replace('.csv', '');
       active = false;
       $.get("index.php?getInfo="+file+"&type="+type, function( data ) {
         data = parse(data);
@@ -437,7 +437,7 @@ function openFile(file,part,type){
           );
         }
         else{
-          newDir = prompt('Error connect db.\nPlease enter download dir name hear:', file.replace('.csv', ''));
+          newDir = prompt('Error connect db.\nPlease enter download dir name hear:', defaultDir);
           dir = newDir ? newDir : defaultDir;
           $(".h_top").text(dir);
           $(".download_migration").html('<table id="info">'+
