@@ -437,7 +437,7 @@ function openFile(file,part,type){
           );
         }
         else{
-          newDir = prompt('Error connect db.\nPlease enter download dir name hear:', defaultDir);
+          newDir = prompt('Error connect db.\nPlease enter download dir name hear:', file.replace('.csv', ''));
           dir = newDir ? newDir : defaultDir;
           $(".h_top").text(dir);
           $(".download_migration").html('<table id="info">'+
