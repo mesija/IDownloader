@@ -439,7 +439,7 @@ function openFile(file,part,type){
         }
         else{
           newDir = prompt('Error connect db.\nPlease enter download dir name hear:', defaultDir);
-          dir = newDir ? newDir : defaultDir;
+          dir = migration['id'] = newDir ? newDir : defaultDir;
           $(".h_top").text(dir);
           $(".download_migration").html('<table id="info">'+
             '<tbody>'+
