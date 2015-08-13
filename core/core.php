@@ -2,13 +2,13 @@
 
 // версія ядра
 
-define('VER', '3.14');
+define('VER', '3.20');
 
 // масив доступних тем
 
 $THEME_ARRAY = array(
   'white'   => array(
-    'name'  => 'Lite',
+    'name'  => 'White-Orange',
     'src'   => 'theme-white.css',
   ),
   'dark'   => array(
@@ -540,8 +540,8 @@ function printContent($listDir, $listDownload, $themeData)
   echo '<div class="block logo">
   <b class="icon-download"></b> <div id="logo-img"></div> <v>' . $ver[0] . '<v2>.' . $ver[1] . '<v2></v> ' . $themeData['logo-title'] . '
   <button class="reload" onclick="res(1,1,0)"><b class="icon-loop2"></b> Reload</button>
+  <button class="settings" id="settings" onclick="settingsOpen()" title="Open settings"><b class="icon-cog"></b></button>
   <button class="lock' . (LOCK ? '' : ' lock-off') . '" id="lock" onclick="lock()" title="Lock reload page"><b class="icon-lock"></b></button>
-  <button class="change-theme" id="change-theme" onclick="changeTheme()" title="Change color theme"><b class="icon-paint-format"></b></button>
   <button class="add" id="add" onclick="addFile()" title="Upload new file"><b class="icon-box-add"></b></button>
   </div>
   <div class="block download panel">

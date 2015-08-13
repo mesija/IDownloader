@@ -765,3 +765,20 @@ Array.prototype.remByVal = function(val) {
   }
   return this;
 }
+
+/* ----------------------------------- Settings ----------------------------------- */
+
+function settingsOpen(){
+  $('#settingsBox').show().animate({opacity:1}, 500);
+}
+
+$(document).ready(function() {
+  $('#settingsClose').bind(
+    'click',
+    function(){
+      $('#settingsBox').animate({opacity:0}, 500, function(){
+        $('#settingsBox').hide();
+      });
+    }
+  );
+});
