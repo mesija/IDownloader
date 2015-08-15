@@ -34,43 +34,55 @@
     <h2><b class="icon-folder"></b> Folders</h2>
     <div class="settItem">
       <div class="settLabel">CSV file folder</div>
-      <div class="settValue"><input name="CSV_FOLDER" type="text" value="csv" placeholder="csv"></div>
+      <div class="settValue"><input name="CSV_FOLDER" type="text" value="<?php echo CSV_FOLDER ?>" placeholder="csv"></div>
     </div>
     <div class="settItem">
       <div class="settLabel">Download folder</div>
-      <div class="settValue"><input name="DOWNLOAD_FOLDER" type="text" value="./download" placeholder="./download">
+      <div class="settValue"><input name="DOWNLOAD_FOLDER" type="text" value="<?php echo DOWNLOAD_FOLDER ?>" placeholder="./download">
       </div>
     </div>
     <h2><b class="icon-meter"></b> Power</h2>
     <div class="settItem">
       <div class="settLabel">Open image in step</div>
-      <div class="settValue"><input name="PACK" type="text" value="25000" placeholder="25000"></div>
+      <div class="settValue">
+        <input name="PACK" id="PACK" type="range" value="<?php echo PACK ?>" min="0" step="5000" max="100000">
+        <input name="PACK_VALUE" id="PACK_VALUE" type="text" value="<?php echo PACK ?>">
+      </div>
     </div>
     <div class="settItem">
       <div class="settLabel">Download process</div>
       <div class="settValue"><input name="PROCESS" type="text" value="10" placeholder="10"></div>
     </div>
-    <h2><b class="icon-tree"></b> Proxy</h2>
+    <h2><b class="icon-tree"></b> Proxy <div class="slideThree">
+        <input style="display: none;" type="checkbox" checked value="1" id="slideThree" name="PROXY_ACTIVE"
+          <?php echo PROXY_ACTIVE ? 'checkbox' : ''; ?>/>
+        <label for="slideThree"></label>
+      </div></h2>
     <div class="settItem">
       <div class="settLabel">Server</div>
-      <div class="settValue"><input name="PROXY_SERVER" type="text" value="127.0.0.1:1111, 127.0.0.2:1111"
+      <div class="settValue"><input name="PROXY_SERVER" type="text" value="<?php echo PROXY_SERVER ?>"
                                     placeholder="127.0.0.1:1111, 127.0.0.2:1111"></div>
     </div>
     <div class="settItem">
       <div class="settLabel">User:pass</div>
-      <div class="settValue"><input name="PROXY_AUTH" type="text" value="user:pass" placeholder="user:pass"></div>
+      <div class="settValue"><input name="PROXY_AUTH" type="text" value="<?php echo PROXY_AUTH ?>" placeholder="user:pass"></div>
     </div>
     <h2><b class="icon-paint-format"></b> Theme</h2>
-    <div class="settItem">
+    <div class="settItem settCenter">
       <?php
       foreach($THEME_ARRAY AS $code => $data){
-        echo "<button class=\"settButt\"" . ($data['name'] == $THEME_DATA['logo-title'] ? ' active' : '') . ">
+        echo "<button class=\"settButt" . ($data['name'] == $THEME_DATA['logo-title'] ? ' active' : '') . "\">
+        <div class=\"colorThemeBox\">";
+        foreach($data['color'] AS $color){
+          echo "<div class=\"colorThemeItem\" style=\"background-color:#" . $color . "\"></div>";
+        }
+        echo "</div>
         {$data['name']}</button>";
       }
       ?>
     </div>
     <h2>&nbsp;</h2>
-    <div class="settItem settSaveBox">
+    <div class="settItem settCenter">
       <button id="settSave">Save</button>
     </div>
   </div>

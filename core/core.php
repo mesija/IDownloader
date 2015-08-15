@@ -10,18 +10,36 @@ $THEME_ARRAY = array(
   'white'   => array(
     'name'  => 'White-Orange',
     'src'   => 'theme-white.css',
+    'color' => array(
+      'FFFFFF',
+      '3ba0b3',
+      'ff5722',
+    ),
   ),
   'dark'   => array(
     'name'  => 'Dark-Yellow',
     'src'   => 'theme-dark.css',
+    'color' => array(
+      '404040',
+      '3ba0b3',
+      'ffe44a',
+    ),
   ),
   'black-white'   => array(
     'name'  => 'Black-White',
     'src'   => 'theme-black-white.css',
+    'color' => array(
+      '404040',
+      'f2f2f2',
+      'ffe44a',
+    ),
   ),
 );
 
 // підключаємо файл конфігів
+
+define('I_FOLDER', basename(__DIR__));
+define('UPDATE_SERVER', 'http://update.mesija.net/');
 
 if (file_exists('./core/config.php')) {
   include('./core/config.php');
@@ -32,19 +50,6 @@ if (file_exists('./core/config.php')) {
   } else {
     alert('error', 404, 'Not create file ./core/config.php T_T');
   }
-}
-
-// конектимся до бази
-
-/**
- * @return resource
- */
-function dbConnect()
-{
-  $db = mysql_connect(DB_HOST, DB_USER, DB_PASS);
-  if ($db)
-    mysql_select_db(DB_NAME, $db);
-  return $db;
 }
 
 // виводимо результат виконання
@@ -93,7 +98,8 @@ if (isset($_COOKIE['theme'])) {
 define('THEME', $theme);
 
 $THEME_DATA = array(
-  'logo-title' => $THEME_ARRAY[$theme]['name'],
+  'logo-title'  => $THEME_ARRAY[$theme]['name'],
+  'color-array' => $THEME_ARRAY[$theme]['color'],
 );
 
 // змінюємо активну тему
@@ -339,18 +345,6 @@ if (isset($_GET['getInfo']) AND !empty($_GET['getInfo']) AND isset($_GET['type']
     if (count($mass) < 3) {
       alert('error', 404, 'No such delimiter in file ' . $file);
     }
-    $db = dbConnect();
-    if (!$db) alert('error', 406, 'No connect database');
-    $rez = mysql_query("
-      SELECT m.*,t.url AS t_url, t.cart_id AS t_name,s.url AS s_url, s.cart_id AS s_name
-      FROM migrations_stores AS t
-      LEFT JOIN migrations AS m ON m.target_store_id = t.id
-      LEFT JOIN migrations_stores AS s ON s.id = m.source_store_id
-      WHERE t.id = " . $mass[1]
-      , $db);
-    if ($rez = mysql_fetch_array($rez, MYSQL_ASSOC)) {
-      alert('ok', 200, $rez);
-    }
     alert('error', 404, 'No such store id ' . $mass[1]);
   }
   alert('error', 404, 'No such file ' . $file);
@@ -391,18 +385,9 @@ if (isset($_GET['renameFile']) AND !empty($_GET['renameFile'])) {
       if (count($mass) < 3) {
         alert('error', 404, 'No such delimiter in file ' . $file);
       }
-      $db = dbConnect();
-      if (!$db) {
-        alert('error', 406, 'No connect database');
-      }
-      $rez = mysql_query("
-      SELECT m.id
-      FROM migrations_stores AS t
-      LEFT JOIN migrations AS m ON m.target_store_id = t.id
-      WHERE t.id = " . $mass[1]
-        , $db);
+      alert('error', 406, 'No connect database');
+      $rez = false;
       if ($rez) {
-        $rez = mysql_fetch_array($rez, MYSQL_ASSOC);
         if ($rez['id'] . '.csv' == $file) {
           alert('ok', 201, 'Name file ' . $rez['id'] . '.csv is actual');
         }

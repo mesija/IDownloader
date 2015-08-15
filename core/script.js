@@ -781,4 +781,25 @@ $(document).ready(function() {
       });
     }
   );
+
+  $('.settButt').bind(
+    'click',
+    function(element){
+      $('.settButt').removeClass('active');
+      element.target.className = 'settButt active';
+    }
+  );
+
+  $('#PACK').bind(
+    'mousemove',
+    function(element){
+      $('#PACK_VALUE').val(element.target.value > 0 ? element.target.value : 1);
+    }
+  ).bind(
+    'dblclick',
+    function(element){
+      element.target.value = 25000;
+      $('#PACK_VALUE').val(25000);
+    }
+  );
 });
