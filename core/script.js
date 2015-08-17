@@ -820,15 +820,32 @@ $(document).ready(function() {
 
   $('#settSave').bind(
     'click',
-    function(element){
-      var formCsvFolder =       $('input[name=CSV_FOLDER]').val();
-      var formDownloadFolder =  $('input[name=DOWNLOAD_FOLDER]').val();
-      var formPack =            $('input[name=PACK]').val();
-      var formProcess =         $('input[name=PROCESS]').val();
-      var formProxyActive =     $('input[name=PROXY_ACTIVE]').is(':checked');
-      var formProxyServer =     $('input[name=PROXY_SERVER]').val();
-      var formProxyAuth =       $('input[name=PROXY_AUTH]').val();
-      var formTheme =           $('.settButt.active').val();
+    function(){
+      var param =              {};
+      param.CSV_FOLDER =       "'" + $('input[name=CSV_FOLDER]').val() + "'";
+      param.DOWNLOAD_FOLDER =  "'" + $('input[name=DOWNLOAD_FOLDER]').val() + "'";
+      param.PACK =             parseInt($('input[name=PACK]').val());
+      param.PROCESS =          parseInt($('input[name=PROCESS]').val());
+      param.PROXY_ACTIVE =     $('input[name=PROXY_ACTIVE]').is(':checked') ? 'true' : 'false';
+      param.PROXY_SERVER =     "'" + $('input[name=PROXY_SERVER]').val() + "'";
+      param.PROXY_AUTH =       "'" + $('input[name=PROXY_AUTH]').val() + "'";
+      param.THEME =            "'" + $('.settButt.active').val() + "'";
+
+      $.post(
+        "index.php",
+        {
+          action: 'settings-save',
+          param: JSON.stringify(param)
+        },
+        function( data ) {
+          data = parse(data);
+          if(data['code'] == 200){
+            res(0,1,0);
+          } else {
+            view(data);
+          }
+          return data['code'] == 200;
+        });
     }
   );
 });

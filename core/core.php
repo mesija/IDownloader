@@ -44,7 +44,7 @@ define('UPDATE_SERVER', 'http://update.mesija.net/');
 if (file_exists('./core/config.php')) {
   include('./core/config.php');
 } else {
-  if (!isset($_GET['config'])) {
+  if (!file_exists('./core/config_sample.php')) {
     rename('./core/config_sample.php', './core/config.php');
     include('./core/config.php');
   } else {
@@ -86,31 +86,27 @@ if (isset($_GET['lock'])) {
   }
 }
 
-// перевіряємо активну тему
-
-$theme = 'white';
-if (isset($_COOKIE['theme'])) {
-  $theme = $_COOKIE['theme'];
-} else {
-  setcookie('theme', $theme);
-}
-
-define('THEME', $theme);
+// завантажуємо інформацію про тему
 
 $THEME_DATA = array(
-  'logo-title'  => $THEME_ARRAY[$theme]['name'],
-  'color-array' => $THEME_ARRAY[$theme]['color'],
+  'logo-title'  => $THEME_ARRAY[THEME]['name'],
+  'color-array' => $THEME_ARRAY[THEME]['color'],
 );
 
-// змінюємо активну тему
+// головний контролер
 
-if (isset($_GET['theme'])) {
-  if(array_key_exists($_GET['theme'], $THEME_ARRAY)){
-    setcookie('theme', $_GET['theme']);
-    alert('ok', 200, 'Change theme ok');
-  } else {
-    alert('error', 400, 'Theme ' . $_GET['theme'] . ' do not exist!');
-  }
+switch(isset($_POST['action']) ? $_POST['action'] : ''){
+  case 'settings-save': // зберігаємо параматри
+    $settingsData = "<?php\n";
+    foreach(json_decode($_POST['param']) AS $key => $val){
+      $settingsData .= "define('" . $key . "', " . $val . ");\n";
+    }
+    if(file_put_contents('./core/config.php', $settingsData)){
+      alert('ok', 200, 'Settings save');
+    } else {
+      alert('ok', 400, 'Error save settings');
+    }
+    break;
 }
 
 // уплоадимо csv файл в теку
@@ -242,15 +238,17 @@ function downloadImage($source, $target, $dir){
     file_put_contents(DOWNLOAD_FOLDER . '/' . $dir . '/' . $target, $img);
     return true;
   } else {
-    $proxyArray = explode(', ', PROXY_SERVER);
-    $proxy = $proxyArray[rand(0, count($proxyArray) - 1)];
-    chmod(DOWNLOAD_FOLDER . '/' . $dir . '/', 0777);
-    exec('curl -x ' . $proxy . ' --proxy-user ' . PROXY_AUTH . ' -L ' . $source . ' > ' . DOWNLOAD_FOLDER . '/' . $dir . '/' . $target);
-    $img = @file_get_contents(DOWNLOAD_FOLDER . '/' . $dir . '/' . $target);
-    if ($img AND !preg_match('/(<html)/', $img) AND filesize(DOWNLOAD_FOLDER . '/' . $dir . '/' . $target) > 0) {
-      return true;
-    } else {
-      unlink(DOWNLOAD_FOLDER . '/' . $dir . '/' . $target);
+    if(PROXY_ACTIVE){
+      $proxyArray = explode(', ', PROXY_SERVER);
+      $proxy = $proxyArray[rand(0, count($proxyArray) - 1)];
+      chmod(DOWNLOAD_FOLDER . '/' . $dir . '/', 0777);
+      exec('curl -x ' . $proxy . ' --proxy-user ' . PROXY_AUTH . ' -L ' . $source . ' > ' . DOWNLOAD_FOLDER . '/' . $dir . '/' . $target);
+      $img = @file_get_contents(DOWNLOAD_FOLDER . '/' . $dir . '/' . $target);
+      if ($img AND !preg_match('/(<html)/', $img) AND filesize(DOWNLOAD_FOLDER . '/' . $dir . '/' . $target) > 0) {
+        return true;
+      } else {
+        unlink(DOWNLOAD_FOLDER . '/' . $dir . '/' . $target);
+      }
     }
   }
   return false;

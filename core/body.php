@@ -46,14 +46,14 @@
       <div class="settLabel">Open image in step</div>
       <div class="settValue">
         <input name="PACK" id="PACK" type="range" value="<?php echo PACK ?>" min="0" step="5000" max="100000">
-        <input name="PACK_VALUE" id="PACK_VALUE" type="text" value="<?php echo PACK ?>">
+        <input name="PACK_VALUE" id="PACK_VALUE" readonly type="text" value="<?php echo PACK ?>">
       </div>
     </div>
     <div class="settItem">
       <div class="settLabel">Download process</div>
       <div class="settValue">
         <input name="PROCESS" id="PROCESS" type="range" value="<?php echo PROCESS ?>" min="0" step="5" max="50">
-        <input name="PROCESS_VALUE" id="PROCESS_VALUE" type="text" value="<?php echo PROCESS ?>">
+        <input name="PROCESS_VALUE" id="PROCESS_VALUE" readonly type="text" value="<?php echo PROCESS ?>">
       </div>
     </div>
     <h2><b class="icon-tree"></b> Proxy <div class="slideThree">
