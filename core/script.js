@@ -770,6 +770,7 @@ Array.prototype.remByVal = function(val) {
 
 function settingsOpen(){
   $('#settingsBox').show().animate({opacity:1}, 500);
+  $('#settingsContent').animate({marginTop:'5%'}, 500);
 }
 
 $(document).ready(function() {
@@ -779,6 +780,7 @@ $(document).ready(function() {
       $('#settingsBox').animate({opacity:0}, 500, function(){
         $('#settingsBox').hide();
       });
+      $('#settingsContent').animate({marginTop:'3%'}, 500);
     }
   );
 
@@ -800,6 +802,33 @@ $(document).ready(function() {
     function(element){
       element.target.value = 25000;
       $('#PACK_VALUE').val(25000);
+    }
+  );
+
+  $('#PROCESS').bind(
+    'mousemove',
+    function(element){
+      $('#PROCESS_VALUE').val(element.target.value > 0 ? element.target.value : 1);
+    }
+  ).bind(
+    'dblclick',
+    function(element){
+      element.target.value = 10;
+      $('#PROCESS_VALUE').val(10);
+    }
+  );
+
+  $('#settSave').bind(
+    'click',
+    function(element){
+      var formCsvFolder =       $('input[name=CSV_FOLDER]').val();
+      var formDownloadFolder =  $('input[name=DOWNLOAD_FOLDER]').val();
+      var formPack =            $('input[name=PACK]').val();
+      var formProcess =         $('input[name=PROCESS]').val();
+      var formProxyActive =     $('input[name=PROXY_ACTIVE]').is(':checked');
+      var formProxyServer =     $('input[name=PROXY_SERVER]').val();
+      var formProxyAuth =       $('input[name=PROXY_AUTH]').val();
+      var formTheme =           $('.settButt.active').val();
     }
   );
 });

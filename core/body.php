@@ -51,11 +51,14 @@
     </div>
     <div class="settItem">
       <div class="settLabel">Download process</div>
-      <div class="settValue"><input name="PROCESS" type="text" value="10" placeholder="10"></div>
+      <div class="settValue">
+        <input name="PROCESS" id="PROCESS" type="range" value="<?php echo PROCESS ?>" min="0" step="5" max="50">
+        <input name="PROCESS_VALUE" id="PROCESS_VALUE" type="text" value="<?php echo PROCESS ?>">
+      </div>
     </div>
     <h2><b class="icon-tree"></b> Proxy <div class="slideThree">
-        <input style="display: none;" type="checkbox" checked value="1" id="slideThree" name="PROXY_ACTIVE"
-          <?php echo PROXY_ACTIVE ? 'checkbox' : ''; ?>/>
+        <input style="display: none;" type="checkbox" id="slideThree" name="PROXY_ACTIVE"
+          <?php echo PROXY_ACTIVE ? 'checked' : ''; ?>/>
         <label for="slideThree"></label>
       </div></h2>
     <div class="settItem">
@@ -71,7 +74,8 @@
     <div class="settItem settCenter">
       <?php
       foreach($THEME_ARRAY AS $code => $data){
-        echo "<button class=\"settButt" . ($data['name'] == $THEME_DATA['logo-title'] ? ' active' : '') . "\">
+        echo "<button class=\"settButt" . ($data['name'] == $THEME_DATA['logo-title'] ? ' active' : '') . "\"
+        value=\"" . $code . "\">
         <div class=\"colorThemeBox\">";
         foreach($data['color'] AS $color){
           echo "<div class=\"colorThemeItem\" style=\"background-color:#" . $color . "\"></div>";
