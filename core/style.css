@@ -778,3 +778,15 @@ input[type="range"]::-ms-thumb {
   width: 65px;
   text-align: left;
 }
+
+.settBottomLine {
+  margin: 25px -25px -25px -25px;
+  background-color: #dddddd;
+  padding: 5px;
+}
+
+.settBottomLine button {
+  background: none;
+  border: none;
+  color: #ff5722;
+}

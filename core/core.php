@@ -2,7 +2,7 @@
 
 // версія ядра
 
-define('VER', '3.21');
+define('VER', '3.22');
 
 // масив доступних тем
 
@@ -105,6 +105,13 @@ switch(isset($_POST['action']) ? $_POST['action'] : ''){
       alert('ok', 200, 'Settings save');
     } else {
       alert('ok', 400, 'Error save settings');
+    }
+    break;
+  case 'force-update':
+    if(file_put_contents('./core/update', '0')){
+      alert('ok', 200, 'Force update complete');
+    } else {
+      alert('ok', 400, 'Error force update');
     }
     break;
 }
@@ -466,7 +473,7 @@ if (!file_exists('./' . CSV_FOLDER . '/')) {
   mkdir('./' . CSV_FOLDER . '/', 0777, true);
   $listDir = '';
 } else {
-  $tmpDir = array_splice(scandir('./' . CSV_FOLDER . '/'), 2);
+  $tmpDir = array_splice(scandir('./' . CSV_FOLDER . '/'), 2, 100);
   $listDir = array();
   foreach ($tmpDir AS $tmp) {
     if (preg_match('/\.csv$/', $tmp)) {
@@ -492,7 +499,7 @@ if (!file_exists('./' . CSV_FOLDER . '/')) {
 if (!file_exists(DOWNLOAD_FOLDER . '/'))
   mkdir(DOWNLOAD_FOLDER . '/', 0777, true);
 
-$tmpDownload = array_splice(scandir(DOWNLOAD_FOLDER . '/'), 2);
+$tmpDownload = array_splice(scandir(DOWNLOAD_FOLDER . '/'), 2, 100);
 $listDownload = array();
 foreach ($tmpDownload AS $tmp) {
   if (preg_match('/^[^\.\s]+$/', $tmp)) {
@@ -508,6 +515,7 @@ if (empty($listDownload)) {
 /**
  * @param $listDir
  * @param $listDownload
+ * @param $themeData
  */
 function printContent($listDir, $listDownload, $themeData)
 {

@@ -807,19 +807,6 @@ $(document).ready(function() {
     }
   );
 
-  $('#PROCESS').bind(
-    'mousemove',
-    function(element){
-      $('#PROCESS_VALUE').val(element.target.value > 0 ? element.target.value : 1);
-    }
-  ).bind(
-    'dblclick',
-    function(element){
-      element.target.value = 10;
-      $('#PROCESS_VALUE').val(10);
-    }
-  );
-
   $('#settSave').bind(
     'click',
     function(){
@@ -838,6 +825,39 @@ $(document).ready(function() {
         {
           action: 'settings-save',
           param: JSON.stringify(param)
+        },
+        function( data ) {
+          data = parse(data);
+          if(data['code'] == 200){
+            res(0,1,0);
+          } else {
+            view(data);
+          }
+          return data['code'] == 200;
+        });
+    }
+  );
+
+  $('#PROCESS').bind(
+    'mousemove',
+    function(element){
+      $('#PROCESS_VALUE').val(element.target.value > 0 ? element.target.value : 1);
+    }
+  ).bind(
+    'dblclick',
+    function(element){
+      element.target.value = 10;
+      $('#PROCESS_VALUE').val(10);
+    }
+  );
+
+  $('.settBottomLine').bind(
+    'dblclick',
+    function(){
+      $.post(
+        "index.php",
+        {
+          action: 'force-update'
         },
         function( data ) {
           data = parse(data);

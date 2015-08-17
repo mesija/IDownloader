@@ -89,6 +89,9 @@
     <div class="settItem settCenter">
       <button id="settSave">Save</button>
     </div>
+    <div class="settBottomLine settCenter">
+      IDownloder v.<?php echo VER; ?> - <button><b class="icon-cloud-download"></b> Force update</button>
+    </div>
   </div>
 </div>
 
