@@ -459,6 +459,9 @@ function update($force = false){
             unlink('./' . ($file[2] != '') ? $file[1] . '.' . $file[2] : $file[1]);
           }
         }
+        if($force){
+          alert('ok', 200, 'Update ok');
+        }
         header('Location: ./');
         alert('ok', 200, 'Update ok');
       }
