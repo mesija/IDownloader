@@ -108,11 +108,7 @@ switch(isset($_POST['action']) ? $_POST['action'] : ''){
     }
     break;
   case 'force-update':
-    if(file_put_contents('./core/update', '0')){
-      alert('ok', 200, 'Force update complete');
-    } else {
-      alert('ok', 400, 'Error force update');
-    }
+    update(true);
     break;
 }
 
@@ -437,12 +433,18 @@ if (isset($_GET['perDir']) AND !empty($_GET['perDir'])) {
 // перевіряємо оновлення
 
 if (file_exists('./core/update')) {
+  update();
+} else {
+  file_put_contents('./core/update', time());
+}
+
+function update($force = false){
   $update_time = (int)file_get_contents('./core/update');
   $update_time = $update_time + (60 * 60);
-  if ($update_time < time()) {
+  if ($update_time < time() || $force) {
     $upVer = @file_get_contents(UPDATE_SERVER . 'IDownloader/ver');
-    if ($upVer) {
-      if ($upVer > VER) {
+    if ($upVer || $force) {
+      if ($upVer > VER || $force) {
         $fileList = @file_get_contents(UPDATE_SERVER . 'IDownloader/fileList');
         $fileList = json_decode($fileList);
         foreach ($fileList AS $file) {
@@ -463,8 +465,6 @@ if (file_exists('./core/update')) {
     }
     file_put_contents('./core/update', time());
   }
-} else {
-  file_put_contents('./core/update', time());
 }
 
 // генеруємо код основної сторінки
