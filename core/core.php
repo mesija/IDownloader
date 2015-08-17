@@ -2,7 +2,7 @@
 
 // версія ядра
 
-define('VER', '3.22');
+define('VER', '3.23');
 
 // масив доступних тем
 
@@ -38,7 +38,7 @@ $THEME_ARRAY = array(
 
 // підключаємо файл конфігів
 
-define('I_FOLDER', basename(__DIR__));
+error_reporting(0);
 define('UPDATE_SERVER', 'http://update.mesija.net/');
 
 if (file_exists('./core/config.php')) {
@@ -432,11 +432,7 @@ if (isset($_GET['perDir']) AND !empty($_GET['perDir'])) {
 
 // перевіряємо оновлення
 
-if (file_exists('./core/update')) {
-  update();
-} else {
-  file_put_contents('./core/update', time());
-}
+update();
 
 function update($force = false){
   $update_time = (int)file_get_contents('./core/update');
