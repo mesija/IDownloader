@@ -265,7 +265,7 @@ function deleteFile(file){
  */
 function download(count,forse){
   if((process_info != 50) || forse){
-    if(process_info == 40){
+    if(process_info == 40 || count == 50){
       $(".process button").hide();
       $(".process .left").addClass('center red').removeClass('left');
     }
@@ -276,9 +276,11 @@ function download(count,forse){
       i++;
     }
     return true;
-  }
-  else
+  } else {
+    $(".process button").hide();
+    $(".process .left").addClass('center red').removeClass('left');
     return false;
+  }
 }
 
 /**
@@ -687,7 +689,7 @@ function start(){
       $(".only").addClass('dis');
       $(".process button").removeClass('dis');
       view(data);
-      download(proces,false);
+      add(proces,false);
       return data['code'] == 200;
     }
   });

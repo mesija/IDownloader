@@ -2,7 +2,7 @@
 
 // версія ядра
 
-define('VER', '3.20');
+define('VER', '3.21');
 
 // масив доступних тем
 
@@ -124,9 +124,8 @@ if (isset($_GET['fileUpload'])) {
 
 if (isset($_GET['start']) AND !empty($_GET['start'])) {
   $dir = $_GET['start'];
-  chmod('../' . I_FOLDER . '/', 0777);
   if (file_exists(DOWNLOAD_FOLDER . '/' . $dir . '/' . $dir . '.csv')) {
-    unlink(DOWNLOAD_FOLDER . '/' . $dir . '/' . $dir . '.csv');
+    exec('rm -Rf ' . DOWNLOAD_FOLDER . '/' . $dir . '/' . $dir . '.csv');
   }
   alert('ok', 200, 'Start download');
 }
@@ -135,7 +134,6 @@ if (isset($_GET['start']) AND !empty($_GET['start'])) {
 
 if (isset($_GET['finish']) AND !empty($_GET['finish'])) {
   $dir = $_GET['finish'];
-  chmod(DOWNLOAD_FOLDER . '/' . $dir . '/', 0777);
   exec('chmod 777 -Rf ' . DOWNLOAD_FOLDER . '/' . $dir . '/');
   alert('ok', 200, 'Finish download');
 }
@@ -144,7 +142,6 @@ if (isset($_GET['finish']) AND !empty($_GET['finish'])) {
 
 if (isset($_GET['clear']) AND !empty($_GET['clear'])) {
   $dir = $_GET['clear'];
-  chmod('../' . I_FOLDER . '/', 0777);
   if (file_exists(DOWNLOAD_FOLDER . '/' . $dir . '/')) {
     exec('rm -Rf ' . DOWNLOAD_FOLDER . '/' . $dir . '/');
     alert('ok', 200, 'Folder ' . $dir . ' is delete');
@@ -158,9 +155,8 @@ if (isset($_GET['clear']) AND !empty($_GET['clear'])) {
 
 if (isset($_GET['deleteFile']) AND !empty($_GET['deleteFile'])) {
   $file = $_GET['deleteFile'];
-  chmod('../' . I_FOLDER . '/', 0777);
   if (file_exists('./' . CSV_FOLDER . '/' . $file)) {
-    unlink('./' . CSV_FOLDER . '/' . $file);
+    exec('rm -Rf ./' . CSV_FOLDER . '/' . $file);
   }
   alert('ok', 200, 'File ' . $file . ' is delete');
 }
@@ -169,7 +165,6 @@ if (isset($_GET['deleteFile']) AND !empty($_GET['deleteFile'])) {
 
 if (isset($_GET['deleteDir']) AND !empty($_GET['deleteDir'])) {
   $dir = $_GET['deleteDir'];
-  chmod(DOWNLOAD_FOLDER . '/', 0777);
   if (file_exists(DOWNLOAD_FOLDER . '/' . $dir . '/')) {
     exec('rm -Rf ./' . DOWNLOAD_FOLDER . '/' . $dir . '/');
   }
@@ -241,13 +236,12 @@ function downloadImage($source, $target, $dir){
     if(PROXY_ACTIVE){
       $proxyArray = explode(', ', PROXY_SERVER);
       $proxy = $proxyArray[rand(0, count($proxyArray) - 1)];
-      chmod(DOWNLOAD_FOLDER . '/' . $dir . '/', 0777);
       exec('curl -x ' . $proxy . ' --proxy-user ' . PROXY_AUTH . ' -L ' . $source . ' > ' . DOWNLOAD_FOLDER . '/' . $dir . '/' . $target);
       $img = @file_get_contents(DOWNLOAD_FOLDER . '/' . $dir . '/' . $target);
       if ($img AND !preg_match('/(<html)/', $img) AND filesize(DOWNLOAD_FOLDER . '/' . $dir . '/' . $target) > 0) {
         return true;
       } else {
-        unlink(DOWNLOAD_FOLDER . '/' . $dir . '/' . $target);
+        exec('rm -Rf ' . DOWNLOAD_FOLDER . '/' . $dir . '/' . $target);
       }
     }
   }
@@ -427,7 +421,6 @@ if (isset($_GET['renameDir']) AND !empty($_GET['renameDir']) AND isset($_GET['na
 if (isset($_GET['perDir']) AND !empty($_GET['perDir'])) {
   $folder = $_GET['perDir'];
   if (is_dir(DOWNLOAD_FOLDER . '/' . $folder . '/')) {
-    chmod(DOWNLOAD_FOLDER . '/' . $folder . '/', 0777);
     exec('chmod 777 -Rf ' . DOWNLOAD_FOLDER . '/' . $folder . '/');
     alert('ok', 200, 'Set permissions dir ' . $folder);
   }
@@ -473,7 +466,6 @@ if (!file_exists('./' . CSV_FOLDER . '/')) {
   mkdir('./' . CSV_FOLDER . '/', 0777, true);
   $listDir = '';
 } else {
-  chmod('./' . CSV_FOLDER . '/', 0777);
   $tmpDir = array_splice(scandir('./' . CSV_FOLDER . '/'), 2);
   $listDir = array();
   foreach ($tmpDir AS $tmp) {
