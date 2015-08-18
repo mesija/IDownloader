@@ -44,7 +44,7 @@ define('UPDATE_SERVER', 'http://update.mesija.net/');
 if (file_exists('./core/config.php')) {
   include('./core/config.php');
 } else {
-  if (!file_exists('./core/config_sample.php')) {
+  if (file_exists('./core/config_sample.php')) {
     rename('./core/config_sample.php', './core/config.php');
     include('./core/config.php');
   } else {

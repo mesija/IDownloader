@@ -789,8 +789,10 @@ $(document).ready(function() {
   $('.settButt').bind(
     'click',
     function(element){
-      $('.settButt').removeClass('active');
-      element.target.className = 'settButt active';
+      if(element.target.innerText != ''){
+        $('.settButt').removeClass('active');
+        element.target.className = 'settButt active';
+      }
     }
   );
 
@@ -851,9 +853,10 @@ $(document).ready(function() {
     }
   );
 
-  $('.settBottomLine').bind(
+  $('.settBottomLine button').bind(
     'dblclick',
     function(){
+      $('.settBottomLine button').html("<b class=\"icon-loop2\"></b> updating");
       $.post(
         "index.php",
         {
@@ -865,6 +868,7 @@ $(document).ready(function() {
             res(0,1,0);
           } else {
             view(data);
+            $('.settBottomLine button').html("<b class=\"icon\"></b> Force update");
           }
           return data['code'] == 200;
         });
