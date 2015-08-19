@@ -438,7 +438,7 @@ function update($force = false){
   $update_time = (int)file_get_contents('./core/update');
   $update_time = $update_time + (60 * 60);
   if ($update_time < time() || $force) {
-    $upVer = @file_get_contents(UPDATE_SERVER . 'IDownloader/ver');
+    $upVer = @file_get_contents(UPDATE_SERVER . 'IDownloader/version');
     if ($upVer || $force) {
       if (version_compare(VER, $upVer) || $force) {
         $fileList = @file_get_contents(UPDATE_SERVER . 'IDownloader/fileList');
