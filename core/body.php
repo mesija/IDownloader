@@ -95,4 +95,29 @@
   </div>
 </div>
 
+<?php if(isset($_GET['update'])) { ?>
+
+<div id="updateBox">
+  <div id="updateContent">
+    <div id="updateClose">X</div>
+    <h1><b class="icon-loop2"></b> New version <strong>IDownloder v.<?php echo VER; ?></strong> installed</h1>
+    <?php
+      include('./core/update_log.php');
+      foreach($UPDATE_INFO AS $ver => $info){
+        echo "<h2>" . $ver . "</h2>";
+        echo "<ul>";
+        foreach($info AS $line){
+          echo "<li>" . $line . "</li>";
+        }
+        echo "</ul>";
+      }
+    ?>
+    <div class="settBottomLine settCenter">
+      IDownloder v.<?php echo VER; ?> - <button><b class="icon-cloud-download"></b> Force update</button>
+    </div>
+  </div>
+</div>
+
+<?php } ?>
+
 </body>

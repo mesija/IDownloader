@@ -646,7 +646,7 @@ function renameFile(file){
  */
 function res(send,forse,action){
   if(size || forse){
-    location.reload();
+    window.location = './';
     return false;
   }
   else{
@@ -786,6 +786,16 @@ $(document).ready(function() {
     }
   );
 
+  $('#updateClose').bind(
+    'click',
+    function(){
+      $('#updateBox').animate({opacity:0}, 500, function(){
+        $('#updateBox').hide();
+      });
+      $('#updateContent').animate({marginTop:'3%'}, 500);
+    }
+  );
+
   $('.settButt').bind(
     'click',
     function(element){
@@ -865,13 +875,15 @@ $(document).ready(function() {
         function( data ) {
           data = parse(data);
           if(data['code'] == 200){
-            res(0,1,0);
+            window.location = './?update';
           } else {
             view(data);
-            $('.settBottomLine button').html("<b class=\"icon\"></b> Force update");
+            $('.settBottomLine button').html("<b class=\"icon-cloud-download\"></b> Force update");
           }
           return data['code'] == 200;
         });
     }
   );
 });
+
+/* ----------------------------------- Update ----------------------------------- */

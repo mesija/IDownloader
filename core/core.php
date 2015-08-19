@@ -2,7 +2,7 @@
 
 // версія ядра
 
-define('VER', '3.24');
+define('VER', '3.2.5');
 
 // масив доступних тем
 
@@ -440,7 +440,7 @@ function update($force = false){
   if ($update_time < time() || $force) {
     $upVer = @file_get_contents(UPDATE_SERVER . 'IDownloader/ver');
     if ($upVer || $force) {
-      if ($upVer > VER || $force) {
+      if (version_compare(VER, $upVer) || $force) {
         $fileList = @file_get_contents(UPDATE_SERVER . 'IDownloader/fileList');
         $fileList = json_decode($fileList);
         foreach ($fileList AS $file) {
@@ -459,7 +459,7 @@ function update($force = false){
         if($force){
           alert('ok', 200, 'Update ok');
         }
-        header('Location: ./');
+        header('Location: ./?update');
         alert('ok', 200, 'Update ok');
       }
     }
@@ -521,7 +521,7 @@ function printContent($listDir, $listDownload, $themeData)
 {
   $ver = explode('.', VER);
   echo '<div class="block logo">
-  <b class="icon-download"></b> <div id="logo-img"></div> <v>' . $ver[0] . '<v2>.' . $ver[1] . '<v2></v> ' . $themeData['logo-title'] . '
+  <b class="icon-download"></b> <div id="logo-img"></div> <v>' . $ver[0] . '<v2>.' . $ver[1] . '.' . $ver[2] . '<v2></v> ' . $themeData['logo-title'] . '
   <button class="reload" onclick="res(1,1,0)"><b class="icon-loop2"></b> Reload</button>
   <button class="settings" id="settings" onclick="settingsOpen()" title="Open settings"><b class="icon-cog"></b></button>
   <button class="lock' . (LOCK ? '' : ' lock-off') . '" id="lock" onclick="lock()" title="Lock reload page"><b class="icon-lock"></b></button>
