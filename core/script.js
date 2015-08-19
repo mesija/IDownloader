@@ -856,7 +856,7 @@ $(document).ready(function() {
   $('.settBottomLine button').bind(
     'dblclick',
     function(){
-      $('.settBottomLine button').html("<b class=\"icon-loop2\"></b> updating");
+      $('.settBottomLine button').html("<b class=\"icon-loop2\"></b> Updating ...");
       $.post(
         "index.php",
         {
