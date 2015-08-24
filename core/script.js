@@ -766,9 +766,7 @@ Array.prototype.remByVal = function(val) {
     }
   }
   return this;
-}
-
-/* ----------------------------------- Settings ----------------------------------- */
+};
 
 function settingsOpen(){
   $('#settingsBox').show().animate({opacity:1}, 500);
@@ -776,6 +774,9 @@ function settingsOpen(){
 }
 
 $(document).ready(function() {
+
+  /* ----------------------------------- Settings ----------------------------------- */
+
   $('#settingsClose').bind(
     'click',
     function(){
@@ -783,16 +784,6 @@ $(document).ready(function() {
         $('#settingsBox').hide();
       });
       $('#settingsContent').animate({marginTop:'3%'}, 500);
-    }
-  );
-
-  $('#updateClose').bind(
-    'click',
-    function(){
-      $('#updateBox').animate({opacity:0}, 500, function(){
-        $('#updateBox').hide();
-      });
-      $('#updateContent').animate({marginTop:'3%'}, 500);
     }
   );
 
@@ -846,7 +837,8 @@ $(document).ready(function() {
             view(data);
           }
           return data['code'] == 200;
-        });
+        }
+      );
     }
   );
 
@@ -870,7 +862,7 @@ $(document).ready(function() {
       $.post(
         "index.php",
         {
-          action: 'force-update'
+          action: 'update'
         },
         function( data ) {
           data = parse(data);
@@ -881,9 +873,57 @@ $(document).ready(function() {
             $('.settBottomLine button').html("<b class=\"icon-cloud-download\"></b> Force update");
           }
           return data['code'] == 200;
-        });
+        }
+      );
     }
   );
-});
 
-/* ----------------------------------- Update ----------------------------------- */
+  /* ----------------------------------- Update ----------------------------------- */
+
+  $('#updateClose').bind(
+    'click',
+    function(){
+      $('#updateBox').animate({opacity:0}, 500, function(){
+        $('#updateBox').hide();
+      });
+      $('#updateContent').animate({marginTop:'3%'}, 500);
+    }
+  );
+
+  setTimeout(function(){
+    $.post(
+      "./",
+      {
+        action: 'check-update'
+      },
+      function( data ) {
+        data = parse(data);
+        if(data['code'] == 200){
+          $('#updateProcessBox').show().animate({opacity:1}, 500);
+          $('#updateProcessContent').animate({marginTop:'5%'}, 500);
+          $.post(
+            "./",
+            {
+              action: 'update'
+            },
+            function( data ) {
+              data = parse(data);
+              if(data['code'] == 200){
+                window.location = './?update';
+              } else {
+                view(data);
+                $('#updateProcessBox').animate({opacity:0}, 500, function(){
+                  $('#updateProcessBox').hide();
+                });
+                $('#updateProcessContent').animate({marginTop:'3%'}, 500);
+              }
+              return data['code'] == 200;
+            }
+          );
+        }
+        return data['code'] == 200;
+      }
+    );
+  }, 1000);
+
+});

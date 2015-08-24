@@ -107,8 +107,21 @@ switch(isset($_POST['action']) ? $_POST['action'] : ''){
       alert('ok', 400, 'Error save settings');
     }
     break;
-  case 'force-update':
-    update(true);
+  case 'check-update':
+    $update_time = (int)file_get_contents('./core/update');
+    $update_time = $update_time + (60 * 60);
+    if ($update_time < time()) {
+      $upVer = @file_get_contents(UPDATE_SERVER . 'IDownloader/version');
+      if ($upVer) {
+        if (version_compare(VER, $upVer)) {
+          alert('ok', 200, 'New version available ' . $upVer);
+        }
+      }
+    }
+    alert('info', 100, 'This is leather version');
+    break;
+  case 'update':
+    update();
     break;
 }
 
@@ -432,39 +445,27 @@ if (isset($_GET['perDir']) AND !empty($_GET['perDir'])) {
 
 // перевіряємо оновлення
 
-update();
-
-function update($force = false){
-  $update_time = (int)file_get_contents('./core/update');
-  $update_time = $update_time + (60 * 60);
-  if ($update_time < time() || $force) {
-    $upVer = @file_get_contents(UPDATE_SERVER . 'IDownloader/version');
-    if ($upVer || $force) {
-      if (version_compare(VER, $upVer) || $force) {
-        $fileList = @file_get_contents(UPDATE_SERVER . 'IDownloader/fileList');
-        $fileList = json_decode($fileList);
-        foreach ($fileList AS $file) {
-          if ($file[0] == '+') {
-            if ($file[2] == "") {
-              mkdir('./' . $file[1] . '/', 0777, true);
-            } else {
-              $fileUpdate = @file_get_contents(UPDATE_SERVER . 'IDownloader/' . $file[1]);
-              exec('rm -Rf ' . $file[1] . '.' . $file[2]);
-              file_put_contents($file[1] . '.' . $file[2], $fileUpdate);
-            }
-          } else {
-            unlink('./' . ($file[2] != '') ? $file[1] . '.' . $file[2] : $file[1]);
-          }
-        }
-        if($force){
-          alert('ok', 200, 'Update ok');
-        }
-        header('Location: ./?update');
-        alert('ok', 200, 'Update ok');
-      }
-    }
-    file_put_contents('./core/update', time());
+function update(){
+  $fileList = @file_get_contents(UPDATE_SERVER . 'IDownloader/fileList');
+  if(!$fileList){
+    alert('error', 404, 'Not connect to server');
   }
+  $fileList = json_decode($fileList);
+  foreach ($fileList AS $file) {
+    if ($file[0] == '+') {
+      if ($file[2] == "") {
+        mkdir('./' . $file[1] . '/', 0777, true);
+      } else {
+        $fileUpdate = @file_get_contents(UPDATE_SERVER . 'IDownloader/' . $file[1]);
+        exec('rm -Rf ' . $file[1] . '.' . $file[2]);
+        file_put_contents($file[1] . '.' . $file[2], $fileUpdate);
+      }
+    } else {
+      unlink('./' . ($file[2] != '') ? $file[1] . '.' . $file[2] : $file[1]);
+    }
+  }
+  file_put_contents('./core/update', time());
+  alert('ok', 200, 'Update ok');
 }
 
 // генеруємо код основної сторінки

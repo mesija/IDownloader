@@ -120,4 +120,17 @@
 
 <?php } ?>
 
+<div id="updateProcessBox">
+  <div id="updateProcessContent">
+    <h1><b class="icon-loop2"></b> Install new version ...</h1>
+    <div class="wrap" style="margin-left: 200px;">
+      <div class="loader"></div>
+      <div class="loaderbefore"></div>
+      <div class="circular"></div>
+      <div class="circular another"></div>
+      <div class="text">Loading</div>
+    </div>
+  </div>
+</div>
+
 </body>
