@@ -909,7 +909,9 @@ $(document).ready(function() {
             function( data ) {
               data = parse(data);
               if(data['code'] == 200){
-                window.location = './?update';
+                setTimeout(function(){
+                  window.location = './?update';
+                }, 3000);
               } else {
                 view(data);
                 $('#updateProcessBox').animate({opacity:0}, 500, function(){
