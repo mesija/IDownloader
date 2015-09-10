@@ -1,6 +1,18 @@
 <?php
 
 $UPDATE_INFO = array(
+  '4.0.0 Alpha' => array(
+    'Convert CSS to LESS structure',
+    'Optimize color theme',
+    'Theme new change all site color',
+    'Add animation for more elements',
+    'New download bar and grid',
+    'Add fast settings (using proxy, other extension)',
+    'New amazing favicon',
+    'Add update informer',
+    'Grid size information (download image info and free disc space)',
+    'And of course create 100500 new bug, because life is pain',
+  ),
   '3.2.6' => array(
     'Small fix update process',
   ),
