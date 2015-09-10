@@ -213,7 +213,7 @@ body {
     }
     .delete {
       &:hover {
-        background-color: @colorHover !important;
+        background-color: @colorRed !important;
       }
     }
     .empty {
@@ -698,7 +698,7 @@ body {
 #updateLoadAnimate {
   .updateLoadErrorConnectDialog {
     text-align: center;
-    font-size: 26px;
+    font-size: 18px;
     margin-top: 50px;
   }
 }
@@ -713,24 +713,30 @@ body {
     font-family: @fontDecorative;
   }
   input[type=text] {
-    font-size: 100px;
+    font-size: 50px;
     text-align: center;
     margin: 25px auto;
-    width: 100%;
-    background: none;
-  }
-  input[type=submit] {
-    font-size: 72px;
-    text-align: center;
-    margin: 25px auto;
-    width: 100%;
+    width: 70%;
     background: none;
     border: none;
-    color: @colorText;
-    cursor: pointer;
+    float: left;
+    border-bottom: 1px solid @colorText;
+  }
+  input[type=submit] {
+    font-size: 25px;
+    text-align: center;
+    padding: 15px 35px;
+    margin-top: 25px;
+    position: relative;
+    float: right;
     display: inline-block;
+    background-color: @colorText;
+    border: none;
+    color: @colorIndex;
+    cursor: pointer;
     &:hover {
-      color: @colorHover;
+      color: @colorIndex;
+      background-color: @colorHover;
     }
   }
   .loader {

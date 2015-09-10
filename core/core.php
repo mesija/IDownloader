@@ -2,7 +2,7 @@
 
 // версія ядра
 
-define('VER', '4.0.0');
+define('VER', '4.0.0 Alpha');
 
 // підключаємо файл конфігів
 
@@ -201,10 +201,16 @@ function prepareImgUrl ($url){
 
 function downloadImage($source, $target, $dir){
   $img = @file_get_contents($source);
-  $targetUrl = str_replace('//', '/', DOWNLOAD_FOLDER . '/' . $dir . '/' . $target);
+  $target = str_replace('//', '/', $dir . '/' . $target);
+  $targetUrl = getcwd() . '/' . DOWNLOAD_FOLDER . '/';
+  foreach(explode('/', $target) AS $dir){
+    $targetUrl .= '/' . $dir;
+    if(!strpos($targetUrl, '.')){
+      mkdir($targetUrl);
+    }
+  }
   if ($img AND !preg_match('/(<html)/', $img)) {
-    file_put_contents($targetUrl, $img);
-    return filesize($targetUrl);
+    return (int)file_put_contents($targetUrl, $img);
   } else {
     if(USING_PROXY){
       $proxyArray = explode(', ', PROXY_SERVER);
@@ -625,6 +631,137 @@ function printContent($listDir, $listDownload, $themeData)
   echo '
     </div>
   </div>';
+  ?>
+  <div id="downloadBox" class="block">
+    <div class="leftBox">
+      <div class="circleLoader">
+        <div style="position:relative; height: 200px;">
+          <div class="circleLoaderItem" style="position:absolute;left:10px;top:10px">
+            <input class="knob circleAll"
+                   data-min="0"
+                   data-max="100"
+                   data-angleOffset="-125"
+                   data-angleArc="250"
+                   data-bgColor="#<?php echo $themeData['color-array']['colorGridStepBg']; ?>"
+                   data-fgColor="#<?php echo $themeData['color-array']['colorInfo']; ?>"
+                   data-displayInput=false
+                   data-width="300"
+                   data-height="300"
+                   data-readOnly=true
+                   data-thickness=".3">
+          </div>
+          <div class="circleLoaderItem" style="position:absolute;left:60px;top:60px">
+            <input class="knob circleCopied"
+                   data-min="0"
+                   data-max="100"
+                   data-angleOffset="-125"
+                   data-angleArc="250"
+                   data-bgColor="#<?php echo $themeData['color-array']['colorGridStepBg']; ?>"
+                   data-fgColor="#<?php echo $themeData['color-array']['colorGreen']; ?>"
+                   data-displayInput=false
+                   data-width="200"
+                   data-height="200"
+                   data-readOnly=true
+                   data-thickness=".45">
+          </div>
+          <div class="circleLoaderItem" style="position:absolute;left:110px;top:110px">
+            <input class="knob circleFailed"
+                   data-min="0"
+                   data-max="100"
+                   data-angleOffset="-125"
+                   data-angleArc="250"
+                   data-bgColor="#<?php echo $themeData['color-array']['colorGridStepBg']; ?>"
+                   data-fgColor="#<?php echo $themeData['color-array']['colorRed']; ?>"
+                   data-displayInput=false
+                   data-width="100"
+                   data-height="100"
+                   data-readOnly=true
+                   data-thickness=".3">
+          </div>
+        </div>
+        <button id="startButton" onclick="start()">Start</button>
+        <div class="downloadSettItem">
+          <div class="slideThree">
+            <input type="checkbox" id="slideThreeFastFailed" name="FAST_ONLY_FAILED"/>
+            <label for="slideThreeFastFailed"></label>
+          </div> <label for="slideThreeFastFailed">Download only failed</label>
+        </div>
+        <div class="downloadSettItem">
+          <div class="slideThree">
+            <input type="checkbox" id="slideThreeFastProxy" name="FAST_PROXY_ACTIVE"
+              <?php echo PROXY_ACTIVE ? 'checked' : ''; ?>/>
+            <label for="slideThreeFastProxy"></label>
+          </div> <label for="slideThreeFastProxy">Using proxy</label>
+        </div>
+        <div class="downloadSettItem">
+          <div class="slideThree">
+            <input type="checkbox" id="slideOtherExtensions" name="FAST_EXTENSIONS"/>
+            <label for="slideOtherExtensions"></label>
+          </div> <label for="slideOtherExtensions">Other extensions</label>
+        </div>
+        <div class="downloadSettItem">
+          <div class="slideThree">
+            <input type="checkbox" id="slideThreeFastPresta" name="FAST_PRESTA"/>
+            <label for="slideThreeFastPresta"></label>
+          </div> <label for="slideThreeFastPresta"><s>PrestaShop images</s></label>
+        </div>
+      </div>
+    </div
+      ><div class="rightBox">
+      <div class="dwGridItem"
+        ><div class="dwGridItemTitle">Active process</div
+          ><div class="dwGridItemData dwGridItemDataProcess"><div class="progressbar barProcess">0</div></div
+          ><div class="dwGridItemButtonBox"><button id="addProcessButton" title="Add 10 download process" onclick="add(10,0)">
+            <b class="icon-arrow-up"></b>
+          </button></div>
+      </div>
+      <div class="dwGridItem"
+        ><div class="dwGridItemTitle">Open file</div
+          ><div class="dwGridItemData countLine">
+          <div class="countImages countOpenAll"><span>00</span>52105</div> /
+          <div class="countImages countOpenCopied"><span>00</span>48679</div> /
+          <div class="countImages countOpenFailed"><span>0000</span>571</div>
+        </div>
+      </div>
+      <div class="dwGridItem"
+        ><div class="dwGridItemTitle">Download</div
+          ><div class="dwGridItemData countLine">
+          <div class="countImages countDownloadAll"><span>000000</span>0</div> /
+          <div class="countImages countDownloadCopied"><span>000000</span>0</div> /
+          <div class="countImages countDownloadFailed"><span>000000</span>0</div>
+        </div>
+      </div>
+      <div class="dwGridItem"
+        ><div class="dwGridItemTitle">Source file</div
+          ><div class="dwGridItemData infoGridSourceFile">
+          <a href="<?php echo CSV_FOLDER; ?>/file.csv" target="_blank">
+            <span><?php echo CSV_FOLDER; ?>/</span>file.csv</a></div>
+      </div>
+      <div class="dwGridItem"
+        ><div class="dwGridItemTitle">Image folder</div
+          ><div class="dwGridItemData"><span><?php echo preg_replace('/\/([^\/]+)$/', '/</span>$1', DOWNLOAD_FOLDER); ?></div>
+      </div>
+      <div class="dwGridItem"
+        ><div class="dwGridItemTitle">Failed images</div
+          ><div class="dwGridItemData infoGridFailedImages">
+          <a href="<?php echo DOWNLOAD_FOLDER; ?>/00000/file.csv" target="_blank">
+            <span><?php echo DOWNLOAD_FOLDER; ?>/00000/</span>file.csv</a></div>
+      </div>
+      <div class="dwGridItem"
+        ><div class="dwGridItemTitle">Images size</div
+          ><div class="dwGridItemData"><div class="infoGridImagesSize">0</div> <span>Mb</span></div>
+      </div>
+      <div class="dwGridItem"
+        ><div class="dwGridItemTitle">Free space</div
+          ><div class="dwGridItemData"><?php echo prepareFileSize(disk_free_space(DOWNLOAD_FOLDER)); ?></div>
+      </div>
+      <div class="dwGridItem"
+        ><div class="dwGridItemTitle">Migration ID</div
+          ><div class="dwGridItemData infoGridMigrationId">00000</div>
+      </div>
+    </div>
+  </div>
+<?php
 }
 
 // вертаємо код сторінки

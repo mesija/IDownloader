@@ -339,6 +339,7 @@ function finish(){
   stat();
   window.onbeforeunload = '';
   active = false;
+  $('#addProcessButton').animate({opacity:0}, 500).delay(500).css({display:'none'});
   if(proces == 0){
     $.get("index.php?finish="+dir, function( data ) {
       data = parse(data);
@@ -408,11 +409,12 @@ function getFileInfo (file,type){
     }
     else{
       view(data);
+      $('#updateProcessContent').css({height:'180px'});
       $('#updateLoadAnimate').html('' +
         '<div class="updateLoadErrorConnectDialog">Error connect db.<br />' +
         'Please enter download dir name hear:</div>' +
-        '<input type="text" autofocus maxlength="15" id="inputOpenFileDirName" value="'+defaultDir+'" />'+
-        '<input type="submit" value="Open" onclick="openFile(\''+file+'\',0,'+type+',1)"/>'
+        '<input type="submit" value="Open" onclick="openFile(\''+file+'\',0,'+type+',1)"/>'+
+        '<input type="text" autofocus maxlength="15" id="inputOpenFileDirName" value="'+defaultDir+'" />'
       );
     }
   });
@@ -727,6 +729,7 @@ function res(send,forse,action){
           actionShow('.action',10,1);
         }
         document.title = "IDownloader";
+        $(".knob").knob({});
         return true;
       }
       else{
