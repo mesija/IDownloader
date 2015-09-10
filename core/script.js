@@ -6,11 +6,11 @@ var all_size = 0;               // загальна кількість файл�
 var failed = 0;                 // кількість фейлових файлів
 var failed_size = 0;            // загальна кількість фейлових файлів
 var failed_size_dw = 0;         // загальна кількість фейлових файлів яку потрібно завантажити
+var copied_size_dw = 0;         // загальна кількість попередньо завантажених файлів яку потрібно завантажити
 var copied = 0;                 // загальна кількість завантажених файлів
 var copied_size = 0;            // загальна кількість попередньо завантажених файлів
 var d = [];                     // масив з данними які отримали з файлу
 var size = 0;                   // загальний розмір усіх отриманих данних
-var pro = 0;                    // прогрес завантаження в процентах
 var step = 0;                   // крок відкриття файлу
 var step_id = 0;                // іп стрічки в кроці
 var dir = '';                   // папка в яку будемо завантажувати файли
@@ -18,10 +18,18 @@ var migration = [];             // штформація про міграцію
 var migration_status = false;   // статус міграції
 var active = true;              // статус завантаження
 var process_info = 0;           // кількість процесів яку потрібно запустити
-var loader = '';                // дані лоадера
 var alertSize = 0;              // кількість активних алертів
 var newDir = '';                // тимчасова змінна для імені папки
 var defaultDir = '';            // оголошення змінної для дефолтної папки завантаження файлів
+var allFileSize = 0;            // загальний розмір завантажених файлів
+var colorIntSize = 7;           // довжина каунтів на гріді завантаження
+
+// параметри завантаження
+
+var param_other_ext = false;    // шукати файли схожих розширень
+var param_using_proxy = false;  // використовувати проксі
+var param_presta_img = false;   // завантажувати тільки оригінальні зображення ( виключно для міграції на престу )
+var param_only_failed = false;  // завантажувати тільки фейлові
 
 // оголошуємо константи
 
@@ -64,6 +72,10 @@ function unBug(test){
   }
 }
 
+$(function() {
+  $(".knob").knob({});
+});
+
 /**
  * @param block
  * @param time
@@ -98,6 +110,9 @@ function add(count,forse){
       alert('Add '+count+' process','ok');
     else
       alert('Error add process','error');
+    if(process_info >= 50){
+      $('#addProcessButton').animate({opacity:0}, 500).delay(500).css({display:'none'});
+    }
     return process_info;
   }
   return false;
@@ -222,6 +237,20 @@ function closeEditorWarning(){
   return 'Are you sure?\n\nDownload process been closed!'
 }
 
+function closeUpdateBox() {
+  $('#updateBox').animate({opacity:0}, 500, function(){
+    $('#updateBox').hide();
+  });
+  $('#updateContent').animate({marginTop:'3%'}, 500);
+}
+
+function closeUpdateProcessBox() {
+  $('#updateProcessBox').animate({opacity:0}, 500, function(){
+    $('#updateProcessBox').hide();
+  });
+  $('#updateProcessContent').animate({marginTop:'3%'}, 500);
+}
+
 /**
  * @param dir
  * @returns {boolean}
@@ -344,14 +373,81 @@ function next(){
   return [id,st];
 }
 
+function colorInt (intValue, length){
+  if(intValue.toString().length < length){
+    var add = length - intValue.toString().length;
+    var prefix = '';
+    while (add > 0) {
+      prefix += '0';
+      add--;
+    }
+    return '<span>'+prefix+'</span>'+intValue;
+  }
+}
+
+function getFileInfo (file,type){
+  $('#updateProcessBox').show().animate({opacity:1}, 500);
+  $('#updateProcessContent').animate({marginTop:'5%'}, 500);
+  $('#updateProcessText').text('Load file: '+ file);
+  alert('Get migration info','info');
+  defaultDir = file.replace('.csv', '');
+  active = false;
+  $.get("index.php?getInfo="+file+"&type="+type, function( data ) {
+    data = parse(data);
+    if(data['code'] == 200){
+      migration = data['data'];
+      $(".h_top").text('ID: ' + migration['id']);
+      if (!migration){
+        migration = [];
+        newDir = prompt('Error connect db.\nPlease enter download dir name hear:', defaultDir);
+        migration['id'] = newDir ? newDir : defaultDir;
+        migration['target_store_id'] = 0;
+      }
+      dir = migration['id'];
+      migration_status = true;
+    }
+    else{
+      view(data);
+      $('#updateLoadAnimate').html('' +
+        '<div class="updateLoadErrorConnectDialog">Error connect db.<br />' +
+        'Please enter download dir name hear:</div>' +
+        '<input type="text" autofocus maxlength="15" id="inputOpenFileDirName" value="'+defaultDir+'" />'+
+        '<input type="submit" value="Open" onclick="openFile(\''+file+'\',0,'+type+',1)"/>'
+      );
+    }
+  });
+
+  return '';
+}
+
+function getDirNameFromInput(){
+  var id = $('#inputOpenFileDirName').val().trim();
+  migration['id'] = id;
+  migration['target_store_id'] = 0;
+  return id;
+}
+
 /**
+ *
  * @param file
  * @param part
  * @param type
+ * @param getLocalName
  * @returns {boolean}
  */
-function openFile(file,part,type){
-  $(".fileList").html('<div id=\"load\"></div>');
+function openFile(file, part, type, getLocalName){
+
+  if(dir == ''){
+    if(getLocalName == 1){
+      dir = getDirNameFromInput();
+    } else {
+      dir = getFileInfo(file,type);
+    }
+    if(dir == ''){
+      return false;
+    }
+  }
+
   $.get("index.php?loadFile="+file+"&step="+part+"&type="+type, function( data ) {
     data = parse(data);
     if(data['data'] != '[]'){
@@ -361,11 +457,10 @@ function openFile(file,part,type){
         return false;
       }
       else {
-        $(".dropzone").hide();
         d[part] = parse(data['data']);
         part++;
         alert('Open file step '+part,'info');
-        openFile(file,part,type);
+        openFile(file,part,type,0);
         return true;
       }
     }
@@ -387,102 +482,66 @@ function openFile(file,part,type){
         }
         i++;
       }
-      createLoader();
-      alert('Get migration info','info');
-      defaultDir = file.replace('.csv', '');
-      active = false;
-      $.get("index.php?getInfo="+file+"&type="+type, function( data ) {
-        data = parse(data);
-        if(data['code'] == 200){
-          migration = data['data'];
-          $(".h_top").text('ID: ' + migration['id']);
-          if (!migration){
-            migration = [];
-            newDir = prompt('Error connect db.\nPlease enter download dir name hear:', defaultDir);
-            migration['id'] = newDir ? newDir : defaultDir;
-            migration['target_store_id'] = 0;
-          }
-          dir = migration['id'];
-          migration_status = true;
-          $(".download_migration").html('<table id="info">'+
-            '<tbody>'+
-            '<tr>'+
-            '<td class="left">Migration page</td>'+
-            '<td class="right"><a href="https://app.shopping-cart-migration.com/admin/migrations/index/mID/'+migration['id']+
-              '" target="_blank"><span class="icon-newtab"></span> https://app.shopping-cart-migration.com ... '+migration['id']+'</a></td>'+
-            '</tr>'+
-            '<tr class="failedList">'+
-            '<td class="left">Failed image list</td>'+
-            '<td class="right"><a target="_blank" href="'+downloadFolder+'/'+dir+'/'+dir+'.csv"><span class="icon-disk"></span> '+downloadFolder+'/'+dir+'/'+dir+'.csv</a></td>'+
-            '</tr>'+
-            '<tr class="end">'+
-            '<td class="left">Download folder</td>'+
-            '<td class="right"><span class="icon-folder"></span> '+downloadFolder+'/'+dir+'/</td>'+
-            '</tr>'+
-            '<tr>'+
-            '<td class="left">Source Name</td>'+
-            '<td class="right"><span class="icon-upload2"></span> '+migration['s_name']+'</td>'+
-            '</tr>'+
-            '<tr class="end">'+
-            '<td class="left">Source Url</td>'+
-            '<td class="right"><a href="'+migration['s_url']+'" target="_blank"><span class="icon-newtab"></span> '+migration['s_url']+'</a></td>'+
-            '</tr>'+
-            '<tr>'+
-            '<td class="left">Target Name</td>'+
-            '<td class="right"><span class="icon-download2"></span> '+migration['t_name']+'</td>'+
-            '</tr>'+
-            '<tr>'+
-            '<td class="left">Target Url</td>'+
-            '<td class="right"><a href="'+migration['t_url']+'" target="_blank"><span class="icon-newtab"></span> '+migration['t_url']+'</a></td>'+
-            '</tr>'+
-            '</tbody>'+
-            '</table>'
-          );
-        }
-        else{
-          newDir = prompt('Error connect db.\nPlease enter download dir name hear:', defaultDir);
-          dir = migration['id'] = newDir ? newDir : defaultDir;
-          $(".h_top").text(dir);
-          $(".download_migration").html('<table id="info">'+
-            '<tbody>'+
-            '<tr class="failedList">'+
-            '<td class="left">Failed image list</td>'+
-            '<td class="right"><a target="_blank" href="'+downloadFolder+'/'+dir+'/'+dir+'.csv"><span class="icon-disk"></span> '+downloadFolder+'/'+dir+'/'+dir+'.csv</a></td>'+
-            '</tr>'+
-            '<tr>'+
-            '<td class="left">Download folder</td>'+
-            '<td class="right"><span class="icon-folder"></span> '+downloadFolder+'/'+dir+'/</td>'+
-            '</tr>'+
-            '</tbody>'+
-            '</table><br/>'
-          );
-          view(data);
-        }
-        $(".all .left").text(size);
-        $(".copied .left").text(copied_size);
-        $(".failed .left").text(failed_size);
-        $(".all .right").text(all);
-        $(".failed .right").text(failed);
-        $(".copied .right").text(copied);
-        $(".download").show(300);
-        $(".fileList").hide(300);
-        $("#change-theme").hide(300);
-        $("#add").hide(300);
-        if(failed_size > 0){
-          $(".only button").addClass("ok");
-        }
-        alert('Open file '+file,'ok');
-      });
+
+      closeUpdateProcessBox();
+      $(".dropzone, .fileList").hide();
+      showDownloadPanel(file);
+      alert('Open file '+file,'ok');
     }
   });
+
   return true;
+}
+
+function showDownloadPanel (file){
+
+  $(".infoGridSourceFile").html('<a href="'+csvFolder+'/'+file+'" target="_blank">'+
+    '<span>'+csvFolder+'/</span>'+file+'</a></div>');
+  $(".infoGridFailedImages").html('<a href="'+downloadFolder+'/'+file.replace('.csv', '')+'/'+file+'" target="_blank">'+
+    '<span>'+downloadFolder+'/'+dir+'/</span>'+file+'</a></div>');
+  $(".infoGridMigrationId").html(migration['id']);
+
+  var i = 70;
+  $('.dwGridItem').each(function(){
+    $(this).delay(500+i).transition({scale:1,opacity:1,marginTop:0}, 300);
+    i += 70;
+  });
+
+  setTimeout(function(){
+    i = 70;
+    $('.circleLoader').animate({opacity:1}, 1000);
+    $('.circleLoaderItem').each(function(){
+      $(this).transition({rotate:(i/1.5)+'deg',scale:1.5}, 0).delay(i).transition({rotate:'0deg',scale:1}, 1500);
+      i += 70;
+    });
+  },500);
+
+  setTimeout(function(){
+    i = 70;
+    $('.downloadSettItem').each(function(){
+      $(this).delay(500+i).animate({opacity:1,marginTop:0}, 300);
+      i += 70;
+    });
+  }, 1000);
+
+  setTimeout(function(){
+    $('#startButton').animate({opacity:1}, 500)
+  },1500);
+
+  $(".countOpenAll").html(colorInt(size, colorIntSize));
+  $(".countOpenCopied").html(colorInt(copied_size, colorIntSize));
+  $(".countOpenFailed").html(colorInt(failed_size, colorIntSize));
+  $(".countDownloadAll").html(colorInt(all, colorIntSize));
+  $(".countDownloadFailed").html(colorInt(failed, colorIntSize));
+  $(".countDownloadCopied").html(colorInt(copied, colorIntSize));
+  $("#downloadBox").show(0);
 }
 
 /**
  * @param data
  * @returns {*}
  */
-function parse (data){
+function parse(data){
   return $.parseJSON(data);
 }
 
@@ -514,33 +573,41 @@ function process(){
   var id = mass[0];
   var stepp = mass[1];
   if(id != -1){
-    if(($(".only button").hasClass("ok")) && (d[stepp][id][0] == 1)){
+    if((param_only_failed) && (d[stepp][id][0] == 1)){
       process();
       return true;
     }
     else {
+      var param = {};
+      param.otherExt = param_other_ext;
+      param.usingProxy = param_using_proxy;
       $.post(
         "index.php",
         {
+         ts: migration['target_store_id'],
+      param: JSON.stringify(param),
+     action: 'download-file',
           s: d[stepp][id][1],
           t: d[stepp][id][2],
-        dir: dir,
-         ts: migration['target_store_id']
+        dir: dir
         },
       function( data ) {
         data = parse(data);
-        if(data['code'] == 200)
+        allFileSize += data['data'];
+        if(data['code'] == 200) {
           copied++;
-        else
+        } else {
           failed++;
-        all++;
-        if(d[stepp][id][0] == 0)
+        }
+        if(d[stepp][id][0] == 0){
           failed_size--;
-        else
+        } else {
           copied_size--;
+        }
         all_size--;
-        process();
+        all++;
         stat();
+        process();
         return data['code'] == 200;
       });
     }
@@ -556,7 +623,7 @@ function process(){
 /**
  * @returns {boolean}
  */
-function createLoader (){
+function createLoader(){
   $(function() {
     loader = $("#topLoader").percentageLoader({width: 256, height: 256, controllable : false, progress : 0, onProgressUpdate : function(val) {
       loader.setValue(Math.round(val * 100.0));
@@ -682,12 +749,18 @@ function start(){
   }
   all_size = size;
   failed_size_dw = failed_size;
+  copied_size_dw = copied_size;
   $.get("index.php?start="+dir, function( data ) {
     data = parse(data);
     if(data['code'] == 200){
       active = true;
-      $(".only").addClass('dis');
-      $(".process button").removeClass('dis');
+      $('#addProcessButton').css({display:'inline-block'}).animate({opacity:1}, 500);
+      param_other_ext = $('input[name=FAST_EXTENSIONS]').is(':checked') ? true : false;
+      param_using_proxy = $('input[name=FAST_PROXY_ACTIVE]').is(':checked') ? true : false;
+      param_presta_img = $('input[name=FAST_PRESTA]').is(':checked') ? true : false;
+      param_only_failed = $('input[name=FAST_ONLY_FAILED]').is(':checked') ? true : false;
+      $('.downloadSettItem input[type=checkbox]').prop('disabled', true);
+      $('.downloadSettItem').addClass('disabled');
       view(data);
       add(proces,false);
       return data['code'] == 200;
@@ -700,22 +773,39 @@ function start(){
  * @returns {boolean}
  */
 function stat(){
-  if($(".only button").hasClass("ok"))
-    pro = parseInt((all/failed_size_dw)*100);
-  else
-    pro = parseInt((all/size)*100);
-  if(failed == 1)
-    $(".failedList").show(500);
-  $(".all .left").text(all_size);
-  $(".copied .left").text(copied_size);
-  $(".failed .left").text(failed_size);
-  $(".all .right").text(all);
-  $(".failed .right").text(failed);
-  $(".copied .right").text(copied);
-  $(".process b").text(process_info);
-  document.title = "Download "+pro+'%';
-  loader.setValue(all);
-  loader.setProgress(pro/100);
+  var perAll = 0;
+  var perCopied = 0;
+  var perFailed = 0;
+  if(param_only_failed){
+    perAll = parseInt((all/failed_size_dw)*100);
+    perCopied = parseInt((copied/failed_size_dw)*100);
+    perFailed = parseInt((failed/failed_size_dw)*100);
+  } else {
+    perAll = parseInt((all/size)*100);
+    perCopied = parseInt((copied/size)*100);
+    perFailed = parseInt((failed/size)*100);
+  }
+
+  document.title = "Download "+perAll+'%';
+  $('#startButton').text(perAll+'%');
+  var processColor = '#ffffff';
+  if(process_info == 0){
+    processColor = '#aaaaaa';
+  }
+  $('.barProcess').text(process_info).css({width:(process_info*2)+'%',color:processColor});
+  $('.infoGridImagesSize').text(parseInt(allFileSize/(1024000)));
+
+  $(".circleAll").val(perAll).trigger("change");
+  $(".circleFailed").val(perFailed).trigger("change");
+  $(".circleCopied").val(perCopied).trigger("change");
+
+  $(".countOpenAll").html(colorInt(all_size, colorIntSize));
+  $(".countOpenCopied").html(colorInt(copied_size, colorIntSize));
+  $(".countOpenFailed").html(colorInt(failed_size, colorIntSize));
+  $(".countDownloadAll").html(colorInt(all, colorIntSize));
+  $(".countDownloadFailed").html(colorInt(failed, colorIntSize));
+  $(".countDownloadCopied").html(colorInt(copied, colorIntSize));
+
   return true;
 }
 
@@ -723,7 +813,7 @@ function stat(){
  * @param data
  * @returns {boolean}
  */
-function view (data){
+function view(data){
   if(data['data'] instanceof Object)
     alert(data['data']['message'],data['type']);
   else
@@ -774,6 +864,19 @@ function settingsOpen(){
 }
 
 $(document).ready(function() {
+
+  /* ----------------------------------- Download ----------------------------------- */
+
+  $('#startButton').bind(
+    'click',
+    function(){
+      start();
+      $('#startButton')
+        .text('Wait ...')
+        .bind('click', function(){})
+        .addClass('disabled');
+    }
+  );
 
   /* ----------------------------------- Settings ----------------------------------- */
 
@@ -883,10 +986,14 @@ $(document).ready(function() {
   $('#updateClose').bind(
     'click',
     function(){
-      $('#updateBox').animate({opacity:0}, 500, function(){
-        $('#updateBox').hide();
-      });
-      $('#updateContent').animate({marginTop:'3%'}, 500);
+      closeUpdateBox();
+    }
+  );
+
+  $('#updateProcessClose').bind(
+    'click',
+    function(){
+      closeUpdateProcessBox();
     }
   );
 

@@ -2,39 +2,7 @@
 
 // версія ядра
 
-define('VER', '3.2.6');
-
-// масив доступних тем
-
-$THEME_ARRAY = array(
-  'white'   => array(
-    'name'  => 'White-Orange',
-    'src'   => 'theme-white.css',
-    'color' => array(
-      'FFFFFF',
-      '3ba0b3',
-      'ff5722',
-    ),
-  ),
-  'dark'   => array(
-    'name'  => 'Dark-Yellow',
-    'src'   => 'theme-dark.css',
-    'color' => array(
-      '404040',
-      '3ba0b3',
-      'ffe44a',
-    ),
-  ),
-  'black-white'   => array(
-    'name'  => 'Black-White',
-    'src'   => 'theme-black-white.css',
-    'color' => array(
-      '404040',
-      'f2f2f2',
-      'ffe44a',
-    ),
-  ),
-);
+define('VER', '4.0.0');
 
 // підключаємо файл конфігів
 
@@ -51,6 +19,10 @@ if (file_exists('./core/config.php')) {
     alert('error', 404, 'Not create file ./core/config.php T_T');
   }
 }
+
+// підключаємо файл конфігурації тем
+
+include('./core/themes.php');
 
 // виводимо результат виконання
 
@@ -113,7 +85,7 @@ switch(isset($_POST['action']) ? $_POST['action'] : ''){
     if ($update_time < time()) {
       $upVer = @file_get_contents(UPDATE_SERVER . 'IDownloader/version');
       if ($upVer) {
-        if (version_compare(VER, $upVer)) {
+        if (version_compare(VER, $upVer) == -1) {
           alert('ok', 200, 'New version available ' . $upVer);
         }
       }
@@ -122,6 +94,38 @@ switch(isset($_POST['action']) ? $_POST['action'] : ''){
     break;
   case 'update':
     update();
+    break;
+  case 'download-file':
+    $dir = $_POST['dir'];
+    $source = prepareImgUrl($_POST['s']);
+    $target = base64_decode($_POST['t']);
+    $targetUrl = DOWNLOAD_FOLDER . '/' . $dir . '/' . $target;
+    $param = json_decode($_POST['param']);
+    define('USING_PROXY', $param->usingProxy);
+    if (!file_exists($targetUrl) OR filesize($targetUrl) == 0) {
+      $img = downloadImage($source, $target, $dir);
+      if ($img) {
+        alert('ok', 200, $img);
+      } else {
+        if (preg_match('/\.(jpeg|JPEG|jpg|JPG)$/', $source, $r) && $param->otherExt) {
+          $extensionArray = array_diff(array('jpeg', 'JPEG', 'jpg', 'JPG'), array($r[0]));
+          $source = preg_replace('/' . $r[0] . '$/', '', $source);
+          foreach ($extensionArray AS $val) {
+            $img = downloadImage($source . '.' . $val, $target, $dir);
+            if ($img) {
+              alert('ok', 200, $img);
+            }
+          }
+        }
+        $file = fopen(DOWNLOAD_FOLDER . '/' . $dir . '/' . $dir . '.csv', 'a');
+        $put = array('0', $_POST['ts'], $source, $target);
+        fputcsv($file, $put, ',', '"');
+        fclose($file);
+        alert('error', 404, 0);
+      }
+    } else {
+      alert('ok', 200, filesize($targetUrl));
+    }
     break;
 }
 
@@ -187,81 +191,34 @@ if (isset($_GET['deleteDir']) AND !empty($_GET['deleteDir'])) {
   alert('ok', 200, 'Dir ' . $dir . ' is delete');
 }
 
-// завантажуємо файл
+// підготовуємо урл сорса
 
-if (isset($_POST['s']) AND isset($_POST['t']) AND isset($_POST['dir'])) {
-  $_POST['s'] = base64_decode($_POST['s']);
-  $_POST['t'] = base64_decode($_POST['t']);
-  $dir = $_POST['dir'];
-  $d = str_replace(basename($_POST['t']), '', $_POST['t']);
-  if (!file_exists(DOWNLOAD_FOLDER . '/' . $dir . '/' . $d)) {
-    mkdir(DOWNLOAD_FOLDER . '/' . $dir . '/' . $d, 0777, true);
-  }
-  if (!file_exists(DOWNLOAD_FOLDER . '/' . $dir . '/' . $_POST['t'])
-    OR filesize(DOWNLOAD_FOLDER . '/' . $dir . '/' . $_POST['t']) == 0
-  ) {
-    $img = false;
-    $img = downloadImage($_POST['s'], $_POST['t'], $dir);
-    if ($img) {
-      alert('ok', 200, 'Download file ' . $_POST['s'] . ' to ' . $_POST['t'] . ' is ok');
-    } else {
-      $s = $_POST['s'];
-      if (preg_match('/\.(jpeg|JPEG|jpg|JPG)$/', $s, $r)) {
-        switch ($r[0]) {
-          case '.jpeg':
-            $mass = array('JPEG', 'jpg', 'JPG');
-            break;
-          case '.JPEG':
-            $mass = array('jpeg', 'jpg', 'JPG');
-            break;
-          case '.jpg':
-            $mass = array('jpeg', 'JPEG', 'JPG');
-            break;
-          case '.JPG':
-            $mass = array('jpeg', 'JPEG', 'jpg');
-            break;
-        }
-        $s = preg_replace('/' . $r[0] . '$/', '', $s);
-        foreach ($mass AS $val) {
-          $img = false;
-          $img = downloadImage(str_replace(' ', "%20", $s . '.' . $val), $_POST['t'], $dir);
-          if ($img) {
-            alert('ok', 200, 'Download file ' . $_POST['s'] . ' to ' . $_POST['t'] . ' is ok');
-          }
-        }
-      }
-      $file = fopen(DOWNLOAD_FOLDER . '/' . $dir . '/' . $dir . '.csv', 'a');
-      $put = array('0', $_POST['ts'], $_POST['s'], $_POST['t']);
-      fputcsv($file, $put, ',', '"');
-      fclose($file);
-      alert('error', 404, 'Error download file ' . $_POST['s'] . ' to ' . $_POST['t']);
-    }
-  } else {
-    alert('ok', 200, 'File ' . $_POST['t'] . ' is exists');
-  }
+function prepareImgUrl ($url){
+  return str_replace(' ', "%20", str_replace('https://', 'http://', base64_decode($url)));
 }
 
 // спроба завантажити картинку
 
 function downloadImage($source, $target, $dir){
   $img = @file_get_contents($source);
+  $targetUrl = str_replace('//', '/', DOWNLOAD_FOLDER . '/' . $dir . '/' . $target);
   if ($img AND !preg_match('/(<html)/', $img)) {
-    file_put_contents(DOWNLOAD_FOLDER . '/' . $dir . '/' . $target, $img);
-    return true;
+    file_put_contents($targetUrl, $img);
+    return filesize($targetUrl);
   } else {
-    if(PROXY_ACTIVE){
+    if(USING_PROXY){
       $proxyArray = explode(', ', PROXY_SERVER);
       $proxy = $proxyArray[rand(0, count($proxyArray) - 1)];
-      exec('curl -x ' . $proxy . ' --proxy-user ' . PROXY_AUTH . ' -L ' . $source . ' > ' . DOWNLOAD_FOLDER . '/' . $dir . '/' . $target);
-      $img = @file_get_contents(DOWNLOAD_FOLDER . '/' . $dir . '/' . $target);
-      if ($img AND !preg_match('/(<html)/', $img) AND filesize(DOWNLOAD_FOLDER . '/' . $dir . '/' . $target) > 0) {
-        return true;
+      exec('curl -x ' . $proxy . ' --proxy-user ' . PROXY_AUTH . ' -L ' . $source . ' > ' . $targetUrl);
+      $img = @file_get_contents($targetUrl);
+      if ($img AND !preg_match('/(<html)/', $img) AND filesize($targetUrl) > 0) {
+        return filesize($targetUrl);
       } else {
-        exec('rm -Rf ' . DOWNLOAD_FOLDER . '/' . $dir . '/' . $target);
+        exec('rm -Rf ' . $targetUrl);
       }
     }
   }
-  return false;
+  return 0;
 }
 
 // завантажуємо інформацію з csv файлу
@@ -468,6 +425,29 @@ function update(){
   alert('ok', 200, 'Update ok');
 }
 
+// перевірка розміру файлу
+
+/**
+ * @param int $size
+ * @return string
+ */
+function prepareFileSize ($size = 0){
+  if (substr(($size / 1000000), 0, 4) > 1.00) {
+    if (substr(($size / 1000000), 0, 4) > 100.00) {
+      $n = 5;
+    } else {
+      $n = 4;
+    }
+    if(substr(($size / 1000000), 0, 4) > 1000.00){
+      return substr(($size / 1068000000), 0, $n-1) . " <span>Gb</span>";
+    } else {
+      return substr(($size / 1000000), 0, $n) . " <span>Mb</span>";
+    }
+  } else {
+    return substr(($size / 1000), 0, 5) . " <span>Kb</span>";
+  }
+}
+
 // генеруємо код основної сторінки
 
 if (!file_exists('./' . CSV_FOLDER . '/')) {
@@ -479,17 +459,7 @@ if (!file_exists('./' . CSV_FOLDER . '/')) {
   foreach ($tmpDir AS $tmp) {
     if (preg_match('/\.csv$/', $tmp)) {
       $f_file = './' . CSV_FOLDER . '/' . $tmp;
-      if (substr((filesize($f_file) / 1000000), 0, 4) > 1.00) {
-        if (substr((filesize($f_file) / 1000000), 0, 4) > 100.00) {
-          $n = 5;
-        } else {
-          $n = 4;
-        }
-        $f_size = substr((filesize($f_file) / 1000000), 0, $n) . " Mb";
-      } else {
-        $f_size = substr((filesize($f_file) / 1000), 0, 5) . " Kb";
-      }
-      $listDir[$tmp] = $f_size;
+      $listDir[$tmp] = prepareFileSize(filesize($f_file));
     }
   }
   if (empty($listDir)) {
@@ -528,32 +498,6 @@ function printContent($listDir, $listDownload, $themeData)
   <button class="lock' . (LOCK ? '' : ' lock-off') . '" id="lock" onclick="lock()" title="Lock reload page"><b class="icon-lock"></b></button>
   <button class="add" id="add" onclick="addFile()" title="Upload new file"><b class="icon-box-add"></b></button>
   </div>
-  <div class="block download panel">
-    <div id="left">
-        <div class="all">
-            <div class="left"></div>
-            <div class="right"></div>
-        </div>
-        <div class="failed">
-            <div class="left"></div>
-            <div class="right"></div>
-        </div>
-        <div class="copied">
-            <div class="left"></div>
-            <div class="right"></div>
-        </div>
-    </div>
-    <div id="right">
-        <div class="process">
-            <div class="left"><b>0</b> <span class="icon-meter"></span></div>
-            <div class="right"><button onclick="add(10,0)" class="dis">+10 process</button></div>
-        </div>
-        <div class="only">
-            <div class="center"><button onclick="check()"><span class="icon-aid"></span> <span id="only_failed">Only failed</span></button></div>
-        </div>
-    </div>
-  </div>
-  <div class="block download cir"><div id="topLoader" class="topLoader"></div></div>
   <div class="block fileList">
     <div id="csv">
       <h1><span class="icon-file3"></span> CSV file</h1>';
@@ -572,7 +516,7 @@ function printContent($listDir, $listDownload, $themeData)
       }
       echo '
                 <tr class="file-' . preg_replace('/\.csv$/', '', $name) . $class . '">
-                  <td onclick="openFile(\'' . $name . '\',0,0)" class="csvFolderName" title="Open file">' . preg_replace('/\.csv$/', '', $name) . '</td>
+                  <td onclick="openFile(\'' . $name . '\',0,0,0)" class="csvFileName" title="Open file">' . preg_replace('/\.csv$/', '', $name) . '</td>
                   <td class="fileSize" title="Size csv file ' . $size . '">' . $size . '</td>
                   <td class="fileDate" title="Last edit date ' . date("H:i d-m-y", filemtime(CSV_FOLDER . '/' . $name)) . '">' . date("d-m-y", filemtime(CSV_FOLDER . '/' . $name)) . '</td>
                   <td class="icon" onclick="renameFile(\'' . $name . '\')" title="Rename file"><span class="icon-pencil2"></span></td>
@@ -680,8 +624,7 @@ function printContent($listDir, $listDownload, $themeData)
   }
   echo '
     </div>
-  </div>
-  <div class="block download download_migration"><p style="text-align: center">No data</p></div>' . '';
+  </div>';
 }
 
 // вертаємо код сторінки
