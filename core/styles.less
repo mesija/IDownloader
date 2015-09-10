@@ -1,0 +1,977 @@
+@logoUrl:           "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAANUAAAAeCAYAAAC7b1v0AAAACXBIWXMAAAsTAAALEwEAmpwYAAABNmlDQ1BQaG90b3Nob3AgSUNDIHByb2ZpbGUAAHjarY6xSsNQFEDPi6LiUCsEcXB4kygotupgxqQtRRCs1SHJ1qShSmkSXl7VfoSjWwcXd7/AyVFwUPwC/0Bx6uAQIYODCJ7p3MPlcsGo2HWnYZRhEGvVbjrS9Xw5+8QMUwDQCbPUbrUOAOIkjvjB5ysC4HnTrjsN/sZ8mCoNTIDtbpSFICpA/0KnGsQYMIN+qkHcAaY6addAPAClXu4vQCnI/Q0oKdfzQXwAZs/1fDDmADPIfQUwdXSpAWpJOlJnvVMtq5ZlSbubBJE8HmU6GmRyPw4TlSaqo6MukP8HwGK+2G46cq1qWXvr/DOu58vc3o8QgFh6LFpBOFTn3yqMnd/n4sZ4GQ5vYXpStN0ruNmAheuirVahvAX34y/Axk/96FpPYgAAQKlpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+Cjx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNS1jMDIxIDc5LjE1NDkxMSwgMjAxMy8xMC8yOS0xMTo0NzoxNiAgICAgICAgIj4KICAgPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4KICAgICAgPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIKICAgICAgICAgICAgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIgogICAgICAgICAgICB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iCiAgICAgICAgICAgIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIgogICAgICAgICAgICB4bWxuczpzdEV2dD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlRXZlbnQjIgogICAgICAgICAgICB4bWxuczpzdFJlZj0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlUmVmIyIKICAgICAgICAgICAgeG1sbnM6cGhvdG9zaG9wPSJodHRwOi8vbnMuYWRvYmUuY29tL3Bob3Rvc2hvcC8xLjAvIgogICAgICAgICAgICB4bWxuczp0aWZmPSJodHRwOi8vbnMuYWRvYmUuY29tL3RpZmYvMS4wLyIKICAgICAgICAgICAgeG1sbnM6ZXhpZj0iaHR0cDovL25zLmFkb2JlLmNvbS9leGlmLzEuMC8iPgogICAgICAgICA8eG1wOkNyZWF0b3JUb29sPkFkb2JlIFBob3Rvc2hvcCBDQyAoV2luZG93cyk8L3htcDpDcmVhdG9yVG9vbD4KICAgICAgICAgPHhtcDpDcmVhdGVEYXRlPjIwMTUtMDctMTFUMDI6NTM6MTErMDM6MDA8L3htcDpDcmVhdGVEYXRlPgogICAgICAgICA8eG1wOk1ldGFkYXRhRGF0ZT4yMDE1LTA3LTExVDAyOjU2OjU1KzAzOjAwPC94bXA6TWV0YWRhdGFEYXRlPgogICAgICAgICA8eG1wOk1vZGlmeURhdGU+MjAxNS0wNy0xMVQwMjo1Njo1NSswMzowMDwveG1wOk1vZGlmeURhdGU+CiAgICAgICAgIDxkYzpmb3JtYXQ+aW1hZ2UvcG5nPC9kYzpmb3JtYXQ+CiAgICAgICAgIDx4bXBNTTpJbnN0YW5jZUlEPnhtcC5paWQ6ZGQ1MWExYjAtM2E2ZS00YzRjLWI3NWUtOWY4NWNiODgyYjVjPC94bXBNTTpJbnN0YW5jZUlEPgogICAgICAgICA8eG1wTU06RG9jdW1lbnRJRD54bXAuZGlkOjliYTU3ODlhLWYzN2EtZjc0YS05NTUzLTY3MzZiNzM5OWExODwveG1wTU06RG9jdW1lbnRJRD4KICAgICAgICAgPHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD54bXAuZGlkOjliYTU3ODlhLWYzN2EtZjc0YS05NTUzLTY3MzZiNzM5OWExODwveG1wTU06T3JpZ2luYWxEb2N1bWVudElEPgogICAgICAgICA8eG1wTU06SGlzdG9yeT4KICAgICAgICAgICAgPHJkZjpTZXE+CiAgICAgICAgICAgICAgIDxyZGY6bGkgcmRmOnBhcnNlVHlwZT0iUmVzb3VyY2UiPgogICAgICAgICAgICAgICAgICA8c3RFdnQ6YWN0aW9uPmNyZWF0ZWQ8L3N0RXZ0OmFjdGlvbj4KICAgICAgICAgICAgICAgICAgPHN0RXZ0Omluc3RhbmNlSUQ+eG1wLmlpZDo5YmE1Nzg5YS1mMzdhLWY3NGEtOTU1My02NzM2YjczOTlhMTg8L3N0RXZ0Omluc3RhbmNlSUQ+CiAgICAgICAgICAgICAgICAgIDxzdEV2dDp3aGVuPjIwMTUtMDctMTFUMDI6NTM6MTErMDM6MDA8L3N0RXZ0OndoZW4+CiAgICAgICAgICAgICAgICAgIDxzdEV2dDpzb2Z0d2FyZUFnZW50PkFkb2JlIFBob3Rvc2hvcCBDQyAoV2luZG93cyk8L3N0RXZ0OnNvZnR3YXJlQWdlbnQ+CiAgICAgICAgICAgICAgIDwvcmRmOmxpPgogICAgICAgICAgICAgICA8cmRmOmxpIHJkZjpwYXJzZVR5cGU9IlJlc291cmNlIj4KICAgICAgICAgICAgICAgICAgPHN0RXZ0OmFjdGlvbj5zYXZlZDwvc3RFdnQ6YWN0aW9uPgogICAgICAgICAgICAgICAgICA8c3RFdnQ6aW5zdGFuY2VJRD54bXAuaWlkOjdmYzA2MDQxLTEyZTgtMWY0My1iNTAxLTExYTY5NTdkN2RjNzwvc3RFdnQ6aW5zdGFuY2VJRD4KICAgICAgICAgICAgICAgICAgPHN0RXZ0OndoZW4+MjAxNS0wNy0xMVQwMjo1Njo1NSswMzowMDwvc3RFdnQ6d2hlbj4KICAgICAgICAgICAgICAgICAgPHN0RXZ0OnNvZnR3YXJlQWdlbnQ+QWRvYmUgUGhvdG9zaG9wIENDIChXaW5kb3dzKTwvc3RFdnQ6c29mdHdhcmVBZ2VudD4KICAgICAgICAgICAgICAgICAgPHN0RXZ0OmNoYW5nZWQ+Lzwvc3RFdnQ6Y2hhbmdlZD4KICAgICAgICAgICAgICAgPC9yZGY6bGk+CiAgICAgICAgICAgICAgIDxyZGY6bGkgcmRmOnBhcnNlVHlwZT0iUmVzb3VyY2UiPgogICAgICAgICAgICAgICAgICA8c3RFdnQ6YWN0aW9uPmNvbnZlcnRlZDwvc3RFdnQ6YWN0aW9uPgogICAgICAgICAgICAgICAgICA8c3RFdnQ6cGFyYW1ldGVycz5mcm9tIGFwcGxpY2F0aW9uL3ZuZC5hZG9iZS5waG90b3Nob3AgdG8gaW1hZ2UvcG5nPC9zdEV2dDpwYXJhbWV0ZXJzPgogICAgICAgICAgICAgICA8L3JkZjpsaT4KICAgICAgICAgICAgICAgPHJkZjpsaSByZGY6cGFyc2VUeXBlPSJSZXNvdXJjZSI+CiAgICAgICAgICAgICAgICAgIDxzdEV2dDphY3Rpb24+ZGVyaXZlZDwvc3RFdnQ6YWN0aW9uPgogICAgICAgICAgICAgICAgICA8c3RFdnQ6cGFyYW1ldGVycz5jb252ZXJ0ZWQgZnJvbSBhcHBsaWNhdGlvbi92bmQuYWRvYmUucGhvdG9zaG9wIHRvIGltYWdlL3BuZzwvc3RFdnQ6cGFyYW1ldGVycz4KICAgICAgICAgICAgICAgPC9yZGY6bGk+CiAgICAgICAgICAgICAgIDxyZGY6bGkgcmRmOnBhcnNlVHlwZT0iUmVzb3VyY2UiPgogICAgICAgICAgICAgICAgICA8c3RFdnQ6YWN0aW9uPnNhdmVkPC9zdEV2dDphY3Rpb24+CiAgICAgICAgICAgICAgICAgIDxzdEV2dDppbnN0YW5jZUlEPnhtcC5paWQ6ZGQ1MWExYjAtM2E2ZS00YzRjLWI3NWUtOWY4NWNiODgyYjVjPC9zdEV2dDppbnN0YW5jZUlEPgogICAgICAgICAgICAgICAgICA8c3RFdnQ6d2hlbj4yMDE1LTA3LTExVDAyOjU2OjU1KzAzOjAwPC9zdEV2dDp3aGVuPgogICAgICAgICAgICAgICAgICA8c3RFdnQ6c29mdHdhcmVBZ2VudD5BZG9iZSBQaG90b3Nob3AgQ0MgKFdpbmRvd3MpPC9zdEV2dDpzb2Z0d2FyZUFnZW50PgogICAgICAgICAgICAgICAgICA8c3RFdnQ6Y2hhbmdlZD4vPC9zdEV2dDpjaGFuZ2VkPgogICAgICAgICAgICAgICA8L3JkZjpsaT4KICAgICAgICAgICAgPC9yZGY6U2VxPgogICAgICAgICA8L3htcE1NOkhpc3Rvcnk+CiAgICAgICAgIDx4bXBNTTpEZXJpdmVkRnJvbSByZGY6cGFyc2VUeXBlPSJSZXNvdXJjZSI+CiAgICAgICAgICAgIDxzdFJlZjppbnN0YW5jZUlEPnhtcC5paWQ6N2ZjMDYwNDEtMTJlOC0xZjQzLWI1MDEtMTFhNjk1N2Q3ZGM3PC9zdFJlZjppbnN0YW5jZUlEPgogICAgICAgICAgICA8c3RSZWY6ZG9jdW1lbnRJRD54bXAuZGlkOjliYTU3ODlhLWYzN2EtZjc0YS05NTUzLTY3MzZiNzM5OWExODwvc3RSZWY6ZG9jdW1lbnRJRD4KICAgICAgICAgICAgPHN0UmVmOm9yaWdpbmFsRG9jdW1lbnRJRD54bXAuZGlkOjliYTU3ODlhLWYzN2EtZjc0YS05NTUzLTY3MzZiNzM5OWExODwvc3RSZWY6b3JpZ2luYWxEb2N1bWVudElEPgogICAgICAgICA8L3htcE1NOkRlcml2ZWRGcm9tPgogICAgICAgICA8cGhvdG9zaG9wOlRleHRMYXllcnM+CiAgICAgICAgICAgIDxyZGY6QmFnPgogICAgICAgICAgICAgICA8cmRmOmxpIHJkZjpwYXJzZVR5cGU9IlJlc291cmNlIj4KICAgICAgICAgICAgICAgICAgPHBob3Rvc2hvcDpMYXllck5hbWU+STwvcGhvdG9zaG9wOkxheWVyTmFtZT4KICAgICAgICAgICAgICAgICAgPHBob3Rvc2hvcDpMYXllclRleHQ+STwvcGhvdG9zaG9wOkxheWVyVGV4dD4KICAgICAgICAgICAgICAgPC9yZGY6bGk+CiAgICAgICAgICAgIDwvcmRmOkJhZz4KICAgICAgICAgPC9waG90b3Nob3A6VGV4dExheWVycz4KICAgICAgICAgPHBob3Rvc2hvcDpDb2xvck1vZGU+MzwvcGhvdG9zaG9wOkNvbG9yTW9kZT4KICAgICAgICAgPHBob3Rvc2hvcDpJQ0NQcm9maWxlPkFkb2JlIFJHQiAoMTk5OCk8L3Bob3Rvc2hvcDpJQ0NQcm9maWxlPgogICAgICAgICA8dGlmZjpPcmllbnRhdGlvbj4xPC90aWZmOk9yaWVudGF0aW9uPgogICAgICAgICA8dGlmZjpYUmVzb2x1dGlvbj43MjAwMDAvMTAwMDA8L3RpZmY6WFJlc29sdXRpb24+CiAgICAgICAgIDx0aWZmOllSZXNvbHV0aW9uPjcyMDAwMC8xMDAwMDwvdGlmZjpZUmVzb2x1dGlvbj4KICAgICAgICAgPHRpZmY6UmVzb2x1dGlvblVuaXQ+MjwvdGlmZjpSZXNvbHV0aW9uVW5pdD4KICAgICAgICAgPGV4aWY6Q29sb3JTcGFjZT42NTUzNTwvZXhpZjpDb2xvclNwYWNlPgogICAgICAgICA8ZXhpZjpQaXhlbFhEaW1lbnNpb24+MjEzPC9leGlmOlBpeGVsWERpbWVuc2lvbj4KICAgICAgICAgPGV4aWY6UGl4ZWxZRGltZW5zaW9uPjMwPC9leGlmOlBpeGVsWURpbWVuc2lvbj4KICAgICAgPC9yZGY6RGVzY3JpcHRpb24+CiAgIDwvcmRmOlJERj4KPC94OnhtcG1ldGE+CiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgCjw/eHBhY2tldCBlbmQ9InciPz4g3q3FAAAAIGNIUk0AAHolAACAgwAA+f8AAIDoAABSCAABFVgAADqXAAAXb9daH5AAAAkoSURBVHja7Jx9kFdVGcc/u+zqwu6CrpZAqQULLFko8iIsS5ODOc5E0hSTmCGJvU052GQvkziVUTSVNjpqpk0qxji+ZFOiNRE5UsiLQrqaAYOZIWiORKy7LIv78uuP8xzvs2fPub/725cf3P3d78yd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";
+
+@fontDecorative:    "Kelly Slab", "monotype", "courier new", sans-serif;
+@fontMonoSpace:     "Share Tech Mono", monospace;
+
+@colorIndex:        #f9f9f9;
+@colorHover:        #ff5722;
+@colorText:         #3ba0b3;
+@colorTextAdd:      #cccccc;
+@colorGridHoverBg:  #aaaaaa;
+@colorGridStepBg:   #eeeeee;
+@colorRed:          #ff5722;
+@colorInfo:         #3ba0b3;
+@colorGreen:        #18c298;
+@colorWhite:        #f9f9f9;
+@colorBlack:        #222222;
+
+// -------------------------------- All -------------------------------- //
+
+body {
+  margin: 0;
+  padding: 0;
+  background: @colorIndex none top repeat;
+  a {
+    cursor: pointer;
+    color: @colorText;
+    text-decoration: none;
+    &:hover{
+      color: @colorHover;
+    }
+    * {
+      cursor: pointer;
+    }
+  }
+}
+
+// -------------------------------- Footer -------------------------------- //
+
+#footer {
+  width: 100%;
+  text-align: center;
+  display: block;
+  color: @colorText;
+  margin-top: 20px;
+  position: fixed;
+  bottom: 15px;
+}
+
+// -------------------------------- Content -------------------------------- //
+
+#box {
+  width: 1100px;
+  margin: 0 auto 50px auto;
+}
+
+#contentBox {
+  width: 1100px;
+  display: inline-block;
+  vertical-align: top;
+}
+
+#content {
+  margin: 25px 0 0 0;
+  .block {
+    margin: 0 0 25px 0;
+    padding: 15px 0;
+    border-radius: 5px;
+    vertical-align: top;
+    h1 {
+      font-size: 25px;
+      font-family: @fontDecorative;
+      padding-bottom: 5px;
+      margin-top: 5px;
+      padding-left: 7px;
+      border-bottom: 1px solid @colorText;
+      color: @colorText;
+    }
+    #load {
+      margin: 20px auto;
+      width: 50px;
+      height: 50px;
+    }
+    a {
+      color: @colorText;
+      &:hover {
+        color: @colorHover;
+      }
+    }
+  }
+
+  // -------------------------------- Menu -------------------------------- //
+
+  #logo-img {
+    background:url(@logoUrl) transparent top no-repeat;
+    width: 213px;
+    height: 30px;
+    display: inline-block;
+  }
+  .logo {
+    background: none;
+    border: 0;
+    font-family: @fontDecorative;
+    font-size: 30px;
+    color: @colorTextAdd;
+    .icon-download {
+      color: @colorText;
+    }
+    img {
+      margin-top: -2px;
+    }
+    v {
+      color: @colorText;
+      v2 {
+        color: @colorTextAdd;
+        font-size: 22px;
+      }
+    }
+    button {
+      color: @colorText;
+      cursor: pointer;
+      float: right;
+      margin-right: 55px;
+      background: none;
+      border: 0;
+      padding: 0;
+      &:hover {
+        color: @colorHover;
+      }
+      b {
+        cursor: pointer;
+      }
+    }
+    .lock {
+      color: @colorText !important;
+    }
+    .lock-off {
+      color: @colorHover !important;
+    }
+    .add {
+      color: @colorHover !important;
+    }
+    .reload {
+      margin-right: 0;
+    }
+  }
+
+  // -------------------------------- Grid -------------------------------- //
+
+  #csv {
+    width: 59%;
+    display: inline-block;
+  }
+  #folder {
+    width: 40%;
+    margin-left: 1%;
+    display: inline-block;
+  }
+  .csvFolder {
+    width: 100%;
+    color: @colorText;
+    font-size: 16px;
+    span {
+      cursor: pointer;
+    }
+    td {
+      padding: 5px 0;
+      text-align: center;
+      cursor: pointer;
+      height: 20px;
+      overflow: hidden;
+      &:hover{
+        background-color: @colorText !important;
+        color: @colorIndex !important;
+        td {
+          background-color: @colorGridHoverBg;
+          color: @colorIndex !important;
+        }
+      }
+    }
+    .csvFolderName {
+      padding-left: 7px !important;
+      text-align: left !important;
+      &:hover {
+        background-color: @colorGridHoverBg !important;
+        cursor: default !important;
+      }
+    }
+    .csvFileName {
+       padding-left: 7px !important;
+       text-align: left !important;
+     }
+    .icon {
+      width: 40px;
+    }
+    .fileSize {
+      width: 90px;
+      text-align: right;
+      padding-right: 10px;
+      &:hover {
+        background-color: @colorGridHoverBg !important;
+        cursor: default !important;
+      }
+    }
+    .fileDate {
+      width: 90px;
+      &:hover {
+        background-color: @colorGridHoverBg !important;
+        cursor: default !important;
+      }
+    }
+    .step {
+      background-color: @colorGridStepBg;
+    }
+    .delete {
+      &:hover {
+        background-color: @colorHover !important;
+      }
+    }
+    .empty {
+      * {
+        cursor: default !important;
+      }
+      td:hover {
+        background-color: @colorGridHoverBg !important;
+      }
+    }
+    .dis:hover {
+      background-color: @colorGridHoverBg !important;
+      cursor: default !important;
+    }
+    .red {
+      color: @colorRed;
+    }
+  }
+}
+
+// -------------------------------- Alert -------------------------------- //
+
+.alertBox {
+  position: absolute;
+  top: -250px;
+  left: 0;
+  #alert {
+    padding: 14px 20px 14px 30px;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    border-left: none;
+    * {
+      vertical-align: middle;
+    }
+    .icon {
+      display: inline-block;
+      width: 26px;
+      font-size: 26px;
+      margin-right: 15px;
+    }
+    .text {
+      display: inline-block;
+    }
+  }
+  .error {
+    color: @colorRed;
+    border-color: @colorRed;
+  }
+  .info {
+    color: @colorInfo;
+    border-color: @colorInfo;
+  }
+  .ok {
+    color: @colorGreen;
+    border-color: @colorGreen;
+  }
+}
+
+// -------------------------------- Download -------------------------------- //
+
+#downloadBox {
+  display: none;
+  .leftBox{
+    text-align: center;
+    display: inline-block;
+    width: 400px;
+    vertical-align: top;
+    .disabled {
+      cursor: default!important;
+      &:hover {
+        cursor: default!important;
+        color: @colorText!important;
+      }
+      * {
+        cursor: default!important;
+        &:hover {
+          cursor: default!important;
+          color: @colorText!important;
+        }
+      }
+    }
+    .circleLoader {
+      height: 420px;
+      margin: 0 auto;
+      width: 320px;
+      opacity: 0;
+    }
+    #startButton {
+      margin: 15px auto;
+      font-family: @fontDecorative;
+      font-size: 48px;
+      color: @colorText;
+      cursor: pointer;
+      border: none;
+      background: none;
+      position: relative;
+      z-index: 777;
+      opacity: 0;
+      &:hover {
+        color: @colorHover;
+      }
+    }
+    .disabled {
+      &:hover {
+        color: @colorText !important;
+        cursor: default !important;
+      }
+    }
+    .downloadSettItem {
+      text-align: left;
+      font-family: @fontDecorative;
+      color: @colorText;
+      font-size: 22px;
+      opacity: 0;
+      margin-top:  -20px;
+      .slideThree {
+        margin-right: 15px;
+        input {
+          display: none;
+        }
+      }
+      label {
+        cursor: pointer;
+        &:hover {
+          color: @colorHover;
+        }
+        button {
+          padding: 0;
+          border: none;
+          background: none;
+        }
+      }
+    }
+  }
+  .rightBox{
+    display: inline-block;
+    width: 700px;
+    padding-top: 25px;
+    vertical-align: top;
+    .dwGridItem{
+      opacity: 0;
+      margin-top: -20px;
+      margin-bottom: 5px;
+      div {
+        display: inline-block;
+        font-family: @fontDecorative;
+        color: @colorText;
+        font-size: 22px;
+        padding: 7px 25px;
+        height: 27px;
+        vertical-align: top;
+        div {
+          padding: 0;
+        }
+      }
+      .dwGridItemTitle {
+        background-color: @colorGridStepBg;
+        width: 150px;
+      }
+      .dwGridItemData {
+        font-family: @fontMonoSpace;
+        width: 450px;
+        span {
+          color: @colorGridHoverBg;
+        }
+        .progressbar {
+          margin: -7px auto;
+          width: 0;
+          height: 27px;
+          padding: 7px 0;
+          text-align: center;
+          background-color: @colorGreen;
+          color: @colorGridHoverBg;
+          overflow: visible;
+        }
+        .countImages {
+          font-family: @fontMonoSpace;
+          span {
+            color: @colorGridStepBg;
+          }
+        }
+        .countOpenCopied, .countDownloadCopied {
+          color: @colorGreen;
+        }
+        .countOpenFailed, .countDownloadFailed {
+          color: @colorRed;
+        }
+      }
+      .dwGridItemDataProcess {
+        width: 400px;
+      }
+      .dwGridItemButtonBox {
+        width: 50px;
+        padding: 7px 0;
+        text-align: center;
+        button {
+          display: none;
+          opacity: 0;
+          cursor: pointer;
+          border: none;
+          background: none;
+          * {
+            cursor: pointer;
+          }
+          &:hover {
+            color: @colorHover;
+          }
+        }
+      }
+    }
+    .countLine {
+      color: @colorGridHoverBg!important;
+    }
+  }
+}
+
+// -------------------------------- DropZone -------------------------------- //
+
+.dropzone {
+  min-height: 130px;
+  border-radius: 15px;
+  color: @colorText;
+  border: 2px dashed @colorText;
+  padding: 20px 20px;
+  &:hover {
+    color: @colorHover;
+    border: 2px dashed @colorHover;
+  }
+}
+
+// -------------------------------- Settings -------------------------------- //
+
+#settingsBox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  background-color: rgba(60, 60, 60, 0.40);
+  display: none;
+  opacity: 0;
+  #settingsContent {
+    width: 500px;
+    padding: 25px;
+    background-color: @colorIndex;
+    margin: 3% auto 0 auto;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.40);
+    border: 1px solid @colorText;
+    color: @colorText;
+    #settingsClose {
+      float: right;
+      position: relative;
+      margin: -25px -25px 0 0;
+      padding: 5px 25px;
+      color: @colorText;
+      cursor: pointer;
+      &:hover {
+        background-color: @colorRed;
+        color: @colorWhite;
+      }
+    }
+    h1 {
+      color: @colorText;
+      margin: -15px 0 25px -15px;
+      text-align: left;
+      font-size: 16px;
+      font-weight: normal;
+    }
+    h2 {
+      color: @colorText;
+      border-bottom: 1px solid @colorText;
+      margin: 0 -25px 25px -25px;
+      padding-left: 25px;
+      text-align: left;
+      font-size: 26px;
+      font-family: @fontDecorative;
+    }
+    .settItem {
+      div {
+        display: inline-block;
+        margin-bottom: 15px;
+      }
+    }
+    .settLabel {
+      width: 180px;
+    }
+    .settValue {
+      width: 285px;
+      input[type=text] {
+        width: 278px;
+        padding: 0 15px 0 15px;
+        border: none;
+        border-bottom: 1px solid @colorText;
+        cursor: text;
+        background: none;
+      }
+      input[type=text]:focus {
+        margin-right: -25px;
+        margin-left: -189px;
+        padding-left: 204px;
+        color: @colorHover;
+      }
+    }
+    .settButt {
+      padding: 7px 15px;
+      height: 32px;
+      margin: 5px 5px 5px 15px;
+      background-color: @colorGridStepBg;
+      border: 1px solid @colorGridHoverBg;
+      vertical-align: top;
+      &:hover {
+        border: 1px solid @colorText;
+      }
+    }
+    .active {
+      background-color: @colorText;
+      color: @colorGridStepBg;
+    }
+    .settCenter {
+      text-align: center;
+    }
+    #settSave {
+      margin: 0 auto;
+      text-align: center;
+      padding: 5px 25px;
+      border: 1px solid @colorGridHoverBg;
+      background-color: @colorHover;
+      color: @colorGridHoverBg;
+      &:hover {
+        border: 1px solid @colorHover;
+      }
+    }
+    #PACK_VALUE, #PROCESS_VALUE {
+      position: absolute;
+      width: 65px;
+      text-align: left;
+    }
+    .settBottomLine {
+      text-align: center;
+      margin: 25px -25px -25px -25px;
+      background-color: @colorGridHoverBg;
+      padding: 5px;
+      color: @colorWhite;
+      button {
+        background: none;
+        border: none;
+        color: @colorHover;
+      }
+    }
+  }
+}
+
+// -------------------------------- Update -------------------------------- //
+
+#updateBox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  background-color: rgba(60, 60, 60, 0.40);
+  #updateContent {
+    width: 500px;
+    padding: 25px;
+    background-color: @colorIndex;
+    margin: 3% auto 0 auto;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.40);
+    border: 1px solid @colorText;
+    color: @colorText;
+    #updateClose {
+      float: right;
+      position: relative;
+      margin: -25px -25px 0 0;
+      padding: 5px 25px;
+      color: @colorText;
+      cursor: pointer;
+      &:hover {
+        background-color: @colorRed;
+        color: @colorWhite;
+      }
+    }
+    h1 {
+      color: @colorText;
+      margin: -15px 0 25px -15px;
+      text-align: left;
+      font-size: 16px;
+      font-weight: normal;
+    }
+    h2 {
+      color: @colorText;
+      border-bottom: 1px solid @colorText;
+      margin: 0 -25px 25px -25px;
+      padding-left: 25px;
+      text-align: left;
+      font-size: 26px;
+      font-family: @fontDecorative;
+    }
+    .settBottomLine {
+      text-align: center;
+      margin: 25px -25px -25px -25px;
+      background-color: @colorGridHoverBg;
+      padding: 5px;
+      color: @colorWhite;
+      button {
+        background: none;
+        border: none;
+        color: @colorHover;
+      }
+    }
+  }
+}
+
+// -------------------------------- UpdateProcess -------------------------------- //
+
+
+#updateProcessBox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  background-color: rgba(60, 60, 60, 0.40);
+  display: none;
+  opacity: 0;
+  #updateProcessContent {
+    width: 500px;
+    padding: 25px;
+    height: 400px;
+    background-color: @colorIndex;
+    margin: 3% auto 0 auto;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.40);
+    border: 1px solid @colorText;
+    color: @colorText;
+    #updateProcessClose {
+      float: right;
+      position: relative;
+      margin: -25px -25px 0 0;
+      padding: 5px 25px;
+      color: @colorText;
+      cursor: pointer;
+      &:hover {
+        background-color: @colorRed;
+        color: @colorWhite;
+      }
+    }
+    h1 {
+      color: @colorText;
+      margin: -15px 0 25px -15px;
+      text-align: left;
+      font-size: 16px;
+      font-weight: normal;
+    }
+    h2 {
+      color: @colorText;
+      border-bottom: 1px solid @colorText;
+      margin: 0 -25px 25px -25px;
+      padding-left: 25px;
+      text-align: left;
+      font-size: 26px;
+      font-family: @fontDecorative;
+    }
+    .settBottomLine {
+      text-align: center;
+      margin: 25px -25px -25px -25px;
+      background-color: @colorGridHoverBg;
+      padding: 5px;
+      color: @colorWhite;
+      button {
+        background: none;
+        border: none;
+        color: @colorHover;
+      }
+    }
+  }
+}
+
+// -------------------------------- OpenFile -------------------------------- //
+
+#updateLoadAnimate {
+  .updateLoadErrorConnectDialog {
+    text-align: center;
+    font-size: 26px;
+    margin-top: 50px;
+  }
+}
+
+#updateProcessBox {
+  .wrap {
+    text-align: center;
+    position: relative;
+    top: 150px;
+    width: 150px;
+    margin: 0 auto;
+    font-family: @fontDecorative;
+  }
+  input[type=text] {
+    font-size: 100px;
+    text-align: center;
+    margin: 25px auto;
+    width: 100%;
+    background: none;
+  }
+  input[type=submit] {
+    font-size: 72px;
+    text-align: center;
+    margin: 25px auto;
+    width: 100%;
+    background: none;
+    border: none;
+    color: @colorText;
+    cursor: pointer;
+    display: inline-block;
+    &:hover {
+      color: @colorHover;
+    }
+  }
+  .loader {
+    position: absolute;
+    top: 0;
+    z-index: 10;
+    width: 50px;
+    height: 50px;
+    border: 15px solid;
+    border-radius: 50%;
+    border-top-color: rgba(44,44,44,0);
+    border-right-color: rgba(55,55,55,0);
+    border-bottom-color: rgba(66,66,66,0);
+    border-left-color: rgba(33,33,33,0);
+    animation: loadEr 3s infinite;
+  }
+  .loaderbefore {
+    width: 50px;
+    height:50px;
+    border: 15px solid #ddd;
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+    z-index: 9;
+  }
+  .circular {
+    position: absolute;
+    top: -15px;
+    left: -15px;
+    width: 70px;
+    height: 70px;
+    border: 20px solid;
+    border-radius: 50%;
+    border-top-color: #333;
+    border-left-color: #fff;
+    border-bottom-color: #333;
+    border-right-color: #fff;
+    opacity: 0.2;
+    animation: poof 5s infinite;
+  }
+  .another {
+    opacity: 0.1;
+    transform: rotate(90deg);
+    animation: poofity 5s infinite;
+    animation-delay: 1s;
+  }
+  .text {
+    position: absolute;
+    top: 95px;
+    left: 8px;
+    text-transform: uppercase;
+    color: #888;
+    animation: opaa 10s infinite;
+  }
+}
+
+@keyframes loadEr {
+  0% {
+    border-top-color: rgba(44,44,44,0);
+    border-right-color: rgba(55,55,55,0);
+    border-bottom-color: rgba(66,66,66,0);
+    border-left-color: rgba(33,33,33,0);
+  }
+  10.4% {
+    border-top-color: rgba(44,44,44,0.5);
+    border-right-color: rgba(55,55,55,0);
+    border-bottom-color: rgba(66,66,66,0);
+    border-left-color: rgba(33,33,33,0);
+  }
+  20.8% {
+    border-top-color: rgba(44,44,44,0);
+    border-right-color: rgba(55,55,55,0);
+    border-bottom-color: rgba(66,66,66,0);
+    border-left-color: rgba(33,33,33,0);
+  }
+  31.2% {
+    border-top-color: rgba(44,44,44,0);
+    border-right-color: rgba(55,55,55,0.5);
+    border-bottom-color: rgba(66,66,66,0);
+    border-left-color: rgba(33,33,33,0);
+  }
+  41.6% {
+    border-top-color: rgba(44,44,44,0);
+    border-right-color: rgba(55,55,55,0);
+    border-bottom-color: rgba(66,66,66,0);
+    border-left-color: rgba(33,33,33,0);
+    transform: rotate(40deg);
+  }
+  52% {
+    border-top-color: rgba(44,44,44,0);
+    border-right-color: rgba(55,55,55,0);
+    border-bottom-color: rgba(66,66,66,0.5);
+    border-left-color: rgba(33,33,33,0);
+  }
+  62.4% {
+    border-top-color: rgba(44,44,44,0);
+    border-right-color: rgba(55,55,55,0);
+    border-bottom-color: rgba(66,66,66,0);
+    border-left-color: rgba(33,33,33,0);
+  }
+  72.8% {
+    border-top-color: rgba(44,44,44,0);
+    border-right-color: rgba(55,55,55,0);
+    border-bottom-color: rgba(66,66,66,0);
+    border-left-color: rgba(33,33,33,0.5);
+  }
+}
+
+@keyframes poof {
+  0% {transform: scale(1,1) rotate(0deg); opacity: 0.2;}
+  50% {transform: scale(4,4) rotate(360deg); opacity: 0;}
+}
+
+@keyframes poofity {
+  0% {transform: scale(1,1) rotate(90deg); opacity: 0.1;}
+  50% {transform: scale(4,4) rotate(-360deg); opacity: 0;}
+}
+
+@keyframes opaa {
+  0% {opacity: 1;}
+  10% {opacity: 0.5}
+  15% {opacity: 1;}
+  30% {opacity: 1;}
+  65% {opacity: 0.3;}
+  90% {opacity: 0.8;}
+}
+
+// -------------------------------- SlideThree -------------------------------- //
+
+.slideThree {
+  width: 80px;
+  height: 26px;
+  background: @colorText;
+  margin: 7px 0 -5px 15px;
+  display: inline-block;
+  position: relative;
+  -webkit-border-radius: 50px;
+  -moz-border-radius: 50px;
+  border-radius: 50px;
+  &:after {
+    content: 'OFF';
+    font: 12px/26px @fontMonoSpace;
+    color: @colorBlack;
+    position: absolute;
+    right: 10px;
+    z-index: 0;
+    font-weight: bold;
+  }
+  &:before {
+    content: 'ON';
+    font: 12px/26px @fontMonoSpace;
+    color: @colorBlack;
+    position: absolute;
+    left: 10px;
+    z-index: 0;
+    font-weight: bold;
+  }
+  label {
+    display: block;
+    width: 34px;
+    height: 20px;
+    -webkit-border-radius: 50px;
+    -moz-border-radius: 50px;
+    border-radius: 50px;
+    -webkit-transition: all .4s ease;
+    -moz-transition: all .4s ease;
+    -o-transition: all .4s ease;
+    -ms-transition: all .4s ease;
+    transition: all .4s ease;
+    cursor: pointer;
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    z-index: 1;
+    background: @colorIndex;
+  }
+  input[type=checkbox]:checked + label {
+    left: 43px;
+  }
+  .colorThemeBox {
+    width: 10px;
+    margin: -7px 7px 0 -45px;
+    position: relative;
+    .colorThemeItem {
+      width: 10px;
+      height: 10px;
+      margin: 0;
+      padding: 0;
+    }
+  }
+}
+
+input[type=range] {
+  -webkit-appearance: none;
+  -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+  width: 240px;
+  height: 20px;
+  margin: -5px 0 0 70px;
+  border: none;
+  padding: 2px 4px;
+  border-radius: 14px;
+  background: @colorText;
+  position: absolute;
+  z-index: 999;
+  &::-moz-range-track {
+    border: inherit;
+    background: transparent;
+  }
+  &::-ms-track {
+    border: inherit;
+    color: transparent; /* don't drawn vertical reference line */
+    background: transparent;
+  }
+  &::-ms-fill-lower,
+  &::-ms-fill-upper {
+    background: transparent;
+  }
+  &::-ms-tooltip {
+    display: none;
+  }
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 35px;
+    height: 18px;
+    border: none;
+    border-radius: 12px;
+    background-color: @colorIndex;
+  }
+  &::-moz-range-thumb {
+    width: 35px;
+    height: 18px;
+    border: none;
+    border-radius: 12px;
+    background-color: @colorIndex;
+    padding-left: 15px;
+  }
+  &::-ms-thumb {
+    width: 35px;
+    height: 18px;
+    border-radius: 12px;
+    border: 0;
+    background-color: @colorIndex;
+  }
+}
