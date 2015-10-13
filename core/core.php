@@ -2,7 +2,7 @@
 
 // версія ядра
 
-define('VER', '4.0.0 Alpha');
+define('VER', '4.1.0');
 
 // підключаємо файл конфігів
 
@@ -127,6 +127,20 @@ switch(isset($_POST['action']) ? $_POST['action'] : ''){
       alert('ok', 200, filesize($targetUrl));
     }
     break;
+  case 'add-file':
+    $id = $_POST['id'];
+    $type = $_POST['type'];
+    $data = @file_get_contents(API_PATH . $id . '/' . $type . '/' . API_KEY);
+    if($data){
+      $data = json_decode($data);
+      if($data->error || !isset($data->data) || $data->data == false || $data->data == ''){
+        alert('error', 404, 'File not found');
+      }
+      alert('ok', 200, 'Download file ' . $id . 'csv, size: ' . prepareFileSize(file_put_contents(CSV_FOLDER . '/' . $id . '.csv', $data->data)));
+    } else {
+      alert('error', 404, 'File not found');
+    }
+    break;
 }
 
 // уплоадимо csv файл в теку
@@ -200,17 +214,13 @@ function prepareImgUrl ($url){
 // спроба завантажити картинку
 
 function downloadImage($source, $target, $dir){
-  $img = @file_get_contents($source);
-  $target = str_replace('//', '/', $dir . '/' . $target);
-  $targetUrl = getcwd() . '/' . DOWNLOAD_FOLDER . '/';
-  foreach(explode('/', $target) AS $dir){
-    $targetUrl .= '/' . $dir;
-    if(!strpos($targetUrl, '.')){
-      mkdir($targetUrl);
-    }
-  }
+  $targetUrl = DOWNLOAD_FOLDER . '/' . $dir . '/' . $target;
+  preg_match('/(.+)\/([^\/]+)$/', $targetUrl, $targetUrlPart);
+  exec('mkdir -p ' . $targetUrlPart[1]);
+  exec('curl ' . $source . ' > ' . $targetUrl);
+  $img = @file_get_contents($targetUrl);
   if ($img AND !preg_match('/(<html)/', $img)) {
-    return (int)file_put_contents($targetUrl, $img);
+    return (int)filesize($targetUrl);
   } else {
     if(USING_PROXY){
       $proxyArray = explode(', ', PROXY_SERVER);

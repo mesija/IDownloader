@@ -68,6 +68,15 @@
       <div class="settLabel">User:pass</div>
       <div class="settValue"><input name="PROXY_AUTH" type="text" value="<?php echo PROXY_AUTH ?>" placeholder="user:pass"></div>
     </div>
+    <h2><b class="icon-cloud-download"></b> Api</h2>
+    <div class="settItem">
+      <div class="settLabel">Path</div>
+      <div class="settValue"><input name="API_PATH" type="text" value="<?php echo API_PATH ?>" placeholder="http://"></div>
+    </div>
+    <div class="settItem">
+      <div class="settLabel">Key</div>
+      <div class="settValue"><input name="API_KEY" type="text" value="<?php echo API_KEY ?>" placeholder="d79d73kjcv"></div>
+    </div>
     <h2><b class="icon-paint-format"></b> Theme</h2>
     <div class="settItem settCenter">
       <?php

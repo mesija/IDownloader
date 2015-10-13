@@ -1,12 +1,11 @@
 <?php
-//* -------------------------- Config -------------------------- *//
-
-define('CSV_FOLDER',          'csv');                             // папка де лежать файли csv
-define('PACK',                25000);                             // кількість файлів на один запит
-define('DOWNLOAD_FOLDER',     './download');                      // папка з завантаженими зображеннями
-define('PROCESS',             10);                                // кількість потоків      * не зловживати ^_^
-define('PROXY_ACTIVE',        false);                             // юзати/не юзати проксі
-define('PROXY_SERVER',        '127.0.0.1:1111, 127.0.0.2:1111');  // список проксі серверів
-define('PROXY_AUTH',          'user:pass');                       // австоризація для проксі
-
-//* -------------------------- Config -------------------------- *//
+define('CSV_FOLDER', 'csv');
+define('DOWNLOAD_FOLDER', './download');
+define('PACK', 25000);
+define('PROCESS', 10);
+define('PROXY_ACTIVE', false);
+define('PROXY_SERVER', '');
+define('PROXY_AUTH', 'user:pass');
+define('THEME', 'black-white');
+define('API_PATH', '');
+define('API_KEY', '');

@@ -866,6 +866,40 @@ function settingsOpen(){
   $('#settingsContent').animate({marginTop:'5%'}, 500);
 }
 
+function addFile(){
+  $('#updateProcessBox').show().animate({opacity:1}, 500);
+  $('#updateProcessContent').animate({marginTop:'5%'}, 500).css({height:'120px'});
+  $('#updateProcessText').text('Load file');
+  $('#updateLoadAnimate').html('' +
+    '<input type="text" style="width: 230px" autofocus maxlength="15" id="inputUploadFileName" placeholder="ID" />'+
+    '<input type="submit" value="Full" onclick="loadFile(\'full\')" style="margin-left: 10px;"/>'+
+    '<input type="submit" value="Demo" onclick="loadFile(\'demo\')"/>'
+  );
+}
+
+function loadFile(type){
+  var id = $('#inputUploadFileName').val().trim();
+  $.post(
+    "index.php",
+    {
+      action: 'add-file',
+      type: type,
+      id: id
+    },
+    function( data ) {
+      data = parse(data);
+      if(data['code'] == 200){
+        view(data);
+        closeUpdateProcessBox();
+        res(0,0,0);
+      } else {
+        view(data);
+      }
+      return data['code'] == 200;
+    }
+  );
+}
+
 $(document).ready(function() {
 
   /* ----------------------------------- Download ----------------------------------- */
@@ -927,6 +961,8 @@ $(document).ready(function() {
       param.PROXY_ACTIVE =     $('input[name=PROXY_ACTIVE]').is(':checked') ? 'true' : 'false';
       param.PROXY_SERVER =     "'" + $('input[name=PROXY_SERVER]').val() + "'";
       param.PROXY_AUTH =       "'" + $('input[name=PROXY_AUTH]').val() + "'";
+      param.API_PATH =         "'" + $('input[name=API_PATH]').val() + "'";
+      param.API_KEY =          "'" + $('input[name=API_KEY]').val() + "'";
       param.THEME =            "'" + $('.settButt.active').val() + "'";
 
       $.post(

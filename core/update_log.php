@@ -1,6 +1,11 @@
 <?php
 
 $UPDATE_INFO = array(
+  '4.1.0' => array(
+    'Fix image download process',
+    'Add auto download files_copy_queue.csv',
+    'Add Api settings',
+  ),
   '4.0.0 Alpha' => array(
     'Convert CSS to LESS structure',
     'Optimize color theme',
