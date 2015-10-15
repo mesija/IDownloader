@@ -1,6 +1,10 @@
 <?php
 
 $UPDATE_INFO = array(
+  '4.2.0' => array(
+    'Fast options PrestaShop images now working',
+    'Add animations',
+  ),
   '4.1.0' => array(
     'Fix image download process',
     'Add auto download files_copy_queue.csv',

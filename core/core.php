@@ -2,7 +2,7 @@
 
 // версія ядра
 
-define('VER', '4.1.0');
+define('VER', '4.2.0');
 
 // підключаємо файл конфігів
 
@@ -103,6 +103,11 @@ switch(isset($_POST['action']) ? $_POST['action'] : ''){
     $param = json_decode($_POST['param']);
     define('USING_PROXY', $param->usingProxy);
     if (!file_exists($targetUrl) OR filesize($targetUrl) == 0) {
+      if($param->prestaImg){
+        if(preg_match('/^img\/(p|c)\/[0-9\/]+-[a-z_]+\.[a-z]{3,4}$/', $target)){
+          alert('ok', 200, 0);
+        }
+      }
       $img = downloadImage($source, $target, $dir);
       if ($img) {
         alert('ok', 200, $img);
@@ -146,7 +151,7 @@ switch(isset($_POST['action']) ? $_POST['action'] : ''){
 // уплоадимо csv файл в теку
 
 if (isset($_GET['fileUpload'])) {
-  $rez = copy($_FILES['file']['tmp_name'], './csv/' . $_FILES['file']['name']);
+  $rez = copy($_FILES['file']['tmp_name'], './' . CSV_FOLDER . '/' . $_FILES['file']['name']);
   if ($rez) {
     alert('ok', 200, 'File uploaded');
   } else {
@@ -713,7 +718,7 @@ function printContent($listDir, $listDownload, $themeData)
           <div class="slideThree">
             <input type="checkbox" id="slideThreeFastPresta" name="FAST_PRESTA"/>
             <label for="slideThreeFastPresta"></label>
-          </div> <label for="slideThreeFastPresta"><s>PrestaShop images</s></label>
+          </div> <label for="slideThreeFastPresta">PrestaShop images</label>
         </div>
       </div>
     </div

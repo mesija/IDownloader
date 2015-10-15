@@ -583,6 +583,7 @@ function process(){
       var param = {};
       param.otherExt = param_other_ext;
       param.usingProxy = param_using_proxy;
+      param.prestaImg = param_presta_img;
       $.post(
         "index.php",
         {
@@ -891,7 +892,7 @@ function loadFile(type){
       if(data['code'] == 200){
         view(data);
         closeUpdateProcessBox();
-        res(0,0,0);
+        res(0,0,'.file-' + id);
       } else {
         view(data);
       }
