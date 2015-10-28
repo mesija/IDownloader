@@ -431,18 +431,19 @@ function update(){
   $fileList = json_decode($fileList);
   foreach ($fileList AS $file) {
     if ($file[0] == '+') {
-      $fileUpdate = @file_get_contents(UPDATE_SERVER . 'IDownloader/' . $file[1]);
-      exec('rm -Rf ' . $file[1] . '.' . $file[2]);
-      if($file[2] != ''){
-        file_put_contents($file[1] . '.' . $file[2], $fileUpdate);
+      if ($file[2] == "") {
+        mkdir('./' . $file[1] . '/', 0777, true);
       } else {
-        file_put_contents($file[1], $fileUpdate);
+        $fileUpdate = @file_get_contents(UPDATE_SERVER . 'IDownloader/' . $file[1]);
+        exec('rm -Rf ' . $file[1] . '.' . $file[2]);
+        file_put_contents($file[1] . '.' . $file[2], $fileUpdate);
       }
-
     } else {
       unlink('./' . ($file[2] != '') ? $file[1] . '.' . $file[2] : $file[1]);
     }
   }
+  $htaccess = @file_get_contents(UPDATE_SERVER . 'IDownloader/htaccess');
+  file_put_contents('./.htaccess', $htaccess);
   file_put_contents('./core/update', time());
   alert('ok', 200, 'Update ok');
 }
