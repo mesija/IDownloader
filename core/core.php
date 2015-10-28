@@ -431,13 +431,9 @@ function update(){
   $fileList = json_decode($fileList);
   foreach ($fileList AS $file) {
     if ($file[0] == '+') {
-      if ($file[2] == "") {
-        mkdir('./' . $file[1] . '/', 0777, true);
-      } else {
-        $fileUpdate = @file_get_contents(UPDATE_SERVER . 'IDownloader/' . $file[1]);
-        exec('rm -Rf ' . $file[1] . '.' . $file[2]);
-        file_put_contents($file[1] . '.' . $file[2], $fileUpdate);
-      }
+      $fileUpdate = @file_get_contents(UPDATE_SERVER . 'IDownloader/' . $file[1]);
+      exec('rm -Rf ' . $file[1] . '.' . $file[2]);
+      file_put_contents($file[1] . '.' . $file[2], $fileUpdate);
     } else {
       unlink('./' . ($file[2] != '') ? $file[1] . '.' . $file[2] : $file[1]);
     }
