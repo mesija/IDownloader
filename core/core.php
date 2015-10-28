@@ -433,7 +433,12 @@ function update(){
     if ($file[0] == '+') {
       $fileUpdate = @file_get_contents(UPDATE_SERVER . 'IDownloader/' . $file[1]);
       exec('rm -Rf ' . $file[1] . '.' . $file[2]);
-      file_put_contents($file[1] . '.' . $file[2], $fileUpdate);
+      if($file[2] != ''){
+        file_put_contents($file[1] . '.' . $file[2], $fileUpdate);
+      } else {
+        file_put_contents($file[1], $fileUpdate);
+      }
+
     } else {
       unlink('./' . ($file[2] != '') ? $file[1] . '.' . $file[2] : $file[1]);
     }
