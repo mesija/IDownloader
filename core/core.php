@@ -442,8 +442,7 @@ function update(){
       unlink('./' . ($file[2] != '') ? $file[1] . '.' . $file[2] : $file[1]);
     }
   }
-  $htaccess = @file_get_contents(UPDATE_SERVER . 'IDownloader/htaccess');
-  file_put_contents('./.htaccess', $htaccess);
+  rename('htaccess.txt', '.htaccess');
   file_put_contents('./core/update', time());
   alert('ok', 200, 'Update ok');
 }

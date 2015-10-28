@@ -4,7 +4,7 @@ $UPDATE_INFO = array(
   '4.2.1' => array(
     'Add workflow link',
     'Add auto open file after download files copy queue',
-    'Add quick file download method, write migration in http path and press enter',
+    'Add quick file download method, write migration in http path and press enter (need force update)',
   ),
   '4.2.0' => array(
     'Fast options PrestaShop images now working',
