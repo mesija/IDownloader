@@ -585,6 +585,13 @@ body {
     box-shadow: 0 0 25px rgba(0, 0, 0, 0.40);
     border: 1px solid @colorText;
     color: @colorText;
+    #updateScroll {
+      max-height: 700px;
+      overflow-y: scroll;
+      overflow-x: hidden;
+      margin: 0 -25px;
+      padding: 0;
+    }
     #updateClose {
       float: right;
       position: relative;
@@ -607,7 +614,7 @@ body {
     h2 {
       color: @colorText;
       border-bottom: 1px solid @colorText;
-      margin: 0 -25px 25px -25px;
+      margin: 0 0 25px 0;
       padding-left: 25px;
       text-align: left;
       font-size: 26px;
@@ -615,7 +622,7 @@ body {
     }
     .settBottomLine {
       text-align: center;
-      margin: 25px -25px -25px -25px;
+      margin: 0 -25px -25px -25px;
       background-color: @colorGridHoverBg;
       padding: 5px;
       color: @colorWhite;

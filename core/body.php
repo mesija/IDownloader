@@ -16,10 +16,12 @@
 
 </div>
 
-<div id="footer">&copy; IDownloader <?php echo VER . ' ' . $THEME_DATA['logo-title']; ?> &nbsp;&nbsp;&nbsp;
+<div id="footer">&copy; IDownloader <?php echo VER ?> &nbsp;&nbsp;&nbsp;
   s.rudavskii@magneticone.com &nbsp;&nbsp;&nbsp;
   <a target="_blank" href="https://github.com/s-rudavskii/IDownloader">
     <span class="icon-github3"></span> Project in GitHub</a> &nbsp;&nbsp;&nbsp;
+  <a target="_blank" href="https://trello.com/b/9IgOADp8/idownloader">
+    <span class="icon-signup"></span> Workflow</a> &nbsp;&nbsp;&nbsp;
   <a target="_blank" href="mailto:s.rudavskii@magneticone.com?Subject=Bug%20report%20IDownloader%20<?php echo VER; ?>">
     <span class="icon-code"></span> Bug report</a>
 </div>
@@ -103,7 +105,8 @@
   <div id="updateContent">
     <div id="updateClose">X</div>
     <h1><b class="icon-loop2"></b> New version <strong>IDownloder v.<?php echo VER; ?></strong> installed</h1>
-    <?php
+    <div id="updateScroll">
+      <?php
       include('./core/update_log.php');
       foreach($UPDATE_INFO AS $ver => $info){
         echo "<h2>" . $ver . "</h2>";
@@ -113,7 +116,8 @@
         }
         echo "</ul>";
       }
-    ?>
+      ?>
+    </div>
     <div class="settBottomLine settCenter">
       IDownloder v.<?php echo VER; ?> - <button><b class="icon-cloud-download"></b> Force update</button>
     </div>

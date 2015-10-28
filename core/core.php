@@ -2,7 +2,7 @@
 
 // версія ядра
 
-define('VER', '4.2.0');
+define('VER', '4.2.1');
 
 // підключаємо файл конфігів
 
@@ -517,7 +517,7 @@ function printContent($listDir, $listDownload, $themeData)
   <button class="reload" onclick="res(1,1,0)"><b class="icon-loop2"></b> Reload</button>
   <button class="settings" id="settings" onclick="settingsOpen()" title="Open settings"><b class="icon-cog"></b></button>
   <button class="lock' . (LOCK ? '' : ' lock-off') . '" id="lock" onclick="lock()" title="Lock reload page"><b class="icon-lock"></b></button>
-  <button class="add" id="add" onclick="addFile()" title="Upload new file"><b class="icon-box-add"></b></button>
+  <button class="add" id="add" onclick="addFile(\'\')" title="Upload new file"><b class="icon-box-add"></b></button>
   </div>
   <div class="block fileList">
     <div id="csv">

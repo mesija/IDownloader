@@ -867,12 +867,12 @@ function settingsOpen(){
   $('#settingsContent').animate({marginTop:'5%'}, 500);
 }
 
-function addFile(){
+function addFile(id){
   $('#updateProcessBox').show().animate({opacity:1}, 500);
   $('#updateProcessContent').animate({marginTop:'5%'}, 500).css({height:'120px'});
   $('#updateProcessText').text('Load file');
   $('#updateLoadAnimate').html('' +
-    '<input type="text" style="width: 230px" autofocus maxlength="15" id="inputUploadFileName" placeholder="ID" />'+
+    '<input type="text" style="width: 230px" autofocus maxlength="15" id="inputUploadFileName" placeholder="ID" value="'+id+'" />'+
     '<input type="submit" value="Full" onclick="loadFile(\'full\')" style="margin-left: 10px;"/>'+
     '<input type="submit" value="Demo" onclick="loadFile(\'demo\')"/>'
   );
@@ -893,6 +893,7 @@ function loadFile(type){
         view(data);
         closeUpdateProcessBox();
         res(0,0,'.file-' + id);
+        setTimeout(function(){openFile(id + '.csv', 0, 0, 0)}, 1000);
       } else {
         view(data);
       }
@@ -901,7 +902,24 @@ function loadFile(type){
   );
 }
 
+function getOpenId() {
+  var query = window.location.href;
+  var vars = query.match(/\/([0-9]+)$/);
+  if (vars){
+    return vars[1];
+  }
+  return null;
+}
+
 $(document).ready(function() {
+
+  /* ----------------------------------- Auto load file ----------------------------------- */
+
+  var openId = getOpenId();
+
+  if(openId) {
+    addFile(openId);
+  }
 
   /* ----------------------------------- Download ----------------------------------- */
 
