@@ -2,7 +2,7 @@
 
 // версія ядра
 
-define('VER', '4.2.1');
+define('VER', '4.2.2');
 
 // підключаємо файл конфігів
 
@@ -108,16 +108,22 @@ switch(isset($_POST['action']) ? $_POST['action'] : ''){
           alert('ok', 200, 0);
         }
       }
-      $img = downloadImage($source, $target, $dir);
+      $img = downloadImage($source, $targetUrl);
       if ($img) {
+        if($param->prestaImg){
+          convertImg($source, $targetUrl);
+        }
         alert('ok', 200, $img);
       } else {
         if (preg_match('/\.(jpeg|JPEG|jpg|JPG)$/', $source, $r) && $param->otherExt) {
           $extensionArray = array_diff(array('jpeg', 'JPEG', 'jpg', 'JPG'), array($r[0]));
           $source = preg_replace('/' . $r[0] . '$/', '', $source);
           foreach ($extensionArray AS $val) {
-            $img = downloadImage($source . '.' . $val, $target, $dir);
+            $img = downloadImage($source . '.' . $val, $targetUrl);
             if ($img) {
+              if($param->prestaImg){
+                convertImg($source, $targetUrl);
+              }
               alert('ok', 200, $img);
             }
           }
@@ -218,28 +224,44 @@ function prepareImgUrl ($url){
 
 // спроба завантажити картинку
 
-function downloadImage($source, $target, $dir){
-  $targetUrl = DOWNLOAD_FOLDER . '/' . $dir . '/' . $target;
-  preg_match('/(.+)\/([^\/]+)$/', $targetUrl, $targetUrlPart);
+function downloadImage($source, $target){
+  preg_match('/(.+)\/([^\/]+)$/', $target, $targetUrlPart);
   exec('mkdir -p ' . $targetUrlPart[1]);
-  exec('curl ' . $source . ' > ' . $targetUrl);
-  $img = @file_get_contents($targetUrl);
+  exec('curl ' . $source . ' > ' . $target);
+  $img = @file_get_contents($target);
   if ($img AND !preg_match('/(<html)/', $img)) {
-    return (int)filesize($targetUrl);
+    return (int)filesize($target);
   } else {
     if(USING_PROXY){
       $proxyArray = explode(', ', PROXY_SERVER);
       $proxy = $proxyArray[rand(0, count($proxyArray) - 1)];
-      exec('curl -x ' . $proxy . ' --proxy-user ' . PROXY_AUTH . ' -L ' . $source . ' > ' . $targetUrl);
-      $img = @file_get_contents($targetUrl);
-      if ($img AND !preg_match('/(<html)/', $img) AND filesize($targetUrl) > 0) {
-        return filesize($targetUrl);
+      exec('curl -x ' . $proxy . ' --proxy-user ' . PROXY_AUTH . ' -L ' . $source . ' > ' . $target);
+      $img = @file_get_contents($target);
+      if ($img AND !preg_match('/(<html)/', $img) AND filesize($target) > 0) {
+        return filesize($target);
       } else {
-        exec('rm -Rf ' . $targetUrl);
+        exec('rm -Rf ' . $target);
       }
     }
   }
   return 0;
+}
+
+function convertImg($source, $target){
+  $image = false;
+  switch(preg_replace('/.*\.([a-z]+)$/', '$1', strtolower($source))) {
+    case 'gif':
+      $image = imagecreatefromgif($target);
+      break;
+    case 'png':
+      $image = imagecreatefrompng($target);
+      break;
+  }
+  if($image){
+    unlink($target);
+    imagejpeg($image, preg_replace('/\.[^\.]+$/', '.jpg', $target));
+    imagedestroy($image);
+  }
 }
 
 // завантажуємо інформацію з csv файлу

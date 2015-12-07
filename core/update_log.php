@@ -1,6 +1,9 @@
 <?php
 
 $UPDATE_INFO = array(
+  '4.2.2' => array(
+    'Fast options PrestaShop images now convert all images to .jpg',
+  ),
   '4.2.1' => array(
     'Add workflow link',
     'Add auto open file after download files copy queue',
