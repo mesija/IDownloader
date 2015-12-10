@@ -1,6 +1,9 @@
 <?php
 
 $UPDATE_INFO = array(
+  '4.2.3' => array(
+    'Small fix download image',
+  ),
   '4.2.2' => array(
     'Fast options PrestaShop images now convert all images to .jpg',
   ),

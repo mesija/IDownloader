@@ -2,7 +2,7 @@
 
 // версія ядра
 
-define('VER', '4.2.2');
+define('VER', '4.2.3');
 
 // підключаємо файл конфігів
 
@@ -229,6 +229,12 @@ function downloadImage($source, $target){
   exec('mkdir -p ' . $targetUrlPart[1]);
   exec('curl ' . $source . ' > ' . $target);
   $img = @file_get_contents($target);
+
+  if (!$img) {
+    file_put_contents($target, @file_get_contents($source));
+    $img = @file_get_contents($target);
+  }
+
   if ($img AND !preg_match('/(<html)/', $img)) {
     return (int)filesize($target);
   } else {
