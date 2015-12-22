@@ -99,7 +99,7 @@
   </div>
 </div>
 
-<?php if(isset($_GET['update'])) { ?>
+<?php if(isset($_COOKIE['update'])) { ?>
 
 <div id="updateBox">
   <div id="updateContent">
@@ -124,7 +124,7 @@
   </div>
 </div>
 
-<?php } ?>
+<?php setcookie('update', null, 0); } ?>
 
 <div id="updateProcessBox">
   <div id="updateProcessContent">

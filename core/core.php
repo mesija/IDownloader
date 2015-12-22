@@ -2,7 +2,7 @@
 
 // версія ядра
 
-define('VER', '4.2.4');
+define('VER', '4.2.5');
 
 // підключаємо файл конфігів
 
@@ -93,7 +93,28 @@ switch(isset($_POST['action']) ? $_POST['action'] : ''){
     alert('info', 100, 'This is leather version');
     break;
   case 'update':
-    update();
+    $fileList = @file_get_contents(UPDATE_SERVER . 'IDownloader/fileList');
+    if(!$fileList){
+      alert('error', 404, 'Not connect to server');
+    }
+    $fileList = json_decode($fileList);
+    foreach ($fileList AS $file) {
+      if ($file[0] == '+') {
+        if ($file[2] == "") {
+          mkdir('./' . $file[1] . '/', 0777, true);
+        } else {
+          $fileUpdate = @file_get_contents(UPDATE_SERVER . 'IDownloader/' . $file[1]);
+          exec('rm -Rf ' . $file[1] . '.' . $file[2]);
+          file_put_contents($file[1] . '.' . $file[2], $fileUpdate);
+        }
+      } else {
+        unlink('./' . ($file[2] != '') ? $file[1] . '.' . $file[2] : $file[1]);
+      }
+    }
+    rename('htaccess.txt', '.htaccess');
+    file_put_contents('./core/update', time());
+    setcookie('update', 1);
+    alert('ok', 200, 'Update ok');
     break;
   case 'download-file':
     $dir = $_POST['dir'];
@@ -446,32 +467,6 @@ if (isset($_GET['perDir']) AND !empty($_GET['perDir'])) {
     alert('ok', 200, 'Set permissions dir ' . $folder);
   }
   alert('error', 404, 'Dir ' . $folder . ' not exists!');
-}
-
-// перевіряємо оновлення
-
-function update(){
-  $fileList = @file_get_contents(UPDATE_SERVER . 'IDownloader/fileList');
-  if(!$fileList){
-    alert('error', 404, 'Not connect to server');
-  }
-  $fileList = json_decode($fileList);
-  foreach ($fileList AS $file) {
-    if ($file[0] == '+') {
-      if ($file[2] == "") {
-        mkdir('./' . $file[1] . '/', 0777, true);
-      } else {
-        $fileUpdate = @file_get_contents(UPDATE_SERVER . 'IDownloader/' . $file[1]);
-        exec('rm -Rf ' . $file[1] . '.' . $file[2]);
-        file_put_contents($file[1] . '.' . $file[2], $fileUpdate);
-      }
-    } else {
-      unlink('./' . ($file[2] != '') ? $file[1] . '.' . $file[2] : $file[1]);
-    }
-  }
-  rename('htaccess.txt', '.htaccess');
-  file_put_contents('./core/update', time());
-  alert('ok', 200, 'Update ok');
 }
 
 // перевірка розміру файлу

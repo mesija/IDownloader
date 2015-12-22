@@ -1028,7 +1028,7 @@ $(document).ready(function() {
         function( data ) {
           data = parse(data);
           if(data['code'] == 200){
-            window.location = './?update';
+            res(0,1,0);
           } else {
             view(data);
             $('.settBottomLine button').html("<b class=\"icon-cloud-download\"></b> Force update");
@@ -1075,7 +1075,7 @@ $(document).ready(function() {
               data = parse(data);
               if(data['code'] == 200){
                 setTimeout(function(){
-                  window.location = './?update';
+                  window.location = './';
                 }, 3000);
               } else {
                 view(data);
