@@ -47,6 +47,16 @@ if (isset($_COOKIE['lock'])) {
 
 define('LOCK', $lock);
 
+// перевіряємо куку апдейту
+
+$update = 0;
+if (isset($_COOKIE['update'])) {
+  $update = $_COOKIE['update'];
+}
+
+setcookie('update', 0);
+define('UPDATE', $update == 0 ? false : true);
+
 // змінюємо параметр захисту від випадквого перезавантаження
 
 if (isset($_GET['lock'])) {

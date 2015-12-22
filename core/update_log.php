@@ -1,6 +1,9 @@
 <?php
 
 $UPDATE_INFO = array(
+  '4.2.5' => array(
+    'Fix update process',
+  ),
   '4.2.4' => array(
     'Fix delete empty image',
   ),
