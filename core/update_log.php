@@ -1,6 +1,9 @@
 <?php
 
 $UPDATE_INFO = array(
+  '4.2.4' => array(
+    'Fix delete empty image',
+  ),
   '4.2.3' => array(
     'Small fix download image',
   ),
