@@ -2,7 +2,7 @@
 
 // версія ядра
 
-define('VER', '4.2.5');
+define('VER', '4.2.6');
 
 // підключаємо файл конфігів
 
@@ -178,7 +178,9 @@ switch(isset($_POST['action']) ? $_POST['action'] : ''){
       if($data->error || !isset($data->data) || $data->data == false || $data->data == ''){
         alert('error', 404, 'File not found');
       }
-      alert('ok', 200, 'Download file ' . $id . 'csv, size: ' . prepareFileSize(file_put_contents(CSV_FOLDER . '/' . $id . '.csv', $data->data)));
+      $size = file_put_contents(CSV_FOLDER . '/' . $id . '.csv', $data->data);
+      exec('chmod 777 -Rf ' . CSV_FOLDER . '/' . $id . '.csv');
+      alert('ok', 200, 'Download file ' . $id . 'csv, size: ' . prepareFileSize($size));
     } else {
       alert('error', 404, 'File not found');
     }
@@ -261,12 +263,12 @@ function downloadImage($source, $target){
   exec('curl ' . $source . ' > ' . $target);
   $img = @file_get_contents($target);
 
-  if (!$img) {
+  if (!$img || preg_match('/(<html)/', $img)) {
     file_put_contents($target, @file_get_contents($source));
     $img = @file_get_contents($target);
   }
 
-  if ($img AND !preg_match('/(<html)/', $img)) {
+  if ($img && !preg_match('/(<html)/', $img)) {
     return (int)filesize($target);
   } else {
     if (USING_PROXY) {

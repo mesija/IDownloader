@@ -1,6 +1,10 @@
 <?php
 
 $UPDATE_INFO = array(
+  '4.2.6' => array(
+    'Fix https image download',
+    'Add set permission auto download csv file',
+  ),
   '4.2.5' => array(
     'Fix update process',
   ),
