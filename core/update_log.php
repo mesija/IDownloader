@@ -1,6 +1,11 @@
 <?php
 
 $UPDATE_INFO = array(
+  '4.2.7' => array(
+    'Disable ssl check',
+    'Remove replace https to http for source url',
+    'Small fix css',
+  ),
   '4.2.6' => array(
     'Fix https image download',
     'Add set permission auto download csv file',

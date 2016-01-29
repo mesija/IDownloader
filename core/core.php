@@ -2,7 +2,7 @@
 
 // версія ядра
 
-define('VER', '4.2.6');
+define('VER', '4.2.7');
 
 // підключаємо файл конфігів
 
@@ -252,7 +252,7 @@ if (isset($_GET['deleteDir']) AND !empty($_GET['deleteDir'])) {
 // підготовуємо урл сорса
 
 function prepareImgUrl ($url){
-  return str_replace(' ', "%20", str_replace('https://', 'http://', base64_decode($url)));
+  return str_replace(' ', "%20", base64_decode($url));
 }
 
 // спроба завантажити картинку
@@ -264,7 +264,13 @@ function downloadImage($source, $target){
   $img = @file_get_contents($target);
 
   if (!$img || preg_match('/(<html)/', $img)) {
-    file_put_contents($target, @file_get_contents($source));
+    $arrContextOptions = array(
+      'ssl' => array(
+        'verify_peer'      => false,
+        'verify_peer_name' => false,
+      ),
+    );
+    file_put_contents($target, @file_get_contents($source, false, stream_context_create($arrContextOptions)));
     $img = @file_get_contents($target);
   }
 
