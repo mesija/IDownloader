@@ -203,34 +203,6 @@ function changeTheme(){
 }
 
 /**
- * @param file
- * @returns {boolean}
- */
-function clearLast(file){
-  if(confirm("Clear last download "+file+"?")){
-    $.get("index.php?getInfo="+file+"&type=0", function( data ) {
-      data = parse(data);
-      if(data['code'] == 200){
-        migration = data['data'];
-        $.get("index.php?clear="+migration['id'], function( data ) {
-          data = parse(data);
-          if(data['code'] == 200)
-            res(0,0,0);
-          view(data);
-          return data['code'] == 200;
-        });
-      }
-      else{
-        view(data);
-        return false;
-      }
-    });
-  }
-  else
-    return false;
-}
-
-/**
  * @returns {string}
  */
 function closeEditorWarning(){
@@ -388,36 +360,15 @@ function colorInt (intValue, length){
 
 function getFileInfo (file,type){
   $('#updateProcessBox').show().animate({opacity:1}, 500);
-  $('#updateProcessContent').animate({marginTop:'5%'}, 500);
+  $('#updateProcessContent').css({height:'160px'}).animate({marginTop:'5%'}, 500);
   $('#updateProcessText').text('Load file: '+ file);
-  alert('Get migration info','info');
   defaultDir = file.replace('.csv', '');
   active = false;
-  $.get("index.php?getInfo="+file+"&type="+type, function( data ) {
-    data = parse(data);
-    if(data['code'] == 200){
-      migration = data['data'];
-      $(".h_top").text('ID: ' + migration['id']);
-      if (!migration){
-        migration = [];
-        newDir = prompt('Error connect db.\nPlease enter download dir name hear:', defaultDir);
-        migration['id'] = newDir ? newDir : defaultDir;
-        migration['target_store_id'] = 0;
-      }
-      dir = migration['id'];
-      migration_status = true;
-    }
-    else{
-      view(data);
-      $('#updateProcessContent').css({height:'180px'});
-      $('#updateLoadAnimate').html('' +
-        '<div class="updateLoadErrorConnectDialog">Error connect db.<br />' +
-        'Please enter download dir name hear:</div>' +
-        '<input type="submit" value="Open" onclick="openFile(\''+file+'\',0,'+type+',1)"/>'+
-        '<input type="text" autofocus maxlength="15" id="inputOpenFileDirName" value="'+defaultDir+'" />'
-      );
-    }
-  });
+  $('#updateLoadAnimate').html('' +
+    '<div class="updateLoadErrorConnectDialog">Please enter download dir name hear:</div>' +
+    '<input type="submit" value="Open" onclick="openFile(\''+file+'\',0,'+type+',1)"/>'+
+    '<input type="text" autofocus maxlength="15" id="inputOpenFileDirName" value="'+defaultDir+'" />'
+  );
 
   return '';
 }

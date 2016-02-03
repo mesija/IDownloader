@@ -2,7 +2,7 @@
 
 // версія ядра
 
-define('VER', '4.2.7');
+define('VER', '4.2.8');
 
 // підключаємо файл конфігів
 
@@ -371,90 +371,28 @@ if (isset($_GET['loadFile']) AND !empty($_GET['loadFile']) AND isset($_GET['step
   }
 }
 
-// отримуємо інформацію про міграцію
-
-if (isset($_GET['getInfo']) AND !empty($_GET['getInfo']) AND isset($_GET['type'])) {
-  $file = $_GET['getInfo'];
-  ini_set('max_execution_time', '0');
-  ini_set('display_errors', '0');
-  if ($_GET['type'] == 0) {
-    $url = './' . CSV_FOLDER . '/' . $file;
-  } else {
-    $url = DOWNLOAD_FOLDER . '/' . $file . '/' . $file . '.csv';
-  }
-  if (file_exists($url)) {
-    $csv = fopen($url, 'r');
-    $line = fgets($csv, 9999);
-    $line = str_replace('"', '', $line);
-    preg_match_all('/[^a-z0-9A-Z:\/\.?&=_ %\\!#$^+@()<>-]/', $line, $del);
-    $mass = array();
-    foreach ($del[0] AS $delTmp) {
-      $mass = explode($delTmp, $line);
-      if (count($mass) > 3) {
-        break;
-      }
-    }
-    if (count($mass) < 3) {
-      alert('error', 404, 'No such delimiter in file ' . $file);
-    }
-    alert('error', 404, 'No such store id ' . $mass[1]);
-  }
-  alert('error', 404, 'No such file ' . $file);
-}
-
 // перейменовуємо файл
 
 if (isset($_GET['renameFile']) AND !empty($_GET['renameFile'])) {
   $file = $_GET['renameFile'];
   if (file_exists('./' . CSV_FOLDER . '/' . $file)) {
-    if ($_GET['name'] != '') {
-      if (!preg_match('/(\.csv)$/', $_GET['name'])) {
-        $_GET['name'] .= '.csv';
-      }
-      if ($_GET['name'] == $file) {
-        alert('ok', 201, 'Name file ' . $_GET['name'] . ' is actual');
-      }
-      if (file_exists('./' . CSV_FOLDER . '/' . $_GET['name'])) {
-        alert('error', 401, 'Error! File ' . $_GET['name'] . ' is exists');
-      }
-      rename('./' . CSV_FOLDER . '/' . $file, './' . CSV_FOLDER . '/' . $_GET['name']);
-      alert('ok', 200, array(
-        'name' => preg_replace('/\.csv$/', '', $_GET['name']),
-        'message' => 'Rename file ' . $file . ' to ' . $_GET['name']
-      ));
-    } else {
-      $csv = fopen('./' . CSV_FOLDER . '/' . $file, 'r');
-      $line = fgets($csv, 9999);
-      $line = str_replace('"', '', $line);
-      preg_match_all('/[^a-z0-9A-Z:\/\.?&=_ %\\!#$^+@()<>-]/', $line, $del);
-      $mass = array();
-      foreach ($del[0] AS $delTmp) {
-        $mass = explode($delTmp, $line);
-        if (count($mass) > 3) {
-          break;
-        }
-      }
-      if (count($mass) < 3) {
-        alert('error', 404, 'No such delimiter in file ' . $file);
-      }
-      alert('error', 406, 'No connect database');
-      $rez = false;
-      if ($rez) {
-        if ($rez['id'] . '.csv' == $file) {
-          alert('ok', 201, 'Name file ' . $rez['id'] . '.csv is actual');
-        }
-        if (file_exists('./' . CSV_FOLDER . '/' . $rez['id'] . '.csv')) {
-          alert('error', 401, 'Error! File ' . $rez['id'] . '.csv is exists');
-        }
-        rename('./' . CSV_FOLDER . '/' . $file, './' . CSV_FOLDER . '/' . $rez['id'] . '.csv');
-        alert('ok', 200, array(
-          'name' => $rez['id'],
-          'message' => 'Rename file ' . $$file . ' to ' . $rez['id'] . '.csv'
-        ));
-      } else {
-        alert('error', 403, 'Bad store id');
-      }
+    if ($_GET['name'] == '') {
+      alert('error', 406, 'Filename is empty');
     }
+    if (!preg_match('/(\.csv)$/', $_GET['name'])) {
+      $_GET['name'] .= '.csv';
+    }
+    if ($_GET['name'] == $file) {
+      alert('ok', 201, 'Name file ' . $_GET['name'] . ' is actual');
+    }
+    if (file_exists('./' . CSV_FOLDER . '/' . $_GET['name'])) {
+      alert('error', 401, 'Error! File ' . $_GET['name'] . ' is exists');
+    }
+    rename('./' . CSV_FOLDER . '/' . $file, './' . CSV_FOLDER . '/' . $_GET['name']);
+    alert('ok', 200, array(
+      'name' => preg_replace('/\.csv$/', '', $_GET['name']),
+      'message' => 'Rename file ' . $file . ' to ' . $_GET['name']
+    ));
   }
   alert('error', 404, 'No such file ' . $file);
 }
@@ -582,7 +520,6 @@ function printContent($listDir, $listDownload, $themeData)
                   <td class="fileSize" title="Size csv file ' . $size . '">' . $size . '</td>
                   <td class="fileDate" title="Last edit date ' . date("H:i d-m-y", filemtime(CSV_FOLDER . '/' . $name)) . '">' . date("d-m-y", filemtime(CSV_FOLDER . '/' . $name)) . '</td>
                   <td class="icon" onclick="renameFile(\'' . $name . '\')" title="Rename file"><span class="icon-pencil2"></span></td>
-                  <td class="icon" onclick="clearLast(\'' . $name . '\')" title="Clear last download files"><span class="icon-magnet"></span></td>
                   <td class="icon delete" onclick="deleteFile(\'' . $name . '\')" title="Delete csv file"><span class="icon-remove"></span></td>
                 </tr>';
     }

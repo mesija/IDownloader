@@ -1,6 +1,10 @@
 <?php
 
 $UPDATE_INFO = array(
+  '4.2.8' => array(
+    'Fix error connect db',
+    'Remove action fileInfo',
+  ),
   '4.2.7' => array(
     'Disable ssl check',
     'Remove replace https to http for source url',
