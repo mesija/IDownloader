@@ -1,6 +1,9 @@
 <?php
 
 $UPDATE_INFO = array(
+  '4.2.9' => array(
+    'Add check API key',
+  ),
   '4.2.8' => array(
     'Fix error connect db',
     'Remove action fileInfo',

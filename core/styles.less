@@ -132,6 +132,9 @@ body {
     }
     .lock {
       color: @colorText !important;
+      &:hover {
+        color: @colorHover !important;
+      }
     }
     .lock-off {
       color: @colorRed !important;
@@ -400,6 +403,9 @@ body {
         }
         .countOpenFailed, .countDownloadFailed {
           color: @colorRed;
+        }
+        *{
+          font-family: @fontMonoSpace;
         }
       }
       .dwGridItemDataProcess {

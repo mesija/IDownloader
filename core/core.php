@@ -2,7 +2,7 @@
 
 // версія ядра
 
-define('VER', '4.2.8');
+define('VER', '4.2.9');
 
 // підключаємо файл конфігів
 
@@ -175,6 +175,9 @@ switch(isset($_POST['action']) ? $_POST['action'] : ''){
     $data = @file_get_contents(API_PATH . $id . '/' . $type . '/' . API_KEY);
     if($data){
       $data = json_decode($data);
+      if($data->error && $data->data == 'You are not authorized to access this page.'){
+        alert('error', 401, 'Incorrect API key');
+      }
       if($data->error || !isset($data->data) || $data->data == false || $data->data == ''){
         alert('error', 404, 'File not found');
       }
