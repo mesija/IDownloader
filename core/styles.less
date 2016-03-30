@@ -994,3 +994,34 @@ input[type=range] {
     background-color: @colorIndex;
   }
 }
+
+// -------------------------------- Scroll bar -------------------------------- //
+
+::-webkit-scrollbar {
+  -webkit-appearance: none;
+}
+
+::-webkit-scrollbar-button {
+  display: none;
+}
+
+::-webkit-scrollbar-track {
+  background: @colorIndex;
+}
+
+::-webkit-scrollbar-thumb {
+  min-height: 48px;
+  background: @colorTextAdd;
+  background-clip: padding-box;
+  border: 3px solid @colorIndex;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: @colorText;
+  border-width: 2px;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}

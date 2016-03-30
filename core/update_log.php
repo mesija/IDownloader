@@ -1,6 +1,13 @@
 <?php
 
 $UPDATE_INFO = array(
+  '4.3.10' => array(
+    'Optimize download image',
+    'Add new amazing scroll bar',
+    'Add url decode to target url',
+    'Add jpeg to convert image',
+    'Split option PrestaShop image to two small option',
+  ),
   '4.2.9' => array(
     'Add check API key',
   ),

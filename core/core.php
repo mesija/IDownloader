@@ -2,7 +2,7 @@
 
 // версія ядра
 
-define('VER', '4.2.9');
+define('VER', '4.3.0');
 
 // підключаємо файл конфігів
 
@@ -36,49 +36,10 @@ function alert($type = 'error', $code = 0, $data = 'Undefined error')
   exit(json_encode($message));
 }
 
-// перевіряємо параметр захисту від випадкових перезавантажень
-
-$lock = 1;
-if (isset($_COOKIE['lock'])) {
-  $lock = $_COOKIE['lock'];
-} else {
-  setcookie('lock', $lock);
-}
-
-define('LOCK', $lock);
-
-// перевіряємо куку апдейту
-
-$update = 0;
-if (isset($_COOKIE['update'])) {
-  $update = $_COOKIE['update'];
-}
-
-setcookie('update', 0);
-define('UPDATE', $update == 0 ? false : true);
-
-// змінюємо параметр захисту від випадквого перезавантаження
-
-if (isset($_GET['lock'])) {
-  setcookie('lock', $_GET['lock']);
-  if ($_GET['lock'] == 1) {
-    alert('ok', 200, 'Lock reload page ON');
-  } else {
-    alert('error', 200, 'Lock reload page OFF');
-  }
-}
-
-// завантажуємо інформацію про тему
-
-$THEME_DATA = array(
-  'logo-title'  => $THEME_ARRAY[THEME]['name'],
-  'color-array' => $THEME_ARRAY[THEME]['color'],
-);
-
 // головний контролер
 
 switch(isset($_POST['action']) ? $_POST['action'] : ''){
-  case 'settings-save': // зберігаємо параматри
+  case 'settings-save':
     $settingsData = "<?php\n";
     foreach(json_decode($_POST['param']) AS $key => $val){
       $settingsData .= "define('" . $key . "', " . $val . ");\n";
@@ -129,7 +90,7 @@ switch(isset($_POST['action']) ? $_POST['action'] : ''){
   case 'download-file':
     $dir = $_POST['dir'];
     $source = prepareImgUrl($_POST['s']);
-    $target = base64_decode($_POST['t']);
+    $target = urldecode(base64_decode($_POST['t']));
     $targetUrl = DOWNLOAD_FOLDER . '/' . $dir . '/' . $target;
     $param = json_decode($_POST['param']);
     define('USING_PROXY', $param->usingProxy);
@@ -141,7 +102,7 @@ switch(isset($_POST['action']) ? $_POST['action'] : ''){
       }
       $img = downloadImage($source, $targetUrl);
       if ($img) {
-        if($param->prestaImg){
+        if($param->convertImg){
           convertImg($source, $targetUrl);
         }
         alert('ok', 200, $img);
@@ -189,6 +150,45 @@ switch(isset($_POST['action']) ? $_POST['action'] : ''){
     }
     break;
 }
+
+// перевіряємо параметр захисту від випадкових перезавантажень
+
+$lock = 1;
+if (isset($_COOKIE['lock'])) {
+  $lock = $_COOKIE['lock'];
+} else {
+  setcookie('lock', $lock);
+}
+
+define('LOCK', $lock);
+
+// змінюємо параметр захисту від випадквого перезавантаження
+
+if (isset($_GET['lock'])) {
+  setcookie('lock', $_GET['lock']);
+  if ($_GET['lock'] == 1) {
+    alert('ok', 200, 'Lock reload page ON');
+  } else {
+    alert('error', 200, 'Lock reload page OFF');
+  }
+}
+
+// перевіряємо куку апдейту
+
+$update = 0;
+if (isset($_COOKIE['update'])) {
+  $update = $_COOKIE['update'];
+}
+
+setcookie('update', 0);
+define('UPDATE', $update != 0);
+
+// завантажуємо інформацію про тему
+
+$THEME_DATA = array(
+  'logo-title'  => $THEME_ARRAY[THEME]['name'],
+  'color-array' => $THEME_ARRAY[THEME]['color'],
+);
 
 // уплоадимо csv файл в теку
 
@@ -302,6 +302,10 @@ function convertImg($source, $target){
       break;
     case 'png':
       $image = imagecreatefrompng($target);
+      break;
+    case 'jpg':
+    case 'jpeg':
+      $image = imagecreatefromjpeg($target);
       break;
   }
   if($image){
@@ -680,7 +684,7 @@ function printContent($listDir, $listDownload, $themeData)
           <div class="slideThree">
             <input type="checkbox" id="slideThreeFastFailed" name="FAST_ONLY_FAILED"/>
             <label for="slideThreeFastFailed"></label>
-          </div> <label for="slideThreeFastFailed">Download only failed</label>
+          </div> <label for="slideThreeFastFailed">Only failed</label>
         </div>
         <div class="downloadSettItem">
           <div class="slideThree">
@@ -699,7 +703,13 @@ function printContent($listDir, $listDownload, $themeData)
           <div class="slideThree">
             <input type="checkbox" id="slideThreeFastPresta" name="FAST_PRESTA"/>
             <label for="slideThreeFastPresta"></label>
-          </div> <label for="slideThreeFastPresta">PrestaShop images</label>
+          </div> <label for="slideThreeFastPresta">Skip Presta images</label>
+        </div>
+        <div class="downloadSettItem">
+          <div class="slideThree">
+            <input type="checkbox" id="slideThreeConvrtImg" name="CONVERT_IMAGES"/>
+            <label for="slideThreeConvrtImg"></label>
+          </div> <label for="slideThreeConvrtImg">Convert to jpg</label>
         </div>
       </div>
     </div

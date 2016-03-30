@@ -29,6 +29,7 @@ var colorIntSize = 7;           // довжина каунтів на гріді
 var param_other_ext = false;    // шукати файли схожих розширень
 var param_using_proxy = false;  // використовувати проксі
 var param_presta_img = false;   // завантажувати тільки оригінальні зображення ( виключно для міграції на престу )
+var param_convert_img = false;  // конвертувати картинки в jpg
 var param_only_failed = false;  // завантажувати тільки фейлові
 
 // оголошуємо константи
@@ -535,6 +536,7 @@ function process(){
       param.otherExt = param_other_ext;
       param.usingProxy = param_using_proxy;
       param.prestaImg = param_presta_img;
+      param.convertImg = param_convert_img;
       $.post(
         "index.php",
         {
@@ -713,6 +715,7 @@ function start(){
       param_other_ext = $('input[name=FAST_EXTENSIONS]').is(':checked') ? true : false;
       param_using_proxy = $('input[name=FAST_PROXY_ACTIVE]').is(':checked') ? true : false;
       param_presta_img = $('input[name=FAST_PRESTA]').is(':checked') ? true : false;
+      param_convert_img = $('input[name=CONVERT_IMAGES]').is(':checked') ? true : false;
       param_only_failed = $('input[name=FAST_ONLY_FAILED]').is(':checked') ? true : false;
       $('.downloadSettItem input[type=checkbox]').prop('disabled', true);
       $('.downloadSettItem').addClass('disabled');
