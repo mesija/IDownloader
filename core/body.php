@@ -17,12 +17,12 @@
 </div>
 
 <div id="footer">&copy; IDownloader <?php echo VER ?> &nbsp;&nbsp;&nbsp;
-  s.rudavskii@magneticone.com &nbsp;&nbsp;&nbsp;
-  <a target="_blank" href="https://github.com/s-rudavskii/IDownloader">
+  mesijart@gmail.com &nbsp;&nbsp;&nbsp;
+  <a target="_blank" href="https://github.com/mesija/IDownloader">
     <span class="icon-github3"></span> Project in GitHub</a> &nbsp;&nbsp;&nbsp;
   <a target="_blank" href="https://trello.com/b/9IgOADp8/idownloader">
     <span class="icon-signup"></span> Workflow</a> &nbsp;&nbsp;&nbsp;
-  <a target="_blank" href="mailto:s.rudavskii@magneticone.com?Subject=Bug%20report%20IDownloader%20<?php echo VER; ?>">
+  <a target="_blank" href="mailto:mesijart@gmail.com?Subject=Bug%20report%20IDownloader%20<?php echo VER; ?>">
     <span class="icon-code"></span> Bug report</a>
 </div>
 

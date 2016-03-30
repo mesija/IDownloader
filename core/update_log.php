@@ -1,7 +1,11 @@
 <?php
 
 $UPDATE_INFO = array(
-  '4.3.10' => array(
+  '4.3.1' => array(
+    'Rebase project to private account',
+    'Change git project url and email',
+  ),
+  '4.3.0' => array(
     'Optimize download image',
     'Add new amazing scroll bar',
     'Add url decode to target url',
