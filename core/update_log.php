@@ -1,6 +1,10 @@
 <?php
 
 $UPDATE_INFO = array(
+  '4.4.0' => array(
+    'Add news block',
+    'Change logo color',
+  ),
   '4.3.1' => array(
     'Rebase project to private account',
     'Change git project url and email',

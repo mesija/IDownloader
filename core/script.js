@@ -1047,4 +1047,28 @@ $(document).ready(function() {
     );
   }, 1000);
 
+  /* ----------------------------------- News ----------------------------------- */
+
+  $.post(
+    "./",
+    {
+      action: 'get-news'
+    },
+    function( data ) {
+      data = parse(data);
+      var subContent = $('.subContent');
+      if(data['code'] == 200){
+        subContent.html(data['data']);
+        var i = 140;
+        $('.news-item').each(function(){
+          $(this).delay(500+i).animate({opacity:1,marginTop:15}, 300);
+          i += 140;
+        });
+      }
+      subContent.animate({opacity:1}, 300);
+      $('#footer').animate({opacity:1}, 300);
+      return data['code'] == 200;
+    }
+  );
+
 });

@@ -2,7 +2,7 @@
 
 // версія ядра
 
-define('VER', '4.3.1');
+define('VER', '4.4.0');
 
 // підключаємо файл конфігів
 
@@ -148,6 +148,48 @@ switch(isset($_POST['action']) ? $_POST['action'] : ''){
     } else {
       alert('error', 404, 'File not found');
     }
+    break;
+  case 'get-news':
+    $dom = new DOMDocument();
+    $dom->loadHTMLFile('http://feeds.feedburner.com/itc-ua');
+    $xpath = new DOMXPath($dom);
+    $snow = $xpath->query('//channel//item');
+
+    $i = 0;
+    $count = $snow->length;
+    $data = array();
+    while ($i != $count){
+      $item = $snow->item($i);
+
+      foreach ($item->childNodes as $childNode) {
+        switch ($childNode->tagName){
+          case '':
+            $data[$i]['link'] = $childNode->nodeValue;
+            break;
+          case 'title':
+            $data[$i]['title'] = $childNode->nodeValue;
+            break;
+          case 'description':
+            $data[$i]['description'] = preg_replace('/(width=\".*?\"|height=\".*?\")/', '', $childNode->nodeValue);
+            break;
+        }
+      }
+      $i++;
+    }
+
+    if ($snow->length > 0) {
+      $result = "<div style=\"color:#CCCCCC;\">";
+      foreach ($data as $news) {
+        $result .= '
+      <div class="news-item">
+        <h2><a href="'. $news['link'] . '" target="_blank">'. $news['title'] . '</a></h2>
+        <div class="content">'. $news['description'] . '</div>
+      </div>';
+      }
+      $result .= "</div>";
+      alert('ok', 200, $result);
+    }
+    alert('error', 500, 'News not loaded');
     break;
 }
 
