@@ -5,15 +5,7 @@
   <div id="contentBox"
     >
     <div id="content"><?php printContent($listDir, $listDownload, $THEME_DATA); ?></div>
-    <div class="subContent">
-      <form action="./index.php?fileUpload"
-            class="dropzone"
-            id="my-awesome-dropzone">
-        <div class="fallback">
-          <input name="file" type="file" multiple/>
-        </div>
-      </form>
-    </div>
+    <div class="subContent"></div>
   </div>
 
 </div>

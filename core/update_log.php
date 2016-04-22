@@ -1,6 +1,10 @@
 <?php
 
 $UPDATE_INFO = array(
+  '4.4.1' => array(
+    'Add news tab',
+    'Add news active button',
+  ),
   '4.4.0' => array(
     'Add news block',
     'Change logo color',

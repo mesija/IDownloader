@@ -2,7 +2,7 @@
 
 // версія ядра
 
-define('VER', '4.4.0');
+define('VER', '4.4.1');
 
 // підключаємо файл конфігів
 
@@ -19,6 +19,17 @@ if (file_exists('./core/config.php')) {
     alert('error', 404, 'Not create file ./core/config.php T_T');
   }
 }
+
+// перевіряємо статус новин
+
+$newsActive = 0;
+if (isset($_COOKIE['news'])) {
+  $newsActive = $_COOKIE['news'];
+} else {
+  setcookie('news', $newsActive);
+}
+
+define('NEWS_ACTIVE', $newsActive);
 
 // підключаємо файл конфігурації тем
 
@@ -150,46 +161,66 @@ switch(isset($_POST['action']) ? $_POST['action'] : ''){
     }
     break;
   case 'get-news':
-    $dom = new DOMDocument();
-    $dom->loadHTMLFile('http://feeds.feedburner.com/itc-ua');
-    $xpath = new DOMXPath($dom);
-    $snow = $xpath->query('//channel//item');
+    $feedArray = array(
+      'ITC' => 'http://feeds.feedburner.com/itc-ua',
+      'Хабрахабр' => 'https://habrahabr.ru/rss/feed/posts/a1845045d0f4546d5bd7c0f0a1793a8e/?with_hubs=true/',
+    );
 
-    $i = 0;
-    $count = $snow->length;
-    $data = array();
-    while ($i != $count){
-      $item = $snow->item($i);
+    $feedData = array();
 
-      foreach ($item->childNodes as $childNode) {
-        switch ($childNode->tagName){
-          case '':
-            $data[$i]['link'] = $childNode->nodeValue;
-            break;
-          case 'title':
-            $data[$i]['title'] = $childNode->nodeValue;
-            break;
-          case 'description':
-            $data[$i]['description'] = preg_replace('/(width=\".*?\"|height=\".*?\")/', '', $childNode->nodeValue);
-            break;
-        }
+    foreach ($feedArray as $feedKey => $feedUrl) {
+      $feed = new DOMDocument();
+      $feed->load($feedUrl);
+      $feedData[$feedKey]['title'] = $feed->getElementsByTagName('channel')->item(0)->getElementsByTagName('title')->item(0)->firstChild->nodeValue;
+      $feedData[$feedKey]['description'] = $feed->getElementsByTagName('channel')->item(0)->getElementsByTagName('description')->item(0)->firstChild->nodeValue;
+      $feedData[$feedKey]['link'] = $feed->getElementsByTagName('channel')->item(0)->getElementsByTagName('link')->item(0)->firstChild->nodeValue;
+      $items = $feed->getElementsByTagName('channel')->item(0)->getElementsByTagName('item');
+      $i = 0;
+      foreach($items as $key => $item) {
+        $title = $item->getElementsByTagName('title')->item(0)->firstChild->nodeValue;
+        $description = $item->getElementsByTagName('description')->item(0)->firstChild->nodeValue;
+        $pubDate = $item->getElementsByTagName('pubDate')->item(0)->firstChild->nodeValue;
+        $guId = $item->getElementsByTagName('guid')->item(0)->firstChild->nodeValue;
+
+        $feedData[$feedKey]['item'][$key]['title'] = $title;
+        $feedData[$feedKey]['item'][$key]['description'] = preg_replace('/(width=\".*?\"|height=\".*?\")/', '',
+          $description
+        );
+        $feedData[$feedKey]['item'][$key]['pubdate'] = $pubDate;
+        $feedData[$feedKey]['item'][$key]['guid'] = $guId;
       }
-      $i++;
     }
 
-    if ($snow->length > 0) {
-      $result = "<div style=\"color:#CCCCCC;\">";
-      foreach ($data as $news) {
-        $result .= '
-      <div class="news-item">
-        <h2><a href="'. $news['link'] . '" target="_blank">'. $news['title'] . '</a></h2>
-        <div class="content">'. $news['description'] . '</div>
-      </div>';
+    if (count($feedData)) {
+      $resultTab = '<ul class="tabs">
+        <div class="slideThree">
+          <input style="display: none;" type="checkbox" id="slideThree" name="NEWS_ACTIVE"
+            ' . (NEWS_ACTIVE ? 'checked' : '') . '/>
+          <label for="slideThree"></label>
+        </div>';
+      $result = "<div style=\"color:#CCCCCC;\" class=\"newsBody " . (NEWS_ACTIVE ? '' : 'hide') . "\">";
+      $i = 1;
+      foreach ($feedData as $feedTitle => $feedChanel) {
+        $resultTab .= "<li class=\"tab-link " . (NEWS_ACTIVE ? 'active' : '') . " " . ($i == 1 ? 'current' : '') . "\" data-tab=\"tab-{$i}\">{$feedTitle}</li>";
+        $result .= "<div id=\"tab-{$i}\" class=\"tab-content " . ($i == 1 ? 'current' : '') . "\">";
+        foreach ($feedChanel['item'] as $news) {
+          $result .= '
+            <div class="news-item">
+              <h2><a href="'. $news['guid'] . '" target="_blank">'. $news['title'] . '</a></h2>
+              <div class="content">'. $news['description'] . '</div>
+            </div>';
+        }
+        $result .= '</div>';
+        $i++;
       }
       $result .= "</div>";
-      alert('ok', 200, $result);
+      $resultTab .= "</ul>";
+      alert('ok', 200, $resultTab . $result);
     }
     alert('error', 500, 'News not loaded');
+    break;
+  case 'news-active':
+    setcookie('news', NEWS_ACTIVE ? 0 : 1);
     break;
 }
 

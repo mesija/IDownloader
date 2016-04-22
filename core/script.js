@@ -438,7 +438,6 @@ function openFile(file, part, type, getLocalName){
       }
 
       closeUpdateProcessBox();
-      $(".dropzone, .fileList").hide();
       showDownloadPanel(file);
       alert('Open file '+file,'ok');
     }
@@ -779,32 +778,6 @@ function view(data){
   return true;
 }
 
-// Dropzone
-
-Dropzone.options.myAwesomeDropzone = {
-  paramName: "file",
-  accept: function(file, done) {
-    if (file.name.search(".csv") > 0) {
-      alert("File "+file.name+" uploaded", 'ok');
-      setTimeout(function(){
-        res(0, 0, '.file-'+file.name.replace(".csv", ""));
-        $(".dz-message").show(0).css("opacity", 1);
-        $(".dz-preview").remove();
-      }, 1500);
-      done();
-    }
-    else {
-      alert("Only .csv files!", 'error');
-      done("Only .csv files!");
-      $(".dz-message").show(0).css("opacity", 1);
-      $(".dz-preview").remove();
-    }
-  },
-  drop: function(){
-    $(".dz-message").hide(0);
-  }
-};
-
 
 Array.prototype.remByVal = function(val) {
   for (var i = 0; i < this.length; i++) {
@@ -1064,6 +1037,26 @@ $(document).ready(function() {
           $(this).delay(500+i).animate({opacity:1,marginTop:15}, 300);
           i += 140;
         });
+        $('ul.tabs li').click(function(){
+          var tab_id = $(this).attr('data-tab');
+          $('ul.tabs li').removeClass('current');
+          $('.tab-content').removeClass('current');
+          $(this).addClass('current');
+          $("#"+tab_id).addClass('current');
+        });
+        $('input[name=NEWS_ACTIVE]').bind(
+          'change',
+          function (item) {
+            $.post("./", {action: 'news-active'});
+            if (item.target.checked) {
+              $('.newsBody').show(250).removeClass('hide');
+              $('.tabs .tab-link').addClass('active');
+            } else {
+              $('.newsBody').hide(250).addClass('hide');
+              $('.tabs .tab-link').removeClass('active');
+            }
+          }
+        )
       }
       subContent.animate({opacity:1}, 300);
       $('#footer').animate({opacity:1}, 300);
