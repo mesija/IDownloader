@@ -2,7 +2,7 @@
 
 // версія ядра
 
-define('VER', '4.4.1');
+define('VER', '4.4.2');
 
 // підключаємо файл конфігів
 
@@ -180,14 +180,12 @@ switch(isset($_POST['action']) ? $_POST['action'] : ''){
         $title = $item->getElementsByTagName('title')->item(0)->firstChild->nodeValue;
         $description = $item->getElementsByTagName('description')->item(0)->firstChild->nodeValue;
         $pubDate = $item->getElementsByTagName('pubDate')->item(0)->firstChild->nodeValue;
-        $guId = $item->getElementsByTagName('guid')->item(0)->firstChild->nodeValue;
+        $link = $item->getElementsByTagName('link')->item(0)->firstChild->nodeValue;
 
         $feedData[$feedKey]['item'][$key]['title'] = $title;
-        $feedData[$feedKey]['item'][$key]['description'] = preg_replace('/(width=\".*?\"|height=\".*?\")/', '',
-          $description
-        );
+        $feedData[$feedKey]['item'][$key]['description'] = $description;
         $feedData[$feedKey]['item'][$key]['pubdate'] = $pubDate;
-        $feedData[$feedKey]['item'][$key]['guid'] = $guId;
+        $feedData[$feedKey]['item'][$key]['link'] = $link;
       }
     }
 
@@ -206,8 +204,8 @@ switch(isset($_POST['action']) ? $_POST['action'] : ''){
         foreach ($feedChanel['item'] as $news) {
           $result .= '
             <div class="news-item">
-              <h2><a href="'. $news['guid'] . '" target="_blank">'. $news['title'] . '</a></h2>
-              <div class="content">'. $news['description'] . '</div>
+              <h2><a href="'. $news['link'] . '" target="_blank">'. $news['title'] . '</a></h2>
+              <div class="content">'. fixNewsDescription($feedTitle, $news['description']) . '</div>
             </div>';
         }
         $result .= '</div>';
@@ -262,6 +260,24 @@ $THEME_DATA = array(
   'logo-title'  => $THEME_ARRAY[THEME]['name'],
   'color-array' => $THEME_ARRAY[THEME]['color'],
 );
+
+
+// фікс дескріпшенів новин
+
+function fixNewsDescription ($key, $description) {
+
+  switch ($key) {
+    case 'ITC':
+      $description = preg_replace('/(width=\".*?\"|height=\".*?\")/', '', $description);
+      break;
+    case 'Хабрахабр':
+      $description = preg_replace('/(Хабы:.*?)(<br.*?>)+/', "", $description);
+      $description = preg_replace('/(<img.*?src=\".*?\".*?>)(\s|\n|<br\/>)+/', "", $description);
+      break;
+  }
+
+  return $description;
+}
 
 // уплоадимо csv файл в теку
 

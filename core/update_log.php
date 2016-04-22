@@ -1,6 +1,9 @@
 <?php
 
 $UPDATE_INFO = array(
+  '4.4.2' => array(
+    'Fix news',
+  ),
   '4.4.1' => array(
     'Add news tab',
     'Add news active button',

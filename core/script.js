@@ -51,7 +51,6 @@ function unBug(test){
     alertDrop();            // видаляє блок повідомлення
     check();                // активує/дективує кнопку Only failed
     changeTheme();          // змінює тему
-    clearLast();            // видаляє результати завантаження
     closeEditorWarning();   // підтвердження закриття вклідки
     createLoader();         // створює індикатор завантаження
     deleteDir();            // видаляє папку
