@@ -2,7 +2,7 @@
 
 // версія ядра
 
-define('VER', '4.4.2');
+define('VER', '4.4.3');
 
 // підключаємо файл конфігів
 
@@ -163,7 +163,8 @@ switch(isset($_POST['action']) ? $_POST['action'] : ''){
   case 'get-news':
     $feedArray = array(
       'ITC' => 'http://feeds.feedburner.com/itc-ua',
-      'Хабрахабр' => 'https://habrahabr.ru/rss/feed/posts/a1845045d0f4546d5bd7c0f0a1793a8e/?with_hubs=true/',
+      'Geektimes' => 'https://geektimes.ru/rss/',
+      'Хабрахабр' => 'https://habrahabr.ru/rss/',
     );
 
     $feedData = array();
@@ -199,8 +200,10 @@ switch(isset($_POST['action']) ? $_POST['action'] : ''){
       $result = "<div style=\"color:#CCCCCC;\" class=\"newsBody " . (NEWS_ACTIVE ? '' : 'hide') . "\">";
       $i = 1;
       foreach ($feedData as $feedTitle => $feedChanel) {
-        $resultTab .= "<li class=\"tab-link " . (NEWS_ACTIVE ? 'active' : '') . " " . ($i == 1 ? 'current' : '') . "\" data-tab=\"tab-{$i}\">{$feedTitle}</li>";
-        $result .= "<div id=\"tab-{$i}\" class=\"tab-content " . ($i == 1 ? 'current' : '') . "\">";
+        $feedKeys= array_keys($feedData);
+        $current = isset($_COOKIE['tab']) ? $_COOKIE['tab'] : array_shift($feedKeys);
+        $resultTab .= "<li class=\"tab-link " . (NEWS_ACTIVE ? 'active' : '') . " " . ($current == $feedTitle ? 'current' : '') . "\" data-tab=\"tab-{$i}\">{$feedTitle}</li>";
+        $result .= "<div id=\"tab-{$i}\" class=\"tab-content " . ($current == $feedTitle ? 'current' : '') . "\">";
         foreach ($feedChanel['item'] as $news) {
           $result .= '
             <div class="news-item">
@@ -219,6 +222,9 @@ switch(isset($_POST['action']) ? $_POST['action'] : ''){
     break;
   case 'news-active':
     setcookie('news', NEWS_ACTIVE ? 0 : 1);
+    break;
+  case 'news-tab':
+    setcookie('tab', $_POST['tab']);
     break;
 }
 
@@ -271,7 +277,9 @@ function fixNewsDescription ($key, $description) {
       $description = preg_replace('/(width=\".*?\"|height=\".*?\")/', '', $description);
       break;
     case 'Хабрахабр':
-      $description = preg_replace('/(Хабы:.*?)(<br.*?>)+/', "", $description);
+      $description = preg_replace('/(<img.*?src=\".*?\".*?>)(\s|\n|<br\/>)+/', "", $description);
+      break;
+    case 'Geektimes':
       $description = preg_replace('/(<img.*?src=\".*?\".*?>)(\s|\n|<br\/>)+/', "", $description);
       break;
   }

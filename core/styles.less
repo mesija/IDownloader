@@ -47,8 +47,13 @@ body {
   text-align: center;
   display: block;
   color: @colorText;
-  margin: 0 0 50px 0;
+  margin-bottom: 50px;
   bottom: 15px;
+  &.absolute {
+    position: absolute;
+    bottom: 15px;
+    margin: 0;
+  }
 }
 
 // -------------------------------- Content -------------------------------- //
@@ -1027,9 +1032,9 @@ input[type=range] {
     background-color: @colorTextAdd;
   }
   .news-item {
-    opacity: 0;
+    opacity: 1;
     border-radius: 5px;
-    margin: 75px 0 15px 0;
+    margin: 15px 0;
     background-color: @colorGridStepBg;
     h2 {
       padding: 0 25px;

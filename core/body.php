@@ -10,7 +10,7 @@
 
 </div>
 
-<div id="footer">&copy; IDownloader <?php echo VER ?> &nbsp;&nbsp;&nbsp;
+<div id="footer" <?php echo NEWS_ACTIVE ? '' : 'class="absolute"' ?>>&copy; IDownloader <?php echo VER ?> &nbsp;&nbsp;&nbsp;
   mesijart@gmail.com &nbsp;&nbsp;&nbsp;
   <a target="_blank" href="https://github.com/mesija/IDownloader">
     <span class="icon-github3"></span> Project in GitHub</a> &nbsp;&nbsp;&nbsp;

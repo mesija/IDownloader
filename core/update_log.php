@@ -1,6 +1,11 @@
 <?php
 
 $UPDATE_INFO = array(
+  '4.4.3' => array(
+    'Add new chanel',
+    'News tab now saved',
+    'Fix footer',
+  ),
   '4.4.2' => array(
     'Fix news',
   ),
