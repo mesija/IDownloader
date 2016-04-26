@@ -2,7 +2,7 @@
 
 // версія ядра
 
-define('VER', '4.4.4');
+define('VER', '4.4.5');
 
 // підключаємо файл конфігів
 
@@ -164,7 +164,6 @@ switch(isset($_POST['action']) ? $_POST['action'] : ''){
     $feedArray = array(
       'ITC' => 'http://feeds.feedburner.com/itc-ua',
       'Geektimes' => 'https://geektimes.ru/rss/',
-      'Хабрахабр' => 'https://habrahabr.ru/rss/',
     );
 
     $feedData = array();
@@ -204,7 +203,7 @@ switch(isset($_POST['action']) ? $_POST['action'] : ''){
         $current = isset($_COOKIE['tab']) ? $_COOKIE['tab'] : array_shift($feedKeys);
         $resultTab .= "<li class=\"tab-link " . (NEWS_ACTIVE ? 'active' : '') . " " . ($current == $feedTitle ? 'current' : '') . "\" data-tab=\"tab-{$i}\">{$feedTitle}</li>";
         $result .= "<div id=\"tab-{$i}\" class=\"tab-content " . ($current == $feedTitle ? 'current' : '') . "\">";
-        foreach ($feedChanel['item'] as $news) {
+        foreach (array_splice($feedChanel['item'], 0, 10) as $news) {
           $result .= '
             <div class="news-item">
               <h2><a href="'. $news['link'] . '" target="_blank">'. $news['title'] . '</a></h2>
@@ -275,9 +274,6 @@ function fixNewsDescription ($key, $description) {
   switch ($key) {
     case 'ITC':
       $description = preg_replace('/(width=\".*?\"|height=\".*?\")/', '', $description);
-      break;
-    case 'Хабрахабр':
-      $description = preg_replace('/(<img.*?src=\".*?\".*?>)(\s|\n|<br\/>)+/', "", $description);
       break;
     case 'Geektimes':
       $description = preg_replace('/(<img.*?src=\".*?\".*?>)(\s|\n|<br\/>)+/', "", $description);

@@ -1,6 +1,10 @@
 <?php
 
 $UPDATE_INFO = array(
+  '4.4.5' => array(
+    'Delete Хабрахабр chanel',
+    'Fix error',
+  ),
   '4.4.4' => array(
     'Add validate image content',
     'Fix error',
