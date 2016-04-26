@@ -1,6 +1,10 @@
 <?php
 
 $UPDATE_INFO = array(
+  '4.4.4' => array(
+    'Add validate image content',
+    'Fix error',
+  ),
   '4.4.3' => array(
     'Add new chanel',
     'News tab now saved',

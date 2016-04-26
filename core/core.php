@@ -2,7 +2,7 @@
 
 // версія ядра
 
-define('VER', '4.4.3');
+define('VER', '4.4.4');
 
 // підключаємо файл конфігів
 
@@ -374,16 +374,16 @@ function downloadImage($source, $target){
     $img = @file_get_contents($target);
   }
 
-  if ($img && !preg_match('/(<html)/', $img)) {
-    return (int)filesize($target);
+  if ($fileSize = validateImage($img, $target)) {
+    return $fileSize;
   } else {
     if (USING_PROXY) {
       $proxyArray = explode(', ', PROXY_SERVER);
       $proxy = $proxyArray[rand(0, count($proxyArray) - 1)];
       exec('curl -x ' . $proxy . ' --proxy-user ' . PROXY_AUTH . ' -L ' . $source . ' > ' . $target);
       $img = @file_get_contents($target);
-      if ($img AND !preg_match('/(<html)/', $img) AND filesize($target) > 0) {
-        return filesize($target);
+      if ($fileSize = validateImage($img, $target)) {
+        return $fileSize;
       }
     }
   }
@@ -410,6 +410,19 @@ function convertImg($source, $target){
     imagejpeg($image, preg_replace('/\.[^\.]+$/', '.jpg', $target));
     imagedestroy($image);
   }
+}
+
+function validateImage ($img, $target) {
+  if (preg_match('/(<html)/', $img)){
+    $img = @file_put_contents($target, trim(preg_replace('/(<html|<\!DOCTYPE)[\s\S]+html>/', '', $img)));
+  }
+
+  $fileSize = filesize($target);
+  if ($img AND $fileSize > 0) {
+    return $fileSize;
+  }
+
+  return false;
 }
 
 // завантажуємо інформацію з csv файлу

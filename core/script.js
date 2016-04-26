@@ -447,6 +447,8 @@ function openFile(file, part, type, getLocalName){
 
 function showDownloadPanel (file){
 
+  $('.fileList').hide(0);
+
   $(".infoGridSourceFile").html('<a href="'+csvFolder+'/'+file+'" target="_blank">'+
     '<span>'+csvFolder+'/</span>'+file+'</a></div>');
   $(".infoGridFailedImages").html('<a href="'+downloadFolder+'/'+file.replace('.csv', '')+'/'+file+'" target="_blank">'+
