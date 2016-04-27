@@ -5,7 +5,7 @@
   <div id="contentBox"
     >
     <div id="content"><?php printContent($listDir, $listDownload, $THEME_DATA); ?></div>
-    <div class="subContent"></div>
+    <div class="subContent <?php echo (NEWS_ACTIVE ? '' : 'hide'); ?>"></div>
   </div>
 
 </div>

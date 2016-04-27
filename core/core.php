@@ -2,7 +2,7 @@
 
 // версія ядра
 
-define('VER', '4.4.5');
+define('VER', '4.4.6');
 
 // підключаємо файл конфігів
 
@@ -190,13 +190,8 @@ switch(isset($_POST['action']) ? $_POST['action'] : ''){
     }
 
     if (count($feedData)) {
-      $resultTab = '<ul class="tabs">
-        <div class="slideThree">
-          <input style="display: none;" type="checkbox" id="slideThree" name="NEWS_ACTIVE"
-            ' . (NEWS_ACTIVE ? 'checked' : '') . '/>
-          <label for="slideThree"></label>
-        </div>';
-      $result = "<div style=\"color:#CCCCCC;\" class=\"newsBody " . (NEWS_ACTIVE ? '' : 'hide') . "\">";
+      $resultTab = '<ul class="tabs">';
+      $result = "<div class=\"newsBody\">";
       $i = 1;
       foreach ($feedData as $feedTitle => $feedChanel) {
         $feedKeys= array_keys($feedData);
@@ -205,10 +200,10 @@ switch(isset($_POST['action']) ? $_POST['action'] : ''){
         $result .= "<div id=\"tab-{$i}\" class=\"tab-content " . ($current == $feedTitle ? 'current' : '') . "\">";
         foreach (array_splice($feedChanel['item'], 0, 10) as $news) {
           $result .= '
-            <div class="news-item">
+            <article class="news-item">
               <h2><a href="'. $news['link'] . '" target="_blank">'. $news['title'] . '</a></h2>
               <div class="content">'. fixNewsDescription($feedTitle, $news['description']) . '</div>
-            </div>';
+            </article>';
         }
         $result .= '</div>';
         $i++;
@@ -610,6 +605,11 @@ function printContent($listDir, $listDownload, $themeData)
   <button class="settings" id="settings" onclick="settingsOpen()" title="Open settings"><b class="icon-cog"></b></button>
   <button class="lock' . (LOCK ? '' : ' lock-off') . '" id="lock" onclick="lock()" title="Lock reload page"><b class="icon-lock"></b></button>
   <button class="add" id="add" onclick="addFile(\'\')" title="Upload new file"><b class="icon-box-add"></b></button>
+  <div class="slideThree">
+    <input style="display: none;" type="checkbox" id="slideThree" name="NEWS_ACTIVE"
+      ' . (NEWS_ACTIVE ? 'checked' : '') . '/>
+    <label for="slideThree"></label>
+  </div>
   </div>
   <div class="block fileList">
     <div id="csv">

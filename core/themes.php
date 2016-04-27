@@ -16,6 +16,7 @@ $THEME_ARRAY = array(
       'colorInfo' =>        '3ba0b3',
       'colorGreen' =>       '18c298',
       'colorWhite' =>       'f9f9f9',
+      'colorNewsTitle' =>   '3ba0b3',
     ),
   ),
   'black-white'   => array(
@@ -31,6 +32,7 @@ $THEME_ARRAY = array(
       'colorInfo' =>        '007799',
       'colorGreen' =>       '009955',
       'colorWhite' =>       'f9f9f9',
+      'colorNewsTitle' =>   'f9f9f9',
     ),
   ),
 );

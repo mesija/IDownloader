@@ -11,6 +11,7 @@
   <script type="text/javascript" src="./core/jquery.min.js"></script>
   <script type="text/javascript" src="./core/jquery.transit.js"></script>
   <script type="text/javascript" src="./core/jquery.knob.js"></script>
+  <script type="text/javascript" src="./core/jquery.easing.1.3.js"></script>
   <script type="text/javascript" src="./core/percentageloader.js"></script>
   <script type="text/javascript">
     var dif_proces          =  <?php echo PROCESS > 50 ? 10 : PROCESS; ?>;

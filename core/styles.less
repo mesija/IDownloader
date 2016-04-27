@@ -14,6 +14,7 @@
 @colorGreen:        #18c298;
 @colorWhite:        #f9f9f9;
 @colorBlack:        #222222;
+@colorNewsTitle:    #f9f9f9;
 
 // -------------------------------- All -------------------------------- //
 
@@ -107,11 +108,19 @@ body {
     display: inline-block;
   }
   .logo {
+    position: relative;
     background: none;
     border: 0;
     font-family: @fontDecorative;
     font-size: 30px;
     color: @colorTextAdd;
+    .slideThree {
+      margin-right: 55px;
+      float: right;
+      left: 570px;
+      top: 10px;
+      position: absolute;
+    }
     .icon-download {
       color: @colorText;
     }
@@ -1026,15 +1035,10 @@ input[type=range] {
 // -------------------------------- News -------------------------------- //
 
 .subContent {
-  opacity: 0;
-  .slideThree {
-    margin-right: 25px;
-    background-color: @colorTextAdd;
-  }
   .news-item {
-    opacity: 1;
-    border-radius: 5px;
-    margin: 15px 0;
+    opacity: 0;
+    margin: 0 200px 0 -200px;
+    color: @colorText;
     background-color: @colorGridStepBg;
     h2 {
       padding: 0 25px;
@@ -1043,7 +1047,10 @@ input[type=range] {
       font-family: @fontDecorative;
       display: inline-block;
       a {
-        color: @colorWhite;
+        color: @colorNewsTitle;
+        &:hover {
+          color: @colorHover;
+        }
       }
     }
     .content {
@@ -1058,12 +1065,21 @@ input[type=range] {
       max-height: 100px;
     }
   }
+  article {
+    &:last-child {
+      border-bottom: none;
+    }
+    &:nth-child(odd) {
+      background-color: (@colorGridStepBg - 10);
+      margin: 0 -200px 0 200px;
+    }
+  }
 }
 
 // -------------------------------- Tabs -------------------------------- //
 
 ul.tabs {
-  margin: 0 0 0 15px;
+  margin: 0;
   padding: 0;
   list-style: none;
   font-family: @fontDecorative;
@@ -1075,23 +1091,29 @@ ul.tabs {
     padding: 10px 15px;
     cursor: pointer;
     &.current {
-      background: @colorGridHoverBg;
-      color: @colorText;
+      color: @colorNewsTitle;
       border-radius: 5px;
     }
     &.active {
       border-bottom-right-radius: 0!important;
       border-bottom-left-radius: 0!important;
     }
+    &:hover {
+      color: @colorHover;
+    }
   }
 }
 
 .tab-content{
+  margin-top: 20px;
   display: none;
-  background: @colorGridHoverBg;
-  padding: 1px 15px;
-  border-radius: 5px;
   &.current {
     display: inherit;
+  }
+
+  iframe {
+    width: 100%;
+    margin: 25px 0;
+    height: 500px;
   }
 }

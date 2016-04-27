@@ -1,6 +1,9 @@
 <?php
 
 $UPDATE_INFO = array(
+  '4.4.6' => array(
+    'Fix design',
+  ),
   '4.4.5' => array(
     'Delete Хабрахабр chanel',
     'Fix error',
