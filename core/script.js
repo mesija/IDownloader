@@ -1039,6 +1039,13 @@ $(document).ready(function() {
           $('.tab-content').removeClass('current');
           $(this).addClass('current');
           $("#"+tab_id).addClass('current');
+          $("#"+tab_id+" article:nth-child(2n)").css({'margin': '0 -200px 0 200px', 'opacity': 0});
+          $("#"+tab_id+" article:nth-child(2n-1)").css({'margin': '0 200px 0 -200px', 'opacity': 0});
+          var i = 0;
+          $("#"+tab_id+" .news-item").each(function(){
+            $(this).delay(1+i).animate({opacity:1,marginLeft:0,marginRight:0}, 700, 'easeInOutBack');
+            i += 170;
+          });
         });
         $('input[name=NEWS_ACTIVE]').bind(
           'change',
@@ -1067,8 +1074,8 @@ $(document).ready(function() {
         setTimeout(function () {
           subContent.animate({opacity:1}, 300);
           var i = 0;
-          $('.news-item').each(function(){
-            $(this).delay(500+i).animate({opacity:1,marginLeft:0,marginRight:0}, 700, 'easeInOutBack');
+          $('.current .news-item').each(function(){
+            $(this).delay(1+i).animate({opacity:1,marginLeft:0,marginRight:0}, 700, 'easeInOutBack');
             i += 170;
           });
         }, 500);

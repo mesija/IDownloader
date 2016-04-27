@@ -1,6 +1,10 @@
 <?php
 
 $UPDATE_INFO = array(
+  '4.4.7' => array(
+    'Fix design',
+    'Fix image download',
+  ),
   '4.4.6' => array(
     'Fix design',
   ),
