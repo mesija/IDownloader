@@ -2,7 +2,7 @@
 
 // версія ядра
 
-define('VER', '4.4.7');
+define('VER', '4.4.8');
 
 // підключаємо файл конфігів
 
@@ -190,14 +190,14 @@ switch(isset($_POST['action']) ? $_POST['action'] : ''){
     }
 
     if (count($feedData)) {
-      $resultTab = '<ul class="tabs">';
+      $resultTab = '<ul class="tabs"><span class="i-news"><span>I</span>News</span>';
       $result = "<div class=\"newsBody\">";
       $i = 1;
       foreach ($feedData as $feedTitle => $feedChanel) {
         $feedKeys= array_keys($feedData);
         $current = isset($_COOKIE['tab']) ? $_COOKIE['tab'] : array_shift($feedKeys);
         $resultTab .= "<li class=\"tab-link " . (NEWS_ACTIVE ? 'active' : '') . " " . ($current == $feedTitle ? 'current' : '') . "\" data-tab=\"tab-{$i}\">{$feedTitle}</li>";
-        $result .= "<div id=\"tab-{$i}\" class=\"tab-content " . ($current == $feedTitle ? 'current' : '') . "\">";
+        $result .= "<div id=\"tab-{$i}\" class=\"tab-content " . ($current == $feedTitle ? 'current' : '') . " news-tab-{$feedTitle}\">";
         foreach (array_splice($feedChanel['item'], 0, 10) as $news) {
           $result .= '
             <article class="news-item">
@@ -272,6 +272,9 @@ function fixNewsDescription ($key, $description) {
       break;
     case 'Geektimes':
       $description = preg_replace('/(<img.*?src=\".*?\".*?>)(\s|\n|<br\/>)+/', "", $description);
+      $description = preg_replace('/^(\s|\n|<br\/>|<br>)+/', "", $description);
+      $description = preg_replace('/(\s|\n|<br\/>|<br>)+$/', "", $description);
+      $description = preg_replace('/(h1>|h2>|h3>|h4>|h5>)/', "p", $description);
       break;
   }
 

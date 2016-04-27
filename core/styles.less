@@ -1042,7 +1042,7 @@ input[type=range] {
     background-color: @colorGridStepBg;
     h2 {
       padding: 0 25px;
-      font-size: 24px;
+      font-size: 18px;
       font-weight: normal;
       font-family: @fontDecorative;
       display: inline-block;
@@ -1057,12 +1057,12 @@ input[type=range] {
       text-align: justify;
       padding: 0 25px 25px 25px;
       display: inline-block;
+      font-size: 14px;
     }
 
     img {
       float: left;
       border-radius: 5px;
-      max-height: 100px;
     }
   }
   article {
@@ -1115,5 +1115,32 @@ ul.tabs {
     width: 100%;
     margin: 25px 0;
     height: 500px;
+  }
+}
+
+.news-tab-ITC {
+  .news-item {
+    position: relative;
+    height: 170px;
+    padding-left: 215px;
+    margin-bottom: 15px!important;
+    img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      border-radius: 0;
+      width: 200px;
+      height: 170px;
+      border-right: 15px solid @colorIndex;
+    }
+  }
+}
+
+.i-news {
+  color: @colorTextAdd;
+  cursor: default;
+  padding: 0 25px;
+  span {
+    color: @colorHover;
   }
 }

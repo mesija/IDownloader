@@ -1,6 +1,10 @@
 <?php
 
 $UPDATE_INFO = array(
+  '4.4.8' => array(
+    'Fix design',
+    'Add news custom filter',
+  ),
   '4.4.7' => array(
     'Fix design',
     'Fix image download',
