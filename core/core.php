@@ -2,7 +2,7 @@
 
 // версія ядра
 
-define('VER', '4.4.8');
+define('VER', '4.4.9');
 
 // підключаємо файл конфігів
 
@@ -268,7 +268,6 @@ function fixNewsDescription ($key, $description) {
 
   switch ($key) {
     case 'ITC':
-      $description = preg_replace('/(width=\".*?\"|height=\".*?\")/', '', $description);
       break;
     case 'Geektimes':
       $description = preg_replace('/(<img.*?src=\".*?\".*?>)(\s|\n|<br\/>)+/', "", $description);
@@ -277,6 +276,8 @@ function fixNewsDescription ($key, $description) {
       $description = preg_replace('/(h1>|h2>|h3>|h4>|h5>)/', "p", $description);
       break;
   }
+
+  $description = preg_replace('/(width=\".*?\"|height=\".*?\")/', '', $description);
 
   return $description;
 }
@@ -437,24 +438,7 @@ if (isset($_GET['loadFile']) AND !empty($_GET['loadFile']) AND isset($_GET['step
     $csv = fopen($url, 'r');
     $input = array();
     $i = 0;
-    $delimiter = '';
-    while ($line = fgets($csv, 9999) AND $i < $max) {
-      $line = preg_replace('/[\n\r"]+/', '', $line);
-      $mass = array();
-      if ($delimiter == '') {
-        preg_match_all('/[^a-z0-9A-Z:\/\.?&=_ %\\!#$^+@()<>-]/', $line, $del);
-        foreach ($del[0] AS $delTmp) {
-          $mass = explode($delTmp, $line);
-          if (count($mass) > 3) {
-            $delimiter = $delTmp;
-            break;
-          }
-        }
-        if ($delimiter == '') {
-          alert('error', 404, 'No such delimiter in file ' . $file);
-        }
-      }
-      $mass = explode($delimiter, $line);
+    while ($mass = fgetcsv($csv, 9999, ',', '"') AND $i < $max) {
       if ($i > $min - 1) {
         if ($mass[6] == 'copied') {
           $mass[6] = 1;

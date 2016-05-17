@@ -1,6 +1,10 @@
 <?php
 
 $UPDATE_INFO = array(
+  '4.4.9' => array(
+    'Fix design, video and scroll bar',
+    'Fix error comma in url',
+  ),
   '4.4.8' => array(
     'Fix design',
     'Add news custom filter',

@@ -1073,12 +1073,12 @@ $(document).ready(function() {
         subContent.css({'display': 'block', 'opacity': 0});
         setTimeout(function () {
           subContent.animate({opacity:1}, 300);
-          var i = 0;
+          var i = 170;
           $('.current .news-item').each(function(){
             $(this).delay(1+i).animate({opacity:1,marginLeft:0,marginRight:0}, 700, 'easeInOutBack');
             i += 170;
           });
-        }, 500);
+        }, 2000);
       }
       $('#footer').animate({opacity:1}, 300);
       return data['code'] == 200;
