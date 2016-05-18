@@ -1,6 +1,9 @@
 <?php
 
 $UPDATE_INFO = array(
+  '4.4.10' => array(
+    'Fix png to jpg convert',
+  ),
   '4.4.9' => array(
     'Fix design, video and scroll bar',
     'Fix error comma in url',

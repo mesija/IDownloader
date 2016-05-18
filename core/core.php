@@ -2,7 +2,7 @@
 
 // версія ядра
 
-define('VER', '4.4.9');
+define('VER', '4.4.10');
 
 // підключаємо файл конфігів
 
@@ -114,7 +114,7 @@ switch(isset($_POST['action']) ? $_POST['action'] : ''){
       $img = downloadImage($source, $targetUrl);
       if ($img) {
         if($param->convertImg){
-          convertImg($source, $targetUrl);
+          convertImg($targetUrl);
         }
         alert('ok', 200, $img);
       } else {
@@ -125,7 +125,7 @@ switch(isset($_POST['action']) ? $_POST['action'] : ''){
             $img = downloadImage($source . '.' . $val, $targetUrl);
             if ($img) {
               if($param->prestaImg){
-                convertImg($source, $targetUrl);
+                convertImg($targetUrl);
               }
               alert('ok', 200, $img);
             }
@@ -386,14 +386,19 @@ function downloadImage($source, $target){
   return 0;
 }
 
-function convertImg($source, $target){
+function convertImg($target){
   $image = false;
-  switch(preg_replace('/.*\.([a-z]+)$/', '$1', strtolower($source))) {
+  switch(preg_replace('/.*\.([a-z]+)$/', '$1', strtolower($target))) {
     case 'gif':
       $image = imagecreatefromgif($target);
       break;
     case 'png':
-      $image = imagecreatefrompng($target);
+      $temp = imagecreatefrompng($target);
+      list($width, $height) = getimagesize($target);
+      $image = imagecreatetruecolor($width, $height);
+      $white = imagecolorallocate($image,  255, 255, 255);
+      imagefilledrectangle($image, 0, 0, $width, $height, $white);
+      imagecopy($image, $temp, 0, 0, 0, 0, $width, $height);
       break;
     case 'jpg':
     case 'jpeg':
