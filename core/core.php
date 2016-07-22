@@ -2,7 +2,7 @@
 
 // версія ядра
 
-define('VER', '4.4.10');
+define('VER', '4.4.11');
 
 // підключаємо файл конфігів
 
@@ -366,6 +366,13 @@ function downloadImage($source, $target){
       ),
     );
     file_put_contents($target, @file_get_contents($source, false, stream_context_create($arrContextOptions)));
+    $img = @file_get_contents($target);
+  }
+
+  $fileSize = validateImage($img, $target);
+
+  if (!$fileSize) {
+    file_put_contents($target, @file_get_contents(preg_replace('/^https/', 'http', $source)));
     $img = @file_get_contents($target);
   }
 

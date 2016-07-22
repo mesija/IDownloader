@@ -1,6 +1,9 @@
 <?php
 
 $UPDATE_INFO = array(
+  '4.4.11' => array(
+    'Small fix image download',
+  ),
   '4.4.10' => array(
     'Fix png to jpg convert',
   ),
